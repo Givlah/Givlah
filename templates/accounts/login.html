@@ -3,7 +3,7 @@
 {% block content %}
 <section class="auth">
   <h1>Sign in</h1>
-  <p class="muted">Give usable things a new home, with help from neighbours.</p>
+  <p class="hand">Good things. New homes. Together.</p>
   <form method="post" class="stack" data-pending-form>
     {% csrf_token %}
     {% if form.non_field_errors %}<div class="message message-error" role="alert">{% for e in form.non_field_errors %}<p>{{ e }}</p>{% endfor %}</div>{% endif %}

@@ -12,8 +12,8 @@ from django.views.decorators.cache import cache_control
 @cache_control(max_age=3600)
 def manifest(request):
     return JsonResponse({
-        "name": "givlah",
-        "short_name": "givlah",
+        "name": "Givlah",
+        "short_name": "Givlah",
         "description": "Give usable household items a new home with help from neighbours.",
         "start_url": "/",
         "scope": "/",
@@ -28,7 +28,8 @@ def manifest(request):
     }, content_type="application/manifest+json")
 
 
-SHELL_FILES = ["css/givlah.css", "js/givlah.js", "icons/icon-192.png"]
+SHELL_FILES = ["css/givlah.css", "js/givlah.js", "icons/icon-192.png",
+               "fonts/givlah/Givlah-Bold.woff2", "fonts/caveat/Caveat-latin.woff2"]
 
 
 def shell_version():

@@ -1,5 +1,22 @@
 /* Givlah: mobile-first styles. Palette from the app icon; darker shades carry text for contrast. */
+@font-face {
+  font-family: "Givlah";
+  src: url("../fonts/givlah/Givlah-Bold.woff2") format("woff2");
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Caveat";
+  src: url("../fonts/caveat/Caveat-latin.woff2") format("woff2");
+  font-style: normal;
+  font-weight: 400 700;
+  font-display: swap;
+}
+
 :root {
+  --font-display: "Givlah", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font-hand: "Caveat", "Segoe Print", "Bradley Hand", cursive;
   --green-300: #34e180;
   --green-500: #10c766;
   --green-700: #0a7f41;   /* white text on this passes WCAG AA */
@@ -36,7 +53,8 @@ body {
 }
 img { max-width: 100%; height: auto; display: block; }
 a { color: var(--blue-700); }
-h1, h2 { line-height: 1.2; margin: 0 0 8px; }
+h1, h2 { font-family: var(--font-display); font-weight: 700; line-height: 1.2; margin: 0 0 8px; }
+.hand { font-family: var(--font-hand); font-size: 1.35rem; line-height: 1.25; color: var(--ink-muted); }
 h1 { font-size: 1.6rem; }
 h2 { font-size: 1.15rem; }
 p { margin: 0 0 12px; }
@@ -52,7 +70,7 @@ p { margin: 0 0 12px; }
   background: rgb(253 252 253 / 92%); backdrop-filter: blur(8px);
   border-bottom: 1px solid var(--line);
 }
-.brand { display: flex; align-items: center; gap: 8px; text-decoration: none; color: var(--green-900); font-weight: 700; font-size: 1.25rem; letter-spacing: -0.01em; }
+.brand { display: flex; align-items: center; gap: 8px; text-decoration: none; color: var(--ink); font-family: var(--font-display); font-weight: 700; font-size: 1.5rem; line-height: 1; }
 .brand img { border-radius: 8px; }
 .account { display: flex; align-items: center; gap: 10px; font-size: 0.9rem; }
 .account form { margin: 0; }
@@ -74,7 +92,7 @@ p { margin: 0 0 12px; }
 .button {
   display: inline-flex; align-items: center; justify-content: center; gap: 8px;
   min-height: 48px; padding: 10px 20px; border-radius: 999px; border: 2px solid transparent;
-  background: var(--green-700); color: #fff; font: inherit; font-weight: 600; text-decoration: none; cursor: pointer;
+  background: var(--green-700); color: #fff; font: inherit; font-family: var(--font-display); font-weight: 700; text-decoration: none; cursor: pointer;
 }
 .button:hover { background: var(--green-900); }
 .button:disabled { opacity: 0.6; cursor: progress; }
@@ -95,10 +113,10 @@ p { margin: 0 0 12px; }
 .meta { color: var(--ink-muted); font-size: 0.9rem; margin-bottom: 6px; }
 .needs { font-weight: 600; color: var(--gold-700); margin-bottom: 6px; }
 
-.tag { display: inline-block; font-size: 0.75rem; font-weight: 600; padding: 2px 8px; border-radius: 999px; vertical-align: middle; }
+.tag { font-family: var(--font-display); display: inline-block; font-size: 0.75rem; font-weight: 600; padding: 2px 8px; border-radius: 999px; vertical-align: middle; }
 .tag-demo { background: var(--cream); color: var(--gold-700); border: 1px solid var(--gold-300); }
 
-.status { display: inline-flex; align-items: center; gap: 6px; font-size: 0.85rem; font-weight: 600; padding: 3px 10px; border-radius: 999px; background: #fff4d6; color: var(--gold-700); }
+.status { font-family: var(--font-display); display: inline-flex; align-items: center; gap: 6px; font-size: 0.85rem; font-weight: 600; padding: 3px 10px; border-radius: 999px; background: #fff4d6; color: var(--gold-700); }
 .status svg { width: 10px; height: 10px; fill: currentColor; }
 .status-ready, .status-handover_recorded { background: #eafaf1; color: var(--green-900); }
 .status-awaiting_confirmations, .status-awaiting_handover { background: #eef6ff; color: var(--blue-700); }
@@ -130,7 +148,7 @@ p { margin: 0 0 12px; }
 /* Forms */
 .stack { display: grid; gap: 16px; }
 fieldset { border: 0; margin: 0; padding: 14px; background: var(--card); border-radius: var(--radius); box-shadow: var(--shadow); display: grid; gap: 14px; }
-legend { font-weight: 700; font-size: 1.05rem; padding: 0; float: left; width: 100%; margin-bottom: 2px; }
+legend { font-family: var(--font-display); font-weight: 700; font-size: 1.05rem; padding: 0; float: left; width: 100%; margin-bottom: 2px; }
 legend + * { clear: both; }
 .field { display: grid; gap: 4px; }
 .field label { font-weight: 600; }
@@ -168,7 +186,7 @@ legend + * { clear: both; }
   height: calc(var(--tabbar-h) + env(safe-area-inset-bottom)); padding-bottom: env(safe-area-inset-bottom);
   background: #fff; border-top: 1px solid var(--line);
 }
-.tabbar a { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; font-size: 0.75rem; font-weight: 600; color: var(--ink-muted); text-decoration: none; }
+.tabbar a { font-family: var(--font-display); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; font-size: 0.75rem; font-weight: 600; color: var(--ink-muted); text-decoration: none; }
 .tabbar svg { width: 24px; height: 24px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
 .tabbar a[aria-current=page] { color: var(--green-900); }
 .tabbar a[aria-current=page] svg { stroke: var(--green-700); }
@@ -186,7 +204,7 @@ legend + * { clear: both; }
 .offer-actions .button { width: 100%; }
 .offer-actions form { margin: 0; display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 10px 14px; background: #eafaf1; border-radius: var(--radius-sm); }
 .offered { font-weight: 600; color: var(--green-900); }
-.role { display: inline-block; min-width: 92px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.03em; padding: 2px 8px; border-radius: 6px; text-align: center; }
+.role { font-family: var(--font-display); display: inline-block; min-width: 92px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.03em; padding: 2px 8px; border-radius: 6px; text-align: center; }
 .role-owner { background: #fff4d6; color: var(--gold-700); }
 .role-recipient { background: #eafaf1; color: var(--green-900); }
 .role-transport { background: #eef6ff; color: var(--blue-700); }

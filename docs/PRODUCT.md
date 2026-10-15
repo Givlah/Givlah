@@ -93,6 +93,8 @@ Interaction principles:
 - Keep navigation predictable and preserve the user's context.
 - Use motion only when it explains a change of state.
 
+Typography: Givlah Bold for the wordmark, headings, buttons, tabs and status chips, system sans-serif for running text, and Caveat for occasional handwritten accents.
+
 Keep text contrast readable, and never use colour as the only signal of status.
 
 ## Measuring outcomes honestly

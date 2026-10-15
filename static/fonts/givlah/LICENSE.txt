@@ -1,0 +1,37 @@
+GIVLAH FREE FONT LICENSE 1.0
+Copyright (c) 2026 Jad Fahmi
+Font family: Givlah
+
+1. FREE PERSONAL AND COMMERCIAL USE
+Permission is granted, free of charge, to any person or organization to use,
+install, copy, embed, modify and redistribute this font, including in commercial
+projects. No purchase, registration, attribution in finished artwork, additional
+seat license, or per-project payment is required. There are no limits on users,
+devices, domains, traffic, production quantities or revenue.
+
+2. PERMITTED USES
+You may use the font in personal and client projects, logos, branding, print,
+packaging, merchandise, advertising, social media, videos and presentations.
+You may self-host it on your own or client websites and embed or subset it in
+PDFs, editable documents, apps, games, software, hardware and templates.
+You may use it in services that let others create designs. Clients and
+collaborators may install and use the font under this same free license.
+You may convert text to outlines and change those outlines in your designs.
+
+3. COPIES AND MODIFICATIONS
+Redistribution of the original or modified font is permitted provided this
+license and the copyright notice accompany the font files. Identify modified
+versions as modified and do not claim authorship of the original font or imply
+endorsement by Jad Fahmi. Finished artwork and embedded documents do not need
+to display a credit or include a separate license notice. No ownership or
+trademark rights are transferred by this license.
+
+4. WARRANTY AND LIABILITY
+The font is provided AS IS, without warranty of any kind, express or implied,
+including warranties of merchantability, fitness for a particular purpose and
+noninfringement. To the extent permitted by applicable law, the licensor is not
+liable for any claim, damages or other liability arising from the font or its
+use. Mandatory rights that applicable law does not permit to be excluded remain
+unaffected. Support and future updates are not guaranteed.
+
+Font development used AI assistance. See documentation/PROVENANCE.md.

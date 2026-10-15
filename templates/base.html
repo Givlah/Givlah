@@ -8,6 +8,7 @@
   <link rel="manifest" href="{% url 'pwa:manifest' %}">
   <link rel="icon" href="{% static 'icons/favicon-32.png' %}" sizes="32x32">
   <link rel="apple-touch-icon" href="{% static 'icons/apple-touch-icon.png' %}">
+  <link rel="preload" href="{% static 'fonts/givlah/Givlah-Bold.woff2' %}" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="{% static 'css/givlah.css' %}">
   <script src="{% static 'js/givlah.js' %}" defer></script>
 </head>
@@ -15,7 +16,7 @@
   <header class="topbar">
     <a class="brand" href="{% url 'listings:nearby' %}">
       <img src="{% static 'icons/icon-192.png' %}" alt="" width="32" height="32">
-      <span>givlah</span>
+      <span>Givlah</span>
     </a>
     {% if user.is_authenticated %}
     <div class="account">
