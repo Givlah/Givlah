@@ -234,6 +234,10 @@ legend + * { clear: both; }
 .photo-preview img { width: 88px; height: 88px; object-fit: cover; border-radius: var(--radius-sm); }
 .locate { display: grid; gap: 6px; justify-items: start; }
 .form-page { gap: 22px; }
+.screen-form fieldset { padding: 18px 16px; gap: 16px; }
+.optional-fields summary { display: flex; align-items: center; justify-content: space-between; gap: 10px; min-height: 44px; list-style: none; cursor: pointer; font-size: 0.9rem; color: var(--blue-700); }
+.optional-fields summary::-webkit-details-marker { display: none; }
+.optional-fields[open] > .stack { margin-top: 14px; }
 .form-page > .actions { display: grid; grid-template-columns: 1fr; }
 .field input[type=file]::file-selector-button { font-family: var(--font-display); padding: 8px 12px; border: 0; border-radius: 8px; background: #eafaf1; color: var(--green-900); margin: 0 8px 4px 0; cursor: pointer; }
 .field div[id] > div > label { display: flex; align-items: center; gap: 10px; min-height: 48px; padding: 10px 0; font-weight: 400; }

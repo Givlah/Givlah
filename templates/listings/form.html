@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% block title %}{% if editing %}Edit {{ listing.title }}{% else %}Give an item{% endif %}{% endblock %}
+{% block screen_class %}screen-form{% endblock %}
 {% block content %}
 <div class="page-head">
   <h1>{% if editing %}Edit item{% else %}Give an item{% endif %}</h1>
@@ -52,10 +53,12 @@
     <legend>When it can be collected</legend>
     {% include "core/_field.html" with field=form.deadline %}
     {% for start, end in form.window_pairs %}
+    {% if forloop.counter == 2 %}<details class="optional-fields"{% if form.errors or editing %} open{% endif %}><summary>More collection times {% include "core/_icon.html" with name="plus" %}</summary><div class="stack">{% endif %}
     <div class="row-2">
       {% include "core/_field.html" with field=start %}
       {% include "core/_field.html" with field=end %}
     </div>
+    {% if forloop.last and not forloop.first %}</div></details>{% endif %}
     {% endfor %}
     <p class="help">Include enough time for loading and the trip. Helpers commit to the whole window.</p>
   </fieldset>

@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% block title %}{{ heading }}{% endblock %}
+{% block screen_class %}screen-form{% endblock %}
 {% block content %}
 <div class="page-head">
   <a class="text-action detail-back" href="{{ listing.get_absolute_url }}">{% include "core/_icon.html" with name="back" %}{{ listing.title }}</a>
