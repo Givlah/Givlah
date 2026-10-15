@@ -133,16 +133,23 @@ p { margin: 0 0 12px; }
 .card-photo { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; background: var(--cream); }
 .card-body { padding: 10px 12px 12px; }
 .listing-heading { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
-.listing-heading h2 { font-size: 1rem; }
+.listing-heading h2 { font-size: 1.05rem; }
 .listing-heading .tag { flex: 0 0 auto; font-size: 0.65rem; padding: 1px 6px; }
-.screen-nearby .card .meta { font-size: 0.8rem; margin-bottom: 0; }
-.screen-nearby .chip-row { gap: 6px; margin: 8px 0 0; }
-.screen-nearby .chip-row .status { font-size: 0.72rem; line-height: 1.35; border-radius: 10px; padding: 5px 8px; }
-.screen-nearby .chip { font-size: 0.72rem; padding: 5px 8px; border-radius: 10px; }
-.screen-nearby .card .image-slot { max-width: none; margin: 0; }
-.screen-nearby .card .image-slot-frame { border-radius: var(--radius) var(--radius) 12px 12px; border: 0; border-bottom: 1px solid #efe7da; }
-.screen-nearby .card .image-slot-frame img { inset: 0; width: 100%; height: 100%; border-radius: 0; }
-.screen-nearby .card .image-slot figcaption { margin: 0; padding: 2px 8px; font-size: 0.6rem; text-align: left; color: var(--ink-muted); background: white; }
+.listing-card { display: flex; align-items: stretch; min-height: 170px; border-radius: 24px; border: 1px solid #f1eadf; }
+.listing-card .card-body { flex: 1; min-width: 0; padding: 14px 12px; display: flex; flex-direction: column; align-items: flex-start; gap: 9px; }
+.listing-card .listing-heading { width: 100%; align-items: flex-start; }
+.listing-card .listing-heading h2 { margin: 0; }
+.listing-card .condition-chip { display: inline-block; background: #e4faed; color: var(--green-900); border-radius: 999px; padding: 4px 9px; font-size: 0.75rem; line-height: 1.3; }
+.item-metadata { display: flex; flex-wrap: wrap; gap: 5px 10px; font-size: 0.75rem; color: var(--ink-muted); }
+.item-metadata > span { display: inline-flex; align-items: center; gap: 5px; }
+.item-metadata .icon { width: 15px; height: 15px; }
+.listing-card .status { font-size: 0.74rem; line-height: 1.4; padding: 6px 8px; border-radius: 13px; margin-top: auto; }
+.listing-card .status .icon { width: 17px; height: 17px; }
+.image-slot.item-card-canvas { position: relative; width: 33%; flex: 0 0 33%; max-width: none; margin: 0; align-self: stretch; }
+.item-card-canvas .image-slot-frame { min-height: 170px; height: 100%; border-radius: 22px; border-color: #efe6d7; }
+.item-card-canvas .image-slot-frame img { inset: 4px; width: calc(100% - 8px); height: calc(100% - 8px); border-radius: 18px; }
+.item-card-canvas figcaption { position: absolute; bottom: 5px; left: 5px; right: 5px; margin: 0; padding: 4px; border-radius: 8px; background: rgb(255 255 255 / 92%); font-size: 0.6rem; }
+.listing-card > .card-photo { flex: 0 0 30%; width: 30%; height: auto; aspect-ratio: 4 / 3; align-self: center; border-radius: 16px; margin: 6px; }
 .image-slot.item-thumb { position: relative; width: 64px; height: 64px; margin: 0; max-width: none; }
 .image-slot.item-thumb .image-slot-frame { border-radius: 12px; }
 .image-slot.item-thumb figcaption { position: absolute; bottom: 2px; left: 3px; right: 3px; font-size: 7px; line-height: 1.2; margin: 0; padding: 2px; color: #56605a; background: rgb(255 255 255 / 90%); border-radius: 4px; }

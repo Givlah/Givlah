@@ -1,0 +1,17 @@
+<a class="card listing-card{% if plan %} plan-item-card{% endif %}" href="{{ listing.get_absolute_url }}">
+  {% if listing.is_synthetic %}
+    {% include "core/_image_slot.html" with slot="item-card" ratio="3 / 4" alt="" slot_class="item-card-canvas" %}
+  {% else %}{% with photo=listing.photos.all.0 %}
+    {% if photo %}<img class="card-photo" src="{% url 'listings:photo' photo.uuid %}" alt="" loading="lazy" decoding="async" width="{{ photo.width }}" height="{{ photo.height }}">{% endif %}
+  {% endwith %}{% endif %}
+  <div class="card-body">
+    <div class="listing-heading"><h2>{{ listing.title }}</h2>{% if listing.is_synthetic %}<span class="tag tag-demo">Demo</span>{% endif %}</div>
+    <span class="condition-chip">{{ listing.get_condition_display }}</span>
+    <div class="item-metadata">
+      <span>{% include "core/_icon.html" with name="pin" %}{{ listing.zone.name }}</span>
+      <span>{% include "core/_icon.html" with name="calendar" %}{% if plan %}{{ plan.start|date:"D j M" }}{% else %}Collect by {{ listing.deadline|date:"j M" }}<span class="sr-only">, {{ listing.deadline|date:"g:i a" }}</span>{% endif %}</span>
+    </div>
+    {% if plan %}<span class="status status-{{ plan.state }}">{% include "core/_icon.html" with name="clock" %}{{ plan.get_state_display }}</span>
+    {% else %}<span class="status status-{{ listing.state }}">{% if 'transport' in listing.missing_roles %}{% include "core/_icon.html" with name="truck" %}{% else %}{% include "core/_icon.html" with name="status" %}{% endif %}{% include "listings/_needs.html" %}</span>{% endif %}
+  </div>
+</a>
