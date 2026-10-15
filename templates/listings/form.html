@@ -1,13 +1,22 @@
 {% extends "base.html" %}
 {% block title %}{% if editing %}Edit {{ listing.title }}{% else %}Give an item{% endif %}{% endblock %}
-{% block screen_class %}screen-form{% endblock %}
+{% block screen_class %}screen-form{% if not editing %} screen-create{% endif %}{% endblock %}
 {% block content %}
+{% if editing %}
 <div class="page-head">
-  <h1>{% if editing %}Edit item{% else %}Give an item{% endif %}</h1>
-  {% if not editing %}<p class="muted">Furniture and simple household items only. No electrical goods, mattresses or hazardous items.</p>{% endif %}
+  <h1>Edit item</h1>
 </div>
+{% endif %}
 
-<form method="post" enctype="multipart/form-data" class="stack form-page" data-pending-form novalidate>
+<form method="post" enctype="multipart/form-data" class="stack form-page" data-pending-form{% if not editing %} data-photo-composer data-form-bound="{{ form.is_bound|yesno:'true,false' }}"{% endif %} novalidate>
+  {% if not editing %}
+  <header class="composer-header">
+    <a class="icon-button" href="{% url 'listings:nearby' %}" aria-label="Cancel giving an item" data-photo-close>{% include "core/_icon.html" with name="close" %}</a>
+    <button class="icon-button" type="button" aria-label="Back to photos" data-photo-back hidden>{% include "core/_icon.html" with name="back" %}</button>
+    <h1 data-composer-heading>Add photos</h1>
+    <button class="button composer-next" type="button" data-photo-next hidden disabled>Next {% include "core/_icon.html" with name="chevron" %}</button>
+  </header>
+  {% endif %}
   {% csrf_token %}
   {{ form.action_token }}
   {% if editing %}<input type="hidden" name="revision" value="{{ listing.revision }}">
@@ -19,10 +28,50 @@
   <p class="message message-error" role="alert">Please fix the highlighted fields. Nothing was saved yet. If you chose photos, choose them again.</p>
   {% endif %}
 
+  {% if not editing %}
+  <section class="photo-step" data-photo-step aria-label="Item photos">
+    <div class="photo-stage">
+      <div data-photo-empty>{% include "core/_image_slot.html" with slot="item-photo-empty" ratio="4 / 3" alt="" slot_class="photo-canvas" %}</div>
+      <img data-photo-hero hidden alt="Selected item photo">
+    </div>
+    <div class="photo-thumbnails" data-photo-thumbnails aria-label="Selected photos"></div>
+    <div class="photo-intro">
+      <p class="step-label">Step 1 of 2</p>
+      <h2>Start with a photo</h2>
+      <p class="muted">Take a photo or choose up to 3. You'll add the item details next.</p>
+    </div>
+    <div class="field" data-photo-native>
+      <label for="{{ form.photos.auto_id }}">{{ form.photos.label }}</label>
+      {{ form.photos }}
+      <div class="photo-preview" data-photo-preview aria-live="polite"></div>
+    </div>
+    <div class="photo-sources" data-photo-sources hidden>
+      <button class="button" type="button" data-photo-camera>{% include "core/_icon.html" with name="camera" %}Take a photo</button>
+      <button class="button button-secondary" type="button" data-photo-library>{% include "core/_icon.html" with name="image" %}Choose photos</button>
+    </div>
+    <p class="error" data-photo-error role="alert" hidden></p>
+    {% if form.photos.errors %}<div id="{{ form.photos.auto_id }}_error">{% for error in form.photos.errors %}<p class="error" role="alert">{{ error }}</p>{% endfor %}</div>{% endif %}
+    <p class="help" data-photo-status role="status" aria-live="polite">JPEG, PNG or WebP. Up to 5 MB per photo.</p>
+    <p class="help">Keep faces, house numbers and other personal details out of your photos.</p>
+    <a class="button button-secondary" href="#item-details" data-photo-fallback>Continue to details {% include "core/_icon.html" with name="chevron" %}</a>
+  </section>
+  {% endif %}
+
+  <div class="stack item-details" id="item-details" data-item-details tabindex="-1">
+  {% if not editing %}
+  <div class="photo-summary" data-photo-summary hidden>
+    <img data-photo-summary-image hidden alt="">
+    <div><p class="step-label">Step 2 of 2</p><span data-photo-count>No photos selected</span></div>
+    <button class="button button-quiet" type="button" data-photo-change>Change photos</button>
+  </div>
+  <p class="help">Furniture and simple household items only. No electrical goods, mattresses or hazardous items.</p>
+  {% endif %}
   <fieldset>
     <legend>The item</legend>
+    {% if editing %}
     {% include "core/_field.html" with field=form.photos %}
     <div class="photo-preview" data-photo-preview aria-live="polite"></div>
+    {% endif %}
     {% include "core/_field.html" with field=form.title %}
     {% include "core/_field.html" with field=form.description %}
     {% include "core/_field.html" with field=form.condition %}
@@ -72,6 +121,8 @@
   <div class="actions">
     <button class="button" type="submit" data-pending-label="{% if editing %}Saving…{% else %}Publishing…{% endif %}">{% if editing %}Save changes{% else %}Publish item{% endif %}</button>
     {% if editing %}<a class="button button-quiet" href="{{ listing.get_absolute_url }}">Cancel</a>{% endif %}
+    {% if not editing %}<a class="button button-quiet" href="{% url 'listings:nearby' %}">Cancel</a>{% endif %}
+  </div>
   </div>
 </form>
 {% endblock %}
