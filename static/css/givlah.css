@@ -145,6 +145,12 @@ p { margin: 0 0 12px; }
 .gallery img:only-child { flex-basis: 100%; }
 .detail-head { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-bottom: 4px; }
 .detail-head h1 { margin: 0; flex-basis: 100%; }
+.detail-back { margin: -8px 0 14px; text-decoration: none; }
+.detail-head { margin-bottom: 12px; }
+.detail > .meta { margin-bottom: 16px; }
+.detail > .panel-private .actions + .actions { margin-top: 12px; }
+.offer-list li { padding: 10px 0; border-bottom: 1px solid var(--line); }
+.offer-list li:last-child { border-bottom: 0; }
 .facts { display: grid; gap: 0; margin: 16px 0; background: var(--card); border-radius: var(--radius); box-shadow: var(--shadow); }
 .facts div { display: flex; justify-content: space-between; gap: 12px; padding: 10px 14px; border-bottom: 1px solid var(--line); }
 .facts div:last-child { border-bottom: 0; }
