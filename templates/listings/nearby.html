@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% block title %}Nearby{% endblock %}
+{% block screen_class %}screen-nearby{% endblock %}
 {% block content %}
 <div class="page-head">
   <h1>Nearby</h1>
@@ -10,18 +11,18 @@
   {% for listing in listings %}
   <li>
     <a class="card" href="{{ listing.get_absolute_url }}">
-      {% with photo=listing.photos.all.0 %}
+      {% if listing.is_synthetic %}
+        {% include "core/_image_slot.html" with slot="item-preview" ratio="3 / 1" alt="" slot_class="item-preview" %}
+      {% else %}{% with photo=listing.photos.all.0 %}
       {% if photo %}<img class="card-photo" src="{% url 'listings:photo' photo.uuid %}" alt="" loading="lazy" width="{{ photo.width }}" height="{{ photo.height }}">{% endif %}
-      {% endwith %}
+      {% endwith %}{% endif %}
       <div class="card-body">
-        <h2>{{ listing.title }}</h2>
-        <p class="meta">{{ listing.get_condition_display }}</p>
-        <p class="meta location-line">{% include "core/_icon.html" with name="pin" %}{{ listing.zone.name }}</p>
+        <div class="listing-heading"><h2>{{ listing.title }}</h2>{% if listing.is_synthetic %}<span class="tag tag-demo">Demo</span>{% endif %}</div>
+        <p class="meta">{{ listing.get_condition_display }} <span aria-hidden="true">·</span> {{ listing.zone.name }}</p>
         <div class="chip-row">
           <span class="status status-{{ listing.state }}">{% include "core/_icon.html" with name="status" %}{% include "listings/_needs.html" %}</span>
-          <span class="chip">{% include "core/_icon.html" with name="calendar" %}Collect by {{ listing.deadline|date:"D j M, g:i a" }}</span>
+          <span class="chip">{% include "core/_icon.html" with name="calendar" %}<span>Collect by {{ listing.deadline|date:"j M" }}<span class="sr-only">, {{ listing.deadline|date:"g:i a" }}</span></span></span>
         </div>
-        {% if listing.is_synthetic %}<span class="tag tag-demo">Demo listing</span>{% endif %}
       </div>
     </a>
   </li>
