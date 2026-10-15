@@ -1,6 +1,6 @@
 // Givlah service worker. Caches only static shell files and an offline notice.
 // Pages, photos and anything personal always come from the network.
-const CACHE = "givlah-shell-v1";
+const CACHE = "givlah-shell-{{ version }}";
 const PRECACHE = [{% for url in precache %}"{{ url|escapejs }}"{% if not forloop.last %}, {% endif %}{% endfor %}];
 
 self.addEventListener("install", (event) => {

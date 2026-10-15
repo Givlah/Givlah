@@ -23,6 +23,15 @@ class PwaTests(TestCase):
         self.assertNotIn("/photos/", body)
         self.assertNotIn("cache.put", body)
 
+    def test_cache_name_changes_when_shell_files_change(self):
+        from unittest import mock
+        from apps.pwa import views
+        first = self.client.get("/sw.js").content.decode()
+        self.assertRegex(first, r'givlah-shell-[0-9a-f]{12}')
+        with mock.patch.object(views, "SHELL_FILES", views.SHELL_FILES + ["icons/icon-512.png"]):
+            second = self.client.get("/sw.js").content.decode()
+        self.assertNotEqual(first.split("givlah-shell-")[1][:12], second.split("givlah-shell-")[1][:12])
+
     def test_offline_page_has_no_personal_content(self):
         response = self.client.get("/offline/")
         self.assertContains(response, "You're offline")

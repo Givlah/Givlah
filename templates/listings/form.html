@@ -9,7 +9,8 @@
 <form method="post" enctype="multipart/form-data" class="stack" data-pending-form novalidate>
   {% csrf_token %}
   {{ form.action_token }}
-  {% if editing %}<input type="hidden" name="revision" value="{{ listing.revision }}">{% endif %}
+  {% if editing %}<input type="hidden" name="revision" value="{{ listing.revision }}">
+  {% if listing.state != "needs_help" %}<p class="message message-error" role="note">A crew is being arranged for this item. Saving changes ends that plan, and everyone will need to confirm again.</p>{% endif %}{% endif %}
   {% if form.non_field_errors %}
   <div class="message message-error" role="alert">{% for e in form.non_field_errors %}<p>{{ e }}</p>{% endfor %}</div>
   {% endif %}
