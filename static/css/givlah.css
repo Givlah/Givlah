@@ -189,9 +189,7 @@ p { margin: 0 0 12px; }
 .screen-detail .facts { margin-block: 16px; }
 .screen-detail .facts > div { padding: 12px 14px; font-size: 0.9rem; }
 .screen-detail .panel { padding: 16px; }
-.screen-detail .offer-actions { grid-template-columns: 1fr 1fr; }
-.screen-detail .offer-actions > :first-child { grid-column: 1 / -1; }
-.screen-detail .offer-actions .button { padding-inline: 10px; font-size: 0.85rem; }
+.screen-detail .offer-actions .button { padding-inline: 14px; font-size: 0.9rem; }
 .detail > .panel-private .actions + .actions { margin-top: 12px; }
 .offer-list li { padding: 10px 0; border-bottom: 1px solid var(--line); }
 .offer-list li:last-child { border-bottom: 0; }
@@ -334,10 +332,17 @@ html[data-motion-paused=true] *, html[data-motion=off] * { animation: none !impo
 /* Offers and coordination */
 .needs-line { font-weight: 600; color: var(--gold-700); }
 .offer-list, .crew-people, .crew-list, .approvals { list-style: none; padding: 0; margin: 8px 0 0; display: grid; gap: 6px; }
-.offer-actions { display: grid; gap: 10px; }
+.offer-actions { display: grid; grid-template-columns: minmax(0, 1fr); gap: 10px; }
 .offer-actions .button { width: 100%; }
-.offer-actions form { margin: 0; display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 10px 14px; background: #eafaf1; border-radius: var(--radius-sm); }
-.offered { font-weight: 600; color: var(--green-900); }
+.offer-actions form { min-width: 0; margin: 0; display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 10px 12px; background: #eafaf1; border: 1px solid #d5efdf; border-radius: var(--radius-sm); }
+.offered { display: flex; align-items: center; gap: 8px; flex: 1; min-width: 0; font-size: 0.85rem; line-height: 1.4; font-weight: 600; color: var(--green-900); overflow-wrap: normal; }
+.offered > span { min-width: 0; }
+.offer-withdraw { flex: 0 0 auto; white-space: nowrap; overflow-wrap: normal; padding: 8px 12px; border: 1px solid #c4dfce; border-radius: 999px; background: white; color: var(--green-900); font-family: var(--font-display); font-size: 0.8rem; line-height: 1.3; text-decoration: none; }
+.offer-option { display: flex; align-items: center; gap: 10px; min-width: 0; min-height: 52px; padding: 8px 12px; border: 1px solid var(--line); border-radius: var(--radius-sm); background: white; color: var(--ink); font-family: var(--font-display); font-size: 0.9rem; line-height: 1.3; text-decoration: none; }
+.offer-option:hover { background: #f5faf7; }
+.offer-option > span:not(.offer-option-icon) { flex: 1; }
+.offer-option > .icon { width: 16px; height: 16px; color: var(--ink-muted); }
+.offer-option-icon { display: inline-flex; align-items: center; justify-content: center; flex: 0 0 32px; height: 32px; border-radius: 10px; background: #eef6ff; color: var(--blue-700); }
 .role { font-family: var(--font-display); display: inline-block; font-size: 0.75rem; font-weight: 700; padding: 3px 9px; border-radius: 999px; text-align: center; }
 .role-owner { background: #fff4d6; color: var(--gold-700); }
 .role-recipient { background: #eafaf1; color: var(--green-900); }

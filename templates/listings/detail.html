@@ -57,22 +57,22 @@
     <div class="offer-actions">
       {% if my_offers.recipient %}{% with o=my_offers.recipient.0 %}
         <form method="post" action="{% url 'coordination:withdraw' 'recipient' o.pk %}" data-pending-form>{% csrf_token %}
-          <span class="offered">✓ You asked for this</span> <button class="link" type="submit">Withdraw</button></form>
+          <span class="offered">{% include "core/_icon.html" with name="check" %}<span>You asked for this</span></span> <button class="link offer-withdraw" type="submit">Withdraw</button></form>
       {% endwith %}{% else %}
         <a class="button" href="{% url 'coordination:offer' listing.pk 'recipient' %}">I'd like this</a>
       {% endif %}
       {% if my_offers.transport %}{% with o=my_offers.transport.0 %}
         <form method="post" action="{% url 'coordination:withdraw' 'transport' o.pk %}" data-pending-form>{% csrf_token %}
-          <span class="offered">✓ You offered transport</span> <button class="link" type="submit">Withdraw</button></form>
+          <span class="offered">{% include "core/_icon.html" with name="check" %}<span>You offered transport</span></span> <button class="link offer-withdraw" type="submit">Withdraw</button></form>
       {% endwith %}{% else %}
-        <a class="button button-secondary" href="{% url 'coordination:offer' listing.pk 'transport' %}">I can transport it</a>
+        <a class="offer-option" href="{% url 'coordination:offer' listing.pk 'transport' %}"><span class="offer-option-icon">{% include "core/_icon.html" with name="truck" %}</span><span>I can transport it</span>{% include "core/_icon.html" with name="chevron" %}</a>
       {% endif %}
       {% if listing.needs_extra_helper %}
         {% if my_offers.helper %}{% with o=my_offers.helper.0 %}
           <form method="post" action="{% url 'coordination:withdraw' 'helper' o.pk %}" data-pending-form>{% csrf_token %}
-            <span class="offered">✓ You offered to help carry</span> <button class="link" type="submit">Withdraw</button></form>
+            <span class="offered">{% include "core/_icon.html" with name="check" %}<span>You offered to help carry</span></span> <button class="link offer-withdraw" type="submit">Withdraw</button></form>
         {% endwith %}{% else %}
-          <a class="button button-secondary" href="{% url 'coordination:offer' listing.pk 'helper' %}">I can help carry</a>
+          <a class="offer-option" href="{% url 'coordination:offer' listing.pk 'helper' %}"><span class="offer-option-icon">{% include "core/_icon.html" with name="people" %}</span><span>I can help carry</span>{% include "core/_icon.html" with name="chevron" %}</a>
         {% endif %}
       {% endif %}
     </div>
