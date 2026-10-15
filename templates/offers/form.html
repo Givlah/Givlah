@@ -2,11 +2,11 @@
 {% block title %}{{ heading }}{% endblock %}
 {% block content %}
 <div class="page-head">
-  <p class="muted small"><a href="{{ listing.get_absolute_url }}">← {{ listing.title }}</a></p>
+  <a class="text-action detail-back" href="{{ listing.get_absolute_url }}">{% include "core/_icon.html" with name="back" %}{{ listing.title }}</a>
   <h1>{{ heading }}</h1>
   <p class="muted">{{ listing.title }} · {{ listing.zone.name }} · {{ listing.width_cm }} × {{ listing.depth_cm }} × {{ listing.height_cm }} cm{% if listing.handling_notes %} · {{ listing.handling_notes }}{% endif %}</p>
 </div>
-<form method="post" class="stack" data-pending-form novalidate>
+<form method="post" class="stack form-page" data-pending-form novalidate>
   {% csrf_token %}
   {% if form.non_field_errors %}<div class="message message-error" role="alert">{% for e in form.non_field_errors %}<p>{{ e }}</p>{% endfor %}</div>{% endif %}
   <fieldset>

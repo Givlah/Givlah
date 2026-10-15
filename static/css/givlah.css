@@ -43,6 +43,7 @@
 }
 
 * { box-sizing: border-box; }
+[hidden] { display: none !important; }
 html { -webkit-text-size-adjust: 100%; background: var(--cream); scroll-padding-block: 80px 100px; }
 body {
   margin: 0;
