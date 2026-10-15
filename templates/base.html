@@ -50,11 +50,11 @@
   <nav class="tabbar" aria-label="Main">
     {% url 'listings:nearby' as nearby_url %}{% url 'listings:create' as create_url %}{% url 'listings:activity' as activity_url %}
     <a href="{{ nearby_url }}" {% if request.path == nearby_url %}aria-current="page"{% endif %}>
-      {% include "core/_icon.html" with name="pin" %}Nearby</a>
+      <span class="tab-icon">{% include "core/_icon.html" with name="pin" %}</span><span>Nearby</span></a>
     <a href="{{ create_url }}" class="tab-primary" {% if request.path == create_url %}aria-current="page"{% endif %}>
-      {% include "core/_icon.html" with name="plus" %}<span>Give</span></a>
+      <span class="tab-icon">{% include "core/_icon.html" with name="plus" %}</span><span>Give</span></a>
     <a href="{{ activity_url }}" {% if request.path == activity_url %}aria-current="page"{% elif request.resolver_match.url_name == 'plan' or request.resolver_match.url_name == 'crew' %}class="tab-active"{% endif %}>
-      {% include "core/_icon.html" with name="activity" %}<span>Activity</span></a>
+      <span class="tab-icon">{% include "core/_icon.html" with name="activity" %}</span><span>Activity</span></a>
   </nav>
   {% endif %}
 </body>
