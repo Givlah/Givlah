@@ -13,6 +13,7 @@
   <script src="{% static 'js/givlah.js' %}" defer></script>
 </head>
 <body>
+  <a class="skip-link" href="#main">Skip to content</a>
   <header class="topbar">
     <a class="brand" href="{% url 'listings:nearby' %}">
       <img src="{% static 'icons/icon-192.png' %}" alt="" width="32" height="32">
@@ -20,14 +21,19 @@
     </a>
     {% if user.is_authenticated %}
     <div class="account">
+      <details class="account-menu">
+        <summary aria-label="Account: {{ user.display_name|default:user.username }}"><span class="avatar" aria-hidden="true">{{ user.display_name|default:user.username|first|upper }}</span></summary>
+        <div class="account-popover">
       <span class="who">{{ user.display_name|default:user.username }}{% if user.is_synthetic %} <span class="tag tag-demo">Demo</span>{% endif %}</span>
       <form method="post" action="{% url 'accounts:logout' %}">{% csrf_token %}<button class="link" type="submit">Sign out</button></form>
+        </div>
+      </details>
     </div>
     {% endif %}
   </header>
   {% if demo_mode %}<p class="demo-banner" role="note">Demo mode: fictional people, places and items.</p>{% endif %}
 
-  <main class="page" id="main">
+  <main class="page" id="main" tabindex="-1">
     {% if messages %}
     <div class="messages" role="status" aria-live="polite">
       {% for message in messages %}<p class="message message-{{ message.tags }}">{{ message }}</p>{% endfor %}
@@ -40,11 +46,11 @@
   <nav class="tabbar" aria-label="Main">
     {% url 'listings:nearby' as nearby_url %}{% url 'listings:create' as create_url %}{% url 'listings:activity' as activity_url %}
     <a href="{{ nearby_url }}" {% if request.path == nearby_url %}aria-current="page"{% endif %}>
-      <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6h-6v6H4a1 1 0 0 1-1-1z"/></svg>Nearby</a>
+      {% include "core/_icon.html" with name="pin" %}Nearby</a>
     <a href="{{ create_url }}" class="tab-primary" {% if request.path == create_url %}aria-current="page"{% endif %}>
-      <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>Give an item</a>
-    <a href="{{ activity_url }}" {% if request.path == activity_url %}aria-current="page"{% endif %}>
-      <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h10"/></svg>My activity</a>
+      {% include "core/_icon.html" with name="plus" %}Give an item</a>
+    <a href="{{ activity_url }}" {% if request.path == activity_url %}aria-current="page"{% elif request.resolver_match.url_name == 'plan' or request.resolver_match.url_name == 'crew' %}class="tab-active"{% endif %}>
+      {% include "core/_icon.html" with name="activity" %}My activity</a>
   </nav>
   {% endif %}
 </body>
