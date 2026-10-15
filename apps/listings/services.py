@@ -28,6 +28,16 @@ class Duplicate:
     result_url: str
 
 
+def _end_active_plan(listing, user, reason, listing_state=Listing.State.NEEDS_HELP):
+    from apps.coordination.services import CoordinationError, invalidate_for_listing_change
+    try:
+        invalidate_for_listing_change(listing, user, reason, listing_state)
+    except CoordinationError:
+        raise ListingClosed
+    if listing_state:
+        listing.state = listing_state
+
+
 def _private_fields(data):
     gps = data.get("latitude") is not None
     return {
@@ -78,18 +88,25 @@ def update_listing(user, listing_id, revision, data):
         listing = Listing.objects.get(pk=listing_id)
         if listing.owner_id != user.pk:
             raise NotAllowed
-        if not listing.is_open:
+        if not listing.is_editable:
             raise ListingClosed
         if listing.revision != revision:
             raise StaleRevision
+        _end_active_plan(listing, user, "The owner changed the listing, so everyone needs to confirm again.")
         for field, value in _public_fields(data).items():
             setattr(listing, field, value)
         listing.revision += 1
         listing.save()
         ListingPrivate.objects.update_or_create(listing=listing, defaults=_private_fields(data))
-        listing.windows.all().delete()
+        # Keep unchanged windows (and the offers that chose them); replace the rest.
+        wanted = set(data["windows"])
+        for window in listing.windows.all():
+            if (window.start, window.end) in wanted:
+                wanted.discard((window.start, window.end))
+            else:
+                window.delete()
         AvailabilityWindow.objects.bulk_create(
-            AvailabilityWindow(listing=listing, start=s, end=e) for s, e in data["windows"])
+            AvailabilityWindow(listing=listing, start=s, end=e) for s, e in sorted(wanted))
         if data["photos"]:
             old = list(listing.photos.all())
             _save_photos(listing, data["photos"])
@@ -104,10 +121,11 @@ def close_listing(user, listing_id, revision):
         listing = Listing.objects.get(pk=listing_id)
         if listing.owner_id != user.pk:
             raise NotAllowed
-        if listing.state != Listing.State.NEEDS_HELP:
+        if not (listing.is_editable or listing.is_expired):
             raise ListingClosed
         if listing.revision != revision:
             raise StaleRevision
+        _end_active_plan(listing, user, "The owner closed the listing.", listing_state=None)
         listing.state = Listing.State.CANCELLED
         listing.closed_at = clock.now()
         listing.revision += 1

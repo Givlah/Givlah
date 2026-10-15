@@ -37,6 +37,8 @@ INSTALLED_APPS = [
     "apps.core",
     "apps.accounts",
     "apps.listings",
+    "apps.offers",
+    "apps.coordination",
     "apps.pwa",
 ]
 
@@ -78,6 +80,8 @@ DATABASES = {
         "NAME": DATA_DIR / "db.sqlite3",
         # Serialize writers at BEGIN; wait at most 5 s for the write lock.
         "OPTIONS": {"transaction_mode": "IMMEDIATE", "timeout": 5},
+        # A file (not in-memory) test database so concurrency tests use real separate connections.
+        "TEST": {"NAME": DATA_DIR / "test_db.sqlite3"},
     }
 }
 

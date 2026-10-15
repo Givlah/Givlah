@@ -178,3 +178,35 @@ legend + * { clear: both; }
   .button, .card { transition: background-color 0.15s, transform 0.15s; }
   .card:active { transform: scale(0.99); }
 }
+
+/* Offers and coordination */
+.needs-line { font-weight: 600; color: var(--gold-700); }
+.offer-list, .crew-people, .crew-list, .approvals { list-style: none; padding: 0; margin: 8px 0 0; display: grid; gap: 6px; }
+.offer-actions { display: grid; gap: 10px; }
+.offer-actions .button { width: 100%; }
+.offer-actions form { margin: 0; display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 10px 14px; background: #eafaf1; border-radius: var(--radius-sm); }
+.offered { font-weight: 600; color: var(--green-900); }
+.role { display: inline-block; min-width: 92px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.03em; padding: 2px 8px; border-radius: 6px; text-align: center; }
+.role-owner { background: #fff4d6; color: var(--gold-700); }
+.role-recipient { background: #eafaf1; color: var(--green-900); }
+.role-transport { background: #eef6ff; color: var(--blue-700); }
+.role-helper { background: #f3eefe; color: #5b3aa8; }
+.crew-card { background: var(--card); border-radius: var(--radius); padding: 14px; box-shadow: var(--shadow); margin: 0 0 14px; border: 2px solid transparent; }
+.crew-card-best { border-color: var(--green-500); }
+.crew-card form { margin-top: 12px; }
+.crew-time { margin-bottom: 6px; }
+.warn { color: var(--gold-700); font-weight: 600; font-size: 0.9rem; margin: 10px 0 0; }
+.crew-list li { display: flex; justify-content: space-between; gap: 8px; padding: 8px 0; border-bottom: 1px solid var(--line); }
+.crew-list li:last-child { border-bottom: 0; }
+.crew-role { display: block; font-size: 0.8rem; color: var(--ink-muted); }
+.check { font-weight: 600; font-size: 0.9rem; white-space: nowrap; }
+.check-yes { color: var(--green-900); }
+.check-no { color: var(--ink-muted); }
+.facts.compact { box-shadow: none; margin: 8px 0 0; background: transparent; }
+.facts.compact div { padding: 8px 0; }
+.spaced { margin-top: 14px; }
+.history summary { cursor: pointer; font-weight: 600; }
+.history ul { padding-left: 18px; font-size: 0.875rem; color: var(--ink-muted); }
+.field ul { list-style: none; padding: 0; margin: 4px 0 0; display: grid; gap: 8px; }
+.field ul label { display: flex; align-items: center; gap: 10px; font-weight: 500; min-height: 44px; padding: 8px 12px; border: 1.5px solid #c9d0cc; border-radius: var(--radius-sm); background: #fff; }
+.field ul input { width: 20px; height: 20px; accent-color: var(--green-700); }

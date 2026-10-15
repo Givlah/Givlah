@@ -11,7 +11,9 @@ from PIL import Image, ImageDraw
 
 from apps.accounts.models import User
 from apps.core import clock
+from apps.coordination.models import Plan
 from apps.core.models import ActionToken
+from apps.coordination import services as coordination
 from apps.listings import services
 from apps.listings.images import sanitize_image
 from apps.listings.models import Listing, Locality, Zone
@@ -49,6 +51,7 @@ class Command(BaseCommand):
     def handle(self, *args, reset=False, **options):
         if reset:
             deleted = 0
+            Plan.objects.filter(listing__is_synthetic=True).delete()
             for listing in Listing.objects.filter(is_synthetic=True):
                 for photo in listing.photos.all():
                     photo.image.delete(save=False)
@@ -84,9 +87,10 @@ class Command(BaseCommand):
             (users["Mei Ling"], "Rattan armchair", "Comfortable reading chair, cushion included.", "worn",
              (70, 70, 85), "Light but bulky", False, zones["Kenanga (demo)"], (200, 160, 90)),
         ]
+        created = {}
         for owner, title, description, condition, (w, d, h), notes, helper, zone, colour in items:
             photo = sanitize_image(placeholder_photo(colour, title))
-            services.publish_listing(owner, {
+            created[title] = services.publish_listing(owner, {
                 "action_token": ActionToken.new(), "title": title, "description": description,
                 "condition": condition, "width_cm": w, "depth_cm": d, "height_cm": h,
                 "handling_notes": notes, "needs_extra_helper": helper, "zone": zone,
@@ -95,4 +99,17 @@ class Command(BaseCommand):
                 "windows": [(day.replace(hour=10), day.replace(hour=12)), (day.replace(hour=17), day.replace(hour=19))],
                 "photos": [photo],
             })
-        self.stdout.write(self.style.SUCCESS(f"Loaded {len(items)} synthetic listings in {LOCALITY}."))
+        # Offers that compete for Mei Ling's van in the morning window, so the planner has to
+        # spread the two collections across different times.
+        shelf, table = created["Wooden bookshelf"], created["Folding study table"]
+        shelf_morning = shelf.windows.order_by("start")[0]
+        table_windows = list(table.windows.order_by("start"))
+        coordination.offer_to_receive(users["Ravi"], shelf.pk, [shelf_morning], zones["Melati (demo)"],
+                                      "Demo drop-off for Ravi")
+        coordination.offer_transport(users["Mei Ling"], shelf.pk, [shelf_morning], "vehicle", None, "Small van (demo)", True)
+        coordination.offer_help(users["Hafiz"], shelf.pk, [shelf_morning])
+        coordination.offer_to_receive(users["Aina"], table.pk, table_windows, zones["Cempaka (demo)"],
+                                      "Demo drop-off for Aina")
+        van = users["Mei Ling"].vehicles.get()
+        coordination.offer_transport(users["Mei Ling"], table.pk, table_windows, "vehicle", van, "", True)
+        self.stdout.write(self.style.SUCCESS(f"Loaded {len(items)} synthetic listings and offers in {LOCALITY}."))

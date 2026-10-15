@@ -8,7 +8,7 @@
 
 Givlah helps neighbours give usable household items a new home. It does more than find someone who wants an item. It arranges the people, transport and time needed to actually collect it.
 
-> **Status: early development.** Accounts, item listings with privacy-safe photos and location, and the installable app shell work today. Neighbour offers and collection planning are being built next.
+> **Status: early development.** The core flow works end to end: list an item, neighbours offer to take, transport or carry it, Givlah suggests a complete crew without double-booking anyone, everyone confirms, and both sides record the handover. Not yet deployed.
 
 ## The problem
 
@@ -67,7 +67,7 @@ Full details are in [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md).
 ## Repository layout
 
 ```
-apps/           Django apps: accounts, listings, core (clock, action tokens), pwa
+apps/           Django apps: accounts, listings, offers, coordination, core (clock, action tokens), pwa
 givlah/         Django project settings and URLs
 templates/      Mobile-first page templates
 static/         CSS, progressive-enhancement JS and app icons

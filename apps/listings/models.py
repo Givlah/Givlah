@@ -90,6 +90,27 @@ class Listing(models.Model):
     def is_open(self):
         return self.state == self.State.NEEDS_HELP and not self.is_expired
 
+    @property
+    def missing_roles(self):
+        """What's still needed, from active offers (prefetched by listing selectors)."""
+        missing = []
+        if not getattr(self, "active_recipients", None):
+            missing.append("someone who wants it")
+        transports = getattr(self, "active_transports", None) or []
+        if not transports:
+            missing.append("transport")
+        elif not any(t.fit_declared for t in transports):
+            missing.append("transport that fits")
+        if self.needs_extra_helper and not getattr(self, "active_helpers", None):
+            missing.append("a second person to carry")
+        return missing
+
+    @property
+    def is_editable(self):
+        """Editable until collection starts. Editing a listing with a crew ends that plan."""
+        return (self.state in (self.State.NEEDS_HELP, self.State.AWAITING_CONFIRMATIONS, self.State.READY)
+                and not self.is_expired)
+
 
 class ListingPrivate(models.Model):
     """Exact pickup details, kept apart from public listing fields."""

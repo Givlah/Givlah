@@ -2,6 +2,25 @@
 {% block title %}My activity{% endblock %}
 {% block content %}
 <div class="page-head"><h1>My activity</h1></div>
+
+{% if invitations %}
+<h2>Needs your action</h2>
+<ul class="rows">
+  {% for plan in invitations %}
+  <li><a href="{% url 'coordination:plan' plan.pk %}"><span>{{ plan.listing.title }}<br><span class="muted small">{{ plan.start|date:"D j M, g:i a" }}</span></span><span class="status status-{{ plan.state }}">{{ plan.get_state_display }}</span></a></li>
+  {% endfor %}
+</ul>
+{% endif %}
+
+<h2>Collections I'm part of</h2>
+{% if plans %}
+<ul class="rows">
+  {% for plan in plans %}
+  <li><a href="{% url 'coordination:plan' plan.pk %}"><span>{{ plan.listing.title }}<br><span class="muted small">{{ plan.start|date:"D j M, g:i a" }}</span></span><span class="status status-{{ plan.state }}">{{ plan.get_state_display }}</span></a></li>
+  {% endfor %}
+</ul>
+{% else %}<p class="muted">None yet.</p>{% endif %}
+
 <h2>Items I'm giving</h2>
 {% if listings %}
 <ul class="rows">
@@ -12,4 +31,13 @@
 {% else %}
 <p class="muted">You haven't listed anything yet. <a href="{% url 'listings:create' %}">Give an item</a></p>
 {% endif %}
+
+<h2>My offers</h2>
+{% if offers %}
+<ul class="rows">
+  {% for role, offer in offers %}
+  <li><a href="{{ offer.listing.get_absolute_url }}"><span>{{ offer.listing.title }}</span><span class="role role-{{ role }}">{% if role == "recipient" %}Wants it{% elif role == "transport" %}Transport{% else %}Helps carry{% endif %}</span></a></li>
+  {% endfor %}
+</ul>
+{% else %}<p class="muted">No active offers. Browse <a href="{% url 'listings:nearby' %}">Nearby</a> to help a neighbour.</p>{% endif %}
 {% endblock %}

@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block title %}Find a crew{% endblock %}
+{% block content %}
+<div class="page-head">
+  <p class="muted small"><a href="{{ listing.get_absolute_url }}">← {{ listing.title }}</a></p>
+  <h1>Find a crew</h1>
+</div>
+{% if plan %}
+  <p class="message">A crew is already being arranged. <a href="{% url 'coordination:plan' plan.pk %}">Open the plan</a></p>
+{% elif not suggestion %}
+  <p class="message">This item isn't waiting for a crew.</p>
+{% elif suggestion.status == "over_limit" %}
+  <p class="message message-error">Too many items share the same helpers to plan exactly right now ({{ suggestion.batch|length }} items). Nothing was reserved. Try again after some collections are confirmed.</p>
+{% else %}
+  {% if suggestion.status == "incomplete" %}<p class="message message-error">Planning took too long, so this may not be the best possible arrangement. Nothing was reserved.</p>{% endif %}
+  {% if best %}
+    <h2>Best complete crew</h2>
+    <p class="muted small">Everyone here offered to help at this time, and no one is booked twice{% if batch_others %}, while still leaving {{ batch_others|join:", " }} plannable{% endif %}.</p>
+    {% include "coordination/_candidate.html" with c=best best=True %}
+  {% elif not alternatives %}
+    <section class="panel">
+      <h2>No complete crew yet</h2>
+      <ul>{% for r in suggestion.reasons %}<li>{{ r }}</li>{% endfor %}</ul>
+      <p class="muted small">Share the item with neighbours, or add more collection times.</p>
+    </section>
+  {% else %}
+    <p class="message">The people who offered are better used for other items at the same time. You can still choose a crew below.</p>
+  {% endif %}
+  {% if alternatives %}
+    <h2>{% if best %}Other options{% else %}Possible crews{% endif %}</h2>
+    {% for c in alternatives %}{% include "coordination/_candidate.html" with best=False %}{% endfor %}
+  {% endif %}
+  <p class="muted small">Inviting a crew holds everyone's time for 20 minutes while they confirm. Nothing is final until every person confirms.</p>
+{% endif %}
+{% endblock %}

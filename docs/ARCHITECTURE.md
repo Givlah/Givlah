@@ -1,6 +1,6 @@
 # Givlah architecture
 
-Status: **in progress**, 15 October 2026. Built so far: accounts, listings, photo sanitizing, location input, private pickup storage and the PWA shell. Offers and coordination are next. Behaviour is defined in [SPECIFICATION](SPECIFICATION.md) and scope in [PRODUCT](PRODUCT.md). When this document and the specification disagree about behaviour, the specification wins.
+Status: **in progress**, 15 October 2026. Built so far: accounts, listings, photo sanitizing, location input, private pickup storage, the PWA shell, neighbour offers and the full coordination lifecycle (matching, holds, approvals, confirmations, withdrawals and handover records). Behaviour is defined in [SPECIFICATION](SPECIFICATION.md) and scope in [PRODUCT](PRODUCT.md). When this document and the specification disagree about behaviour, the specification wins.
 
 ## Client decision: installable mobile web app
 
@@ -57,7 +57,6 @@ Rules for each layer:
 
 ## Project layout
 
-Folders marked *(next)* don't exist yet:
 
 ```
 manage.py
@@ -66,8 +65,8 @@ apps/
   core/                 clock.py (injectable now), ActionToken (safe resubmission)
   accounts/             User model (display name, synthetic flag), login, demo-mode account switch
   listings/             Listing, photos, zones, private pickup details, image sanitizer, load_demo command
-  offers/               (next) Recipient, transport and helper offers; shared Vehicle records
-  coordination/         (next)
+  offers/               Recipient, transport and helper offers; shared Vehicle records
+  coordination/
     models.py           Plan, Reservation, SharingApproval, Confirmation, HandoverRecord, Event, ActionToken
     matcher.py          Candidate generation + exhaustive selection (pure)
     services.py         activate, approve/revoke, confirm/decline, withdraw, record/retract handover
@@ -155,8 +154,9 @@ How the matcher works:
 
 1. **Candidate generation.** For each listing, combine the owner, an eligible recipient, an eligible transport offer (with its vehicle, if any) and a distinct helper if one is required. Use only exact shared windows, and record why any combination was rejected.
 2. **Selection.** Run a backtracking search that assigns at most one candidate to each listing. Pruning rejects any branch that reuses a person or vehicle in an overlapping interval, and also any branch that can no longer beat the best count found so far. The goal is the most complete handovers. Ties go to the earlier deadline, then the older listing, then the stable ID.
-3. **Limits.** More than eight listings or 24 candidates returns an explicit over-limit result. Hitting the five-second budget returns an incomplete result. Neither case is ever presented as optimal.
-4. **Output.** Suggestions reserve nothing. Only `activate_plan` creates a hold.
+3. **Batch.** The batch for a listing is every open listing connected to it through a shared person or vehicle (owner or offer). Listings outside that group can't affect its plan, so solving the group exactly gives the same answer as solving everything at once, without an arbitrary cut-off.
+4. **Limits.** More than eight listings or 24 candidates in the batch returns an explicit over-limit result. Hitting the five-second budget returns an incomplete result. Neither case is ever presented as optimal.
+5. **Output.** Suggestions reserve nothing. Only `activate` creates a hold. The owner sees the best crew, other feasible crews, and which other listings a choice would block.
 
 ## Transactions and concurrency
 

@@ -31,8 +31,47 @@
 
   <section class="panel">
     <h2>What's still needed</h2>
-    <p>{% include "listings/_needs.html" %}.</p>
+    <p class="needs-line">{% include "listings/_needs.html" %}.</p>
+    {% if listing.active_recipients or listing.active_transports or listing.active_helpers %}
+    <ul class="offer-list">
+      {% for o in listing.active_recipients %}<li><span class="role role-recipient">Wants it</span> {{ o.user }}</li>{% endfor %}
+      {% for o in listing.active_transports %}<li><span class="role role-transport">Transport</span> {{ o.user }}{% if o.vehicle %} · {{ o.vehicle }}{% else %} · carrying locally{% endif %}</li>{% endfor %}
+      {% for o in listing.active_helpers %}<li><span class="role role-helper">Helps carry</span> {{ o.user }}</li>{% endfor %}
+    </ul>
+    {% endif %}
+    {% if active_plan and my_plan_role %}
+    <p><a class="button" href="{% url 'coordination:plan' active_plan.pk %}">Open your collection plan</a></p>
+    {% endif %}
   </section>
+
+  {% if not is_owner and can_offer %}
+  <section class="panel">
+    <h2>Can you help?</h2>
+    <p class="muted small">Offers are commitments you can withdraw later. A crew is only confirmed when everyone agrees.</p>
+    <div class="offer-actions">
+      {% if my_offers.recipient %}{% with o=my_offers.recipient.0 %}
+        <form method="post" action="{% url 'coordination:withdraw' 'recipient' o.pk %}" data-pending-form>{% csrf_token %}
+          <span class="offered">✓ You asked for this</span> <button class="link" type="submit">Withdraw</button></form>
+      {% endwith %}{% else %}
+        <a class="button" href="{% url 'coordination:offer' listing.pk 'recipient' %}">I'd like this</a>
+      {% endif %}
+      {% if my_offers.transport %}{% with o=my_offers.transport.0 %}
+        <form method="post" action="{% url 'coordination:withdraw' 'transport' o.pk %}" data-pending-form>{% csrf_token %}
+          <span class="offered">✓ You offered transport</span> <button class="link" type="submit">Withdraw</button></form>
+      {% endwith %}{% else %}
+        <a class="button button-secondary" href="{% url 'coordination:offer' listing.pk 'transport' %}">I can transport it</a>
+      {% endif %}
+      {% if listing.needs_extra_helper %}
+        {% if my_offers.helper %}{% with o=my_offers.helper.0 %}
+          <form method="post" action="{% url 'coordination:withdraw' 'helper' o.pk %}" data-pending-form>{% csrf_token %}
+            <span class="offered">✓ You offered to help carry</span> <button class="link" type="submit">Withdraw</button></form>
+        {% endwith %}{% else %}
+          <a class="button button-secondary" href="{% url 'coordination:offer' listing.pk 'helper' %}">I can help carry</a>
+        {% endif %}
+      {% endif %}
+    </div>
+  </section>
+  {% endif %}
 
   {% if is_owner %}
   <section class="panel panel-private">
@@ -41,10 +80,16 @@
     <p>{{ private.pickup_details|linebreaksbr }}</p>
     <p class="muted small">{{ private.get_source_display }}. Only you can see this until you approve sharing it with a confirmed crew.</p>
     {% endif %}
-    {% if listing.is_open %}
+    {% if listing.is_open or active_plan %}
+    <div class="actions">
+      {% if active_plan %}<a class="button" href="{% url 'coordination:plan' active_plan.pk %}">Open collection plan</a>
+      {% else %}<a class="button" href="{% url 'coordination:crew' listing.pk %}">Find a crew</a>{% endif %}
+    </div>
+    {% endif %}
+    {% if listing.is_editable %}
     <div class="actions">
       <a class="button button-secondary" href="{% url 'listings:edit' listing.pk %}">Edit</a>
-      <form method="post" action="{% url 'listings:close' listing.pk %}" data-confirm="Close this listing? Neighbours will no longer see it.">
+      <form method="post" action="{% url 'listings:close' listing.pk %}" data-confirm="Close this listing? Neighbours will no longer see it{% if active_plan %}, and the current crew will be released{% endif %}.">
         {% csrf_token %}<input type="hidden" name="revision" value="{{ listing.revision }}">
         <button class="button button-quiet" type="submit">Close listing</button>
       </form>

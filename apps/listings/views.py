@@ -22,6 +22,8 @@ def _zone_points():
 
 @login_required
 def nearby(request):
+    from apps.coordination.services import reconcile
+    reconcile()
     return render(request, "listings/nearby.html", {"listings": selectors.nearby_listings()})
 
 
@@ -45,10 +47,18 @@ def detail(request, pk):
     listing = selectors.visible_listing(request.user, pk)
     if listing is None:
         raise Http404
+    from apps.coordination import selectors as coordination_selectors, services as coordination_services
+    coordination_services.reconcile()
+    listing = selectors.visible_listing(request.user, pk)
+    plan = coordination_selectors.active_plan(listing)
     return render(request, "listings/detail.html", {
         "listing": listing,
         "private": selectors.private_details_for(request.user, listing),
         "is_owner": listing.owner_id == request.user.pk,
+        "active_plan": plan,
+        "my_plan_role": plan.roles_of(request.user.pk) if plan else [],
+        "my_offers": coordination_selectors.my_offers(request.user, listing),
+        "can_offer": listing.state in coordination_services.OPEN_FOR_OFFERS and not listing.is_expired,
     })
 
 
@@ -71,7 +81,7 @@ def edit(request, pk):
         raise Http404
     if listing.owner_id != request.user.pk:
         raise PermissionDenied
-    if not listing.is_open:
+    if not listing.is_editable:
         messages.error(request, "This listing can no longer be edited.")
         return redirect(listing)
     status = 200
@@ -121,7 +131,22 @@ def close(request, pk):
 
 @login_required
 def activity(request):
-    return render(request, "listings/activity.html", {"listings": selectors.my_listings(request.user)})
+    from apps.coordination import selectors as coordination_selectors, services as coordination_services
+    from apps.coordination.models import Plan
+    coordination_services.reconcile()
+    plans = list(coordination_selectors.plans_for(request.user)[:30])
+    me = request.user.pk
+    invitations = [p for p in plans if
+                   (p.state == Plan.State.AWAITING_CONFIRMATIONS and not p.confirmations.filter(user_id=me).exists())
+                   or (p.state in (Plan.State.AWAITING_HANDOVER, Plan.State.NEEDS_REVIEW)
+                       and me in (p.owner_id, p.recipient_id) and not p.handovers.filter(user_id=me).exists())]
+    offers = coordination_selectors.my_offers(request.user)
+    return render(request, "listings/activity.html", {
+        "listings": selectors.my_listings(request.user),
+        "plans": [p for p in plans if p not in invitations],
+        "invitations": invitations,
+        "offers": [(role, o) for role in ("recipient", "transport", "helper") for o in offers[role]],
+    })
 
 
 @login_required
