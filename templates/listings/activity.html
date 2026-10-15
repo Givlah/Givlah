@@ -1,8 +1,9 @@
 ﻿{% extends "base.html" %}
 {% block title %}My activity{% endblock %}
+{% block screen_class %}screen-activity{% endblock %}
 {% block content %}
 <div class="page-head"><h1>My activity</h1><p class="muted">Your giving and help in one place</p></div>
-<nav class="segments" aria-label="Jump to activity section"><a href="#giving">Giving</a><a href="#helping">Helping</a></nav>
+<nav class="segments" aria-label="Jump to activity section"><a href="?section=giving#giving"{% if request.GET.section != 'helping' %} aria-current="location"{% endif %}>Giving</a><a href="?section=helping#helping"{% if request.GET.section == 'helping' %} aria-current="location"{% endif %}>Helping</a></nav>
 
 <section class="activity-section" aria-labelledby="action-heading">
   <h2 class="section-heading" id="action-heading">Needs your action <span class="count count-gold">{{ invitations|length }}</span></h2>
@@ -10,14 +11,14 @@
   <ul class="activity-rows">
     {% for plan in invitations %}<li><a class="activity-row" href="{% url 'coordination:plan' plan.pk %}">
       {% include "core/_item_thumb.html" with item=plan.listing %}
-      <span class="row-copy"><strong>{{ plan.listing.title }}</strong><span class="meta">{{ plan.start|date:"D j M, g:i a" }}</span><span class="status status-{{ plan.state }}">{% include "core/_icon.html" with name="clock" %}{{ plan.get_state_display }}</span></span>
+      <span class="row-copy"><strong>{% if plan.state == "awaiting_confirmations" %}Confirm collection plan{% else %}Record what happened{% endif %}</strong><span class="meta">{{ plan.listing.title }}</span><span class="status status-{{ plan.state }}">{% include "core/_icon.html" with name="clock" %}{{ plan.get_state_display }}</span></span>
       {% include "core/_icon.html" with name="chevron" %}
     </a></li>{% endfor %}
   </ul>
   {% else %}
   <div class="empty-card">
     {% include "core/_image_slot.html" with slot="activity-empty" ratio="2 / 1" alt="" %}
-    <h3>Nothing needs your action</h3><p class="muted small">Your collection invitations and handover actions will appear here.</p>
+    <div><h3>Nothing needs your action</h3><p class="muted small">Invitations and handover actions will appear here.</p></div>
   </div>
   {% endif %}
 </section>
