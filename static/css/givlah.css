@@ -175,7 +175,7 @@ fieldset { border: 0; min-width: 0; margin: 0; padding: 20px; background: var(--
 legend { font-family: var(--font-display); font-weight: 700; font-size: 1.05rem; padding: 0; float: left; width: 100%; margin-bottom: 2px; }
 legend + * { clear: both; }
 .field { display: grid; gap: 6px; min-width: 0; }
-.field label { font-weight: 600; }
+.field label, .field-label { font-weight: 600; }
 .field input:not([type=checkbox]), .field select, .field textarea {
   width: 100%; min-height: 48px; padding: 10px 12px; font: inherit; color: inherit;
   border: 1.5px solid #8c9890; border-radius: var(--radius-sm); background: #fdfcfa; min-width: 0;

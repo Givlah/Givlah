@@ -1,8 +1,8 @@
-<div class="field{% if field.errors %} field-error{% endif %}{% if field.field.widget.input_type == 'checkbox' %} field-check{% endif %}">
-  {% if field.field.widget.input_type == 'checkbox' %}
+<div class="field{% if field.errors %} field-error{% endif %}{% if field.field.widget.input_type == 'checkbox' and not field.field.widget.allow_multiple_selected %} field-check{% endif %}"{% if field.field.widget.allow_multiple_selected %} role="group" aria-labelledby="{{ field.auto_id }}_label"{% endif %}>
+  {% if field.field.widget.input_type == 'checkbox' and not field.field.widget.allow_multiple_selected %}
     {{ field }} <label for="{{ field.id_for_label }}">{{ field.label }}</label>
   {% else %}
-    <label for="{{ field.id_for_label }}">{{ field.label }}{% if not field.field.required %} <span class="muted">(optional)</span>{% endif %}</label>
+    {% if field.field.widget.allow_multiple_selected %}<span class="field-label" id="{{ field.auto_id }}_label">{{ field.label }}</span>{% else %}<label for="{{ field.id_for_label }}">{{ field.label }}{% if not field.field.required %} <span class="muted">(optional)</span>{% endif %}</label>{% endif %}
     {{ field }}
   {% endif %}
   {% if field.help_text %}<p class="help" id="{{ field.id_for_label }}_help">{{ field.help_text }}</p>{% endif %}
