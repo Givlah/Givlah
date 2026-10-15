@@ -6,7 +6,7 @@
   {% if not editing %}<p class="muted">Furniture and simple household items only. No electrical goods, mattresses or hazardous items.</p>{% endif %}
 </div>
 
-<form method="post" enctype="multipart/form-data" class="stack" data-pending-form novalidate>
+<form method="post" enctype="multipart/form-data" class="stack form-page" data-pending-form novalidate>
   {% csrf_token %}
   {{ form.action_token }}
   {% if editing %}<input type="hidden" name="revision" value="{{ listing.revision }}">
@@ -38,7 +38,7 @@
     <legend>Pickup location</legend>
     <div class="locate">
       <button type="button" class="button button-secondary" data-locate hidden>
-        <svg aria-hidden="true" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/></svg>
+        {% include "core/_icon.html" with name="locate" %}
         Use my location
       </button>
       <p class="help" data-locate-status role="status" aria-live="polite"></p>
@@ -60,8 +60,11 @@
     <p class="help">Include enough time for loading and the trip. Helpers commit to the whole window.</p>
   </fieldset>
 
+  <fieldset>
+  <legend>Before you publish</legend>
   {% include "core/_field.html" with field=form.ownership_declared %}
   <p class="help">Before publishing, check your photos and text don't show faces, house numbers or other personal details.</p>
+  </fieldset>
 
   <div class="actions">
     <button class="button" type="submit" data-pending-label="{% if editing %}Saving…{% else %}Publishing…{% endif %}">{% if editing %}Save changes{% else %}Publish item{% endif %}</button>
