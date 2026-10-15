@@ -219,14 +219,19 @@ legend + * { clear: both; }
 .offer-actions .button { width: 100%; }
 .offer-actions form { margin: 0; display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 10px 14px; background: #eafaf1; border-radius: var(--radius-sm); }
 .offered { font-weight: 600; color: var(--green-900); }
-.role { font-family: var(--font-display); display: inline-block; min-width: 92px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.03em; padding: 2px 8px; border-radius: 6px; text-align: center; }
+.role { font-family: var(--font-display); display: inline-block; font-size: 0.75rem; font-weight: 700; padding: 3px 9px; border-radius: 999px; text-align: center; }
 .role-owner { background: #fff4d6; color: var(--gold-700); }
 .role-recipient { background: #eafaf1; color: var(--green-900); }
 .role-transport { background: #eef6ff; color: var(--blue-700); }
 .role-helper { background: #f3eefe; color: #5b3aa8; }
-.crew-card { background: var(--card); border-radius: var(--radius); padding: 14px; box-shadow: var(--shadow); margin: 0 0 14px; border: 2px solid transparent; }
+.crew-card { background: var(--card); border-radius: var(--radius); padding: 18px; box-shadow: var(--shadow); margin: 0 0 18px; border: 2px solid transparent; }
 .crew-card-best { border-color: var(--green-500); }
 .crew-card form { margin-top: 12px; }
+.crew-card .button { width: 100%; }
+.person-row { display: flex; align-items: center; gap: 12px; }
+.crew-people > li { padding: 12px 0; border-bottom: 1px solid var(--line); }
+.crew-people > li:last-child { border-bottom: 0; }
+.crew-people > li > .small { display: block; margin: 6px 0 0 52px; }
 .crew-time { margin-bottom: 6px; }
 .warn { color: var(--gold-700); font-weight: 600; font-size: 0.9rem; margin: 10px 0 0; }
 .crew-list li { display: flex; justify-content: space-between; gap: 8px; padding: 8px 0; border-bottom: 1px solid var(--line); }
