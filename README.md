@@ -2,9 +2,9 @@
   <img src="assets/brand/givlah-icon.png" alt="Givlah icon: a parcel between green and blue waves" width="120">
 </p>
 
-# Givlah
+<h1 align="center">Givlah</h1>
 
-**Good things. New homes. Together.**
+<p align="center"><strong>Good things. New homes. Together.</strong></p>
 
 Givlah helps neighbours give usable household items a new home. It does more than find someone who wants an item. It arranges the people, transport and time needed to actually collect it.
 
