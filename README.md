@@ -79,7 +79,7 @@ Not available yet. Setup and run instructions will be added here once the first 
 
 ## Contributing
 
-Contributions are welcome. See [CONTRIBUTING.md](CONTRIBUTING.md), and report security issues as described in [SECURITY.md](SECURITY.md).
+Givlah is developed by a small core team, and only team members can contribute code. Bug reports and feedback are welcome as issues. Team members should follow [CONTRIBUTING.md](CONTRIBUTING.md). Report security issues as described in [SECURITY.md](SECURITY.md).
 
 ## Acknowledgements
 

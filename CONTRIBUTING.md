@@ -1,11 +1,13 @@
 # Contributing to Givlah
 
-Thanks for your interest in Givlah. Bug reports, ideas and pull requests are all welcome.
+Givlah is developed by a small core team. **Pull requests are accepted only from core team members**, and outside pull requests will be closed. You're still welcome to open an issue to report a bug or share feedback.
+
+The rest of this guide is for core team members.
 
 ## Before you start
 
 - Read [docs/PRODUCT.md](docs/PRODUCT.md) for scope and [docs/SPECIFICATION.md](docs/SPECIFICATION.md) for how the app must behave. If a change alters behaviour described in the specification, update the specification in the same pull request.
-- For anything larger than a small fix, please open an issue first so the approach can be agreed before you spend time on it.
+- For anything larger than a small fix, agree on the approach with the team before you start.
 - Report security problems privately as described in [SECURITY.md](SECURITY.md), not in public issues.
 
 ## Development setup
