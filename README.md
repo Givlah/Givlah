@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="assets/brand/givlah-icon.png" alt="Givlah icon: a parcel between green and blue waves" width="120">
+  <img src="assets/brand/iconconcept-readme.png" alt="Givlah icon: a parcel passed between two hands" width="140">
 </p>
 
 <h1 align="center">Givlah</h1>
