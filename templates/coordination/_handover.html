@@ -1,0 +1,53 @@
+<section class="panel handover-panel">
+  <h2>What happened?</h2>
+  <ol class="handover-timeline">
+    <li class="{% if records.owner %}step-recorded{% else %}step-waiting{% endif %}">
+      <span class="step-icon">{% if records.owner %}{% include "core/_icon.html" with name="check" %}{% else %}{% include "core/_icon.html" with name="clock" %}{% endif %}</span>
+      <div><h3>{% if records.owner %}Owner recorded{% else %}Waiting for owner to record{% endif %}</h3>
+      <p class="muted small">{% if records.owner %}{{ plan.owner }}: {{ records.owner.get_outcome_display|lower }}<br>{{ records.owner.created_at|date:"j M, g:i a" }}{% else %}{{ plan.owner }} hasn't recorded yet{% endif %}</p></div>
+    </li>
+    <li class="{% if records.recipient %}step-recorded{% else %}step-waiting{% endif %}">
+      <span class="step-icon">{% if records.recipient %}{% include "core/_icon.html" with name="check" %}{% else %}{% include "core/_icon.html" with name="clock" %}{% endif %}</span>
+      <div><h3>{% if records.recipient %}Recipient recorded{% else %}Waiting for recipient to record{% endif %}</h3>
+      <p class="muted small">{% if records.recipient %}{{ plan.recipient }}: {{ records.recipient.get_outcome_display|lower }}<br>{{ records.recipient.created_at|date:"j M, g:i a" }}{% else %}{{ plan.recipient }} hasn't recorded yet{% endif %}</p></div>
+    </li>
+    <li class="{% if plan.state == 'handover_recorded' %}step-recorded{% else %}step-pending{% endif %}">
+      <span class="step-icon">{% if plan.state == "handover_recorded" %}{% include "core/_icon.html" with name="check" %}{% else %}{% include "core/_icon.html" with name="status" %}{% endif %}</span>
+      <div><h3>{% if plan.state == "handover_recorded" %}Handover recorded{% else %}Handover not yet confirmed{% endif %}</h3>
+      <p class="muted small">{% if plan.state == "handover_recorded" %}Both parties recorded that the item was handed over.{% else %}Both parties must record that the item was handed over.{% endif %}</p></div>
+    </li>
+  </ol>
+  {% if my_party %}
+    {% if my_record %}
+      <form method="post" action="{% url 'coordination:plan_action' plan.pk 'retract' %}" data-pending-form>{% csrf_token %}
+        <button class="button button-quiet" type="submit">Withdraw my record</button></form>
+    {% else %}
+      <div class="actions">
+        {% for value, label in outcomes %}
+        <form method="post" action="{% url 'coordination:plan_action' plan.pk 'handover' %}" data-pending-form>{% csrf_token %}
+          <input type="hidden" name="outcome" value="{{ value }}">
+          <button class="button{% if not forloop.first %} button-secondary{% endif %}" type="submit">{{ label }}</button>
+        </form>
+        {% endfor %}
+      </div>
+    {% endif %}
+  {% else %}
+    <p class="muted small">The owner and recipient record the handover.</p>
+  {% endif %}
+  {% if plan.state == "awaiting_handover" %}
+  <form method="post" action="{% url 'coordination:plan_action' plan.pk 'decline' %}" data-confirm="Report that you couldn't take part? The owner and recipient will be asked what happened.">{% csrf_token %}
+    <button class="button button-quiet spaced" type="submit">I couldn't take part</button></form>
+  {% endif %}
+</section>
+{% if plan.state == "handover_recorded" %}
+<section class="state-hero">
+  {% include "core/_image_slot.html" with slot="handover-done" ratio="2 / 1" alt="" %}
+  <h2>The item has a new home</h2><p class="muted">Owner and recipient both recorded the handover.</p>
+</section>
+{% elif plan.state == "awaiting_handover" %}
+<section class="state-hero">
+  {% include "core/_image_slot.html" with slot="handover-waiting" ratio="4 / 3" alt="" %}
+  <h2>{% if records.owner and not records.recipient %}Waiting for recipient to record handover{% elif records.recipient and not records.owner %}Waiting for owner to record handover{% else %}Awaiting handover record{% endif %}</h2>
+  <p class="muted">The handover is confirmed only when both parties record that the item was handed over.</p>
+</section>
+{% endif %}

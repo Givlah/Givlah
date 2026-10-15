@@ -2,10 +2,14 @@
 {% block title %}Collection plan{% endblock %}
 {% block content %}
 <div class="page-head">
-  <p class="muted small"><a href="{{ plan.listing.get_absolute_url }}">← {{ plan.listing.title }}</a></p>
-  <h1>Collection plan</h1>
-  <span class="status status-{{ plan.state }}"><svg aria-hidden="true" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/></svg>{{ plan.get_state_display }}</span>
-  {% if plan.listing.is_synthetic %}<span class="tag tag-demo">Demo</span>{% endif %}
+  <div class="screen-title"><a class="back-link" href="{{ plan.listing.get_absolute_url }}" aria-label="Back to {{ plan.listing.title }}">{% include "core/_icon.html" with name="back" %}</a><h1>Collection plan</h1></div>
+  <a class="item-summary" href="{{ plan.listing.get_absolute_url }}">
+    {% include "core/_item_thumb.html" with item=plan.listing %}
+    <span class="row-copy"><strong>{{ plan.listing.title }}</strong><span class="meta">{{ plan.listing.get_condition_display }}</span><span class="meta">{{ plan.listing.zone.name }}</span></span>
+    {% include "core/_icon.html" with name="chevron" %}
+  </a>
+  <div class="chip-row"><span class="status status-{{ plan.state }}">{% include "core/_icon.html" with name="status" %}{{ plan.get_state_display }}</span>
+  {% if plan.listing.is_synthetic %}<span class="tag tag-demo">Demo</span>{% endif %}</div>
 </div>
 
 {% if plan.state == "ended" %}
@@ -13,15 +17,22 @@
 {% elif plan.state == "awaiting_confirmations" %}
 <p class="message">Held until <strong>{{ plan.hold_expires_at|date:"g:i a" }}</strong>. If anyone hasn't confirmed by then, the plan ends and everyone is released.</p>
 {% elif plan.state == "ready" %}
-<p class="message message-success">Everyone confirmed. The collection is on.</p>
+<section class="state-hero state-ready">
+  {% include "core/_image_slot.html" with slot="plan-ready" ratio="2 / 1" alt="" %}
+  <h2>Everyone confirmed</h2><p class="muted">The collection is on.</p>
+</section>
 {% elif plan.state == "handover_recorded" %}
 <p class="message message-success">Owner and recipient both recorded the handover. The item has a new home.</p>
 {% elif plan.state == "needs_review" %}
 <p class="message message-error">Something changed after the collection time started. The owner and recipient each record what happened. The item won't be relisted until both say it stayed with the owner.</p>
 {% endif %}
 
-<section class="panel">
-  <h2>When</h2>
+{% if plan.state == "awaiting_handover" or plan.state == "needs_review" or plan.state == "handover_recorded" %}
+  {% include "coordination/_handover.html" %}
+{% endif %}
+
+<section class="panel collection-details">
+  <h2>Collection details</h2>
   <p><strong>{{ plan.start|date:"l j F" }}, {{ plan.start|date:"g:i a" }} – {{ plan.end|date:"g:i a" }}</strong></p>
   <p class="muted small">This whole window is reserved for everyone, including loading, the trip and unloading.</p>
   <dl class="facts compact">
@@ -37,9 +48,10 @@
   <ul class="crew-list">
     {% for member in crew %}
     <li>
-      <span><span class="crew-role">{{ member.role }}</span> {{ member.person }}{% if member.me %} (you){% endif %}</span>
-      {% if plan.state == "awaiting_confirmations" %}
-        {% if member.confirmed %}<span class="check check-yes">✓ Confirmed</span>{% else %}<span class="check check-no">○ Not yet</span>{% endif %}
+      <span class="avatar avatar-{{ forloop.counter }}" aria-hidden="true">{{ member.person.display_name|default:member.person.username|first|upper }}</span>
+      <span class="crew-person"><span class="crew-role">{{ member.role }}</span><strong>{{ member.person }}</strong>{% if member.me %} <span class="muted small">(you)</span>{% endif %}</span>
+      {% if plan.state == "awaiting_confirmations" or plan.state == "ready" %}
+        {% if member.confirmed %}<span class="check check-yes">{% include "core/_icon.html" with name="check" %} Confirmed</span>{% else %}<span class="check check-no">{% include "core/_icon.html" with name="clock" %} Not yet</span>{% endif %}
       {% endif %}
     </li>
     {% endfor %}
@@ -97,35 +109,7 @@
   <form method="post" action="{% url 'coordination:plan_action' plan.pk 'decline' %}" data-confirm="Drop out? The plan ends and the item looks for a new crew.">{% csrf_token %}
     <button class="button button-quiet" type="submit">I can no longer make it</button></form>
 </section>
-{% elif plan.state == "awaiting_handover" or plan.state == "needs_review" or plan.state == "handover_recorded" %}
-<section class="panel">
-  <h2>What happened?</h2>
-  <ul class="approvals">
-    <li>{% if records.owner %}✓ {{ plan.owner }}: {{ records.owner.get_outcome_display|lower }}{% else %}○ {{ plan.owner }} hasn't recorded yet{% endif %}</li>
-    <li>{% if records.recipient %}✓ {{ plan.recipient }}: {{ records.recipient.get_outcome_display|lower }}{% else %}○ {{ plan.recipient }} hasn't recorded yet{% endif %}</li>
-  </ul>
-  {% if my_party %}
-    {% if my_record %}
-      <form method="post" action="{% url 'coordination:plan_action' plan.pk 'retract' %}" data-pending-form>{% csrf_token %}
-        <button class="button button-quiet" type="submit">Withdraw my record</button></form>
-    {% else %}
-      <div class="actions">
-        {% for value, label in outcomes %}
-        <form method="post" action="{% url 'coordination:plan_action' plan.pk 'handover' %}" data-pending-form>{% csrf_token %}
-          <input type="hidden" name="outcome" value="{{ value }}">
-          <button class="button{% if not forloop.first %} button-secondary{% endif %}" type="submit">{{ label }}</button>
-        </form>
-        {% endfor %}
-      </div>
-    {% endif %}
-  {% else %}
-    <p class="muted small">The owner and recipient record the handover.</p>
-  {% endif %}
-  {% if plan.state == "awaiting_handover" %}
-  <form method="post" action="{% url 'coordination:plan_action' plan.pk 'decline' %}" data-confirm="Report that you couldn't take part? The owner and recipient will be asked what happened.">{% csrf_token %}
-    <button class="button button-quiet spaced" type="submit">I couldn't take part</button></form>
-  {% endif %}
-</section>
+
 {% endif %}
 
 <details class="panel history">
