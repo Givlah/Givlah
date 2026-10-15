@@ -205,6 +205,10 @@ legend + * { clear: both; }
 .page p > a:not(.button), .page .center > a { display: inline-flex; align-items: center; min-height: 44px; }
 
 .auth { max-width: 420px; margin: 16px auto; }
+.auth > h1 { margin-bottom: 12px; }
+.auth-card { padding: 24px 20px; background: white; border-radius: var(--radius); box-shadow: var(--shadow); margin: 24px 0 16px; }
+.offline-page { padding-top: 64px; }
+.offline-page .empty { background: white; padding: 32px 24px; border-radius: var(--radius); box-shadow: var(--shadow); }
 .demo-users { list-style: none; padding: 0; margin: 0; display: grid; gap: 8px; }
 .demo-users form { margin: 0; }
 .demo-users .button { width: 100%; }

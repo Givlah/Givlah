@@ -4,7 +4,7 @@
 <section class="auth">
   <h1>Sign in</h1>
   <p class="hand">Good things. New homes. Together.</p>
-  <form method="post" class="stack" data-pending-form>
+  <form method="post" class="stack auth-card" data-pending-form>
     {% csrf_token %}
     {% if form.non_field_errors %}<div class="message message-error" role="alert">{% for e in form.non_field_errors %}<p>{{ e }}</p>{% endfor %}</div>{% endif %}
     {% include "core/_field.html" with field=form.username %}

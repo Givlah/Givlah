@@ -3,7 +3,7 @@
 {% block content %}
 <section class="auth">
   <h1>Create an account</h1>
-  <form method="post" class="stack" data-pending-form>
+  <form method="post" class="stack auth-card" data-pending-form>
     {% csrf_token %}
     {% for field in form %}{% include "core/_field.html" %}{% endfor %}
     <button class="button" type="submit" data-pending-label="Creating…">Create account</button>
