@@ -75,7 +75,7 @@ p { margin: 0 0 12px; }
   padding: 10px var(--space); padding-top: calc(10px + env(safe-area-inset-top));
   background: var(--cream);
 }
-.brand { display: flex; align-items: center; gap: 8px; text-decoration: none; color: var(--ink); font-family: var(--font-display); font-weight: 700; font-size: 1.5rem; line-height: 1; }
+.brand { display: flex; align-items: center; gap: 8px; min-height: 44px; text-decoration: none; color: var(--ink); font-family: var(--font-display); font-weight: 700; font-size: 1.5rem; line-height: 1; }
 .brand img { border-radius: 8px; }
 .account { display: flex; align-items: center; gap: 10px; font-size: 0.9rem; }
 .account form { margin: 0; }
