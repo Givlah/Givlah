@@ -139,7 +139,7 @@ p { margin: 0 0 12px; }
 .listing-card .card-body { flex: 1; min-width: 0; padding: 14px 12px; display: flex; flex-direction: column; align-items: flex-start; gap: 9px; }
 .listing-card .listing-heading { width: 100%; align-items: flex-start; }
 .listing-card .listing-heading h2 { margin: 0; }
-.listing-card .condition-chip { display: inline-block; background: #e4faed; color: var(--green-900); border-radius: 999px; padding: 4px 9px; font-size: 0.75rem; line-height: 1.3; }
+.listing-card .condition-chip { display: inline-block; background: #e4faed; color: var(--green-900); border-radius: 999px; padding: 4px 9px; font-family: var(--font-display); font-weight: 700; font-size: 0.75rem; line-height: 1.3; }
 .item-metadata { display: flex; flex-wrap: wrap; gap: 5px 10px; font-size: 0.75rem; color: var(--ink-muted); }
 .item-metadata > span { display: inline-flex; align-items: center; gap: 5px; }
 .item-metadata .icon { width: 15px; height: 15px; }
@@ -347,7 +347,7 @@ h3 { font-family: var(--font-display); font-size: 1rem; line-height: 1.3; margin
 .screen-activity .section-heading { font-size: 1.05rem; }
 .screen-activity .activity-row { border: 1px solid #f4eee5; box-shadow: 0 2px 8px rgb(75 54 19 / 3%); padding: 10px; }
 .screen-activity .item-thumb { width: 76px; height: 76px; }
-.activity-action { background: #e8f3ff; color: var(--blue-700); font-size: 0.75rem; padding: 3px 8px; border-radius: 999px; }
+.activity-action { background: #e8f3ff; color: var(--blue-700); font-family: var(--font-display); font-weight: 700; font-size: 0.75rem; padding: 3px 8px; border-radius: 999px; }
 .screen-activity .row-copy strong { font-size: 1rem; }
 .activity-section:target { outline: 2px solid var(--green-700); outline-offset: 6px; border-radius: var(--radius); }
 .section-heading { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 10px; font-size: 1.12rem; }
@@ -405,7 +405,7 @@ details[open] > summary > .icon:last-child { transform: rotate(90deg); }
 .crew-section { margin: 18px 0; background: white; padding: 12px; border: 1px solid #f1eadf; border-radius: 22px; box-shadow: var(--shadow); }
 .crew-section > h2 { margin: 0 0 4px; padding-bottom: 10px; border-bottom: 1px solid var(--line); font-size: 1.15rem; }
 .crew-section > h2 > .icon { color: var(--green-700); width: 27px; height: 27px; }
-.crew-section > h2 > .count { font: 0.72rem/1.4 system-ui, sans-serif; height: 26px; }
+.crew-section > h2 > .count { font: 700 0.72rem/1.4 var(--font-display); height: 26px; }
 .crew-section .crew-list { padding: 0; margin: 0; }
 .crew-list { gap: 0; }
 .crew-list li { align-items: center; padding: 10px 0; gap: 10px; min-height: 64px; }
