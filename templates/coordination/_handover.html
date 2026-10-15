@@ -1,5 +1,5 @@
 <section class="panel handover-panel">
-  <h2>What happened?</h2>
+  <h2 class="sr-only">What happened?</h2>
   <ol class="handover-timeline">
     <li class="{% if records.owner %}step-recorded{% else %}step-waiting{% endif %}">
       <span class="step-icon">{% if records.owner %}{% include "core/_icon.html" with name="check" %}{% else %}{% include "core/_icon.html" with name="clock" %}{% endif %}</span>
@@ -17,27 +17,7 @@
       <p class="muted small">{% if plan.state == "handover_recorded" %}Both parties recorded that the item was handed over.{% else %}Both parties must record that the item was handed over.{% endif %}</p></div>
     </li>
   </ol>
-  {% if my_party %}
-    {% if my_record %}
-      <form method="post" action="{% url 'coordination:plan_action' plan.pk 'retract' %}" data-pending-form>{% csrf_token %}
-        <button class="button button-quiet" type="submit">Withdraw my record</button></form>
-    {% else %}
-      <div class="actions">
-        {% for value, label in outcomes %}
-        <form method="post" action="{% url 'coordination:plan_action' plan.pk 'handover' %}" data-pending-form>{% csrf_token %}
-          <input type="hidden" name="outcome" value="{{ value }}">
-          <button class="button{% if not forloop.first %} button-secondary{% endif %}" type="submit">{{ label }}</button>
-        </form>
-        {% endfor %}
-      </div>
-    {% endif %}
-  {% else %}
-    <p class="muted small">The owner and recipient record the handover.</p>
-  {% endif %}
-  {% if plan.state == "awaiting_handover" %}
-  <form method="post" action="{% url 'coordination:plan_action' plan.pk 'decline' %}" data-confirm="Report that you couldn't take part? The owner and recipient will be asked what happened.">{% csrf_token %}
-    <button class="button button-quiet spaced" type="submit">I couldn't take part</button></form>
-  {% endif %}
+
 </section>
 {% if plan.state == "handover_recorded" %}
 <section class="state-hero">
@@ -51,3 +31,29 @@
   <p class="muted">The handover is confirmed only when both parties record that the item was handed over.</p>
 </section>
 {% endif %}
+
+<section class="handover-actions">
+  {% if my_party %}
+    {% if my_record %}
+      <details class="plan-options"><summary>Record options {% include "core/_icon.html" with name="chevron" %}</summary>
+      <form method="post" action="{% url 'coordination:plan_action' plan.pk 'retract' %}" data-pending-form>{% csrf_token %}
+        <button class="button button-quiet" type="submit">Withdraw my record</button></form></details>
+    {% else %}
+      <div class="actions handover-record-actions">
+        {% for value, label in outcomes %}
+        <form method="post" action="{% url 'coordination:plan_action' plan.pk 'handover' %}" data-pending-form>{% csrf_token %}
+          <input type="hidden" name="outcome" value="{{ value }}">
+          <button class="button{% if not forloop.first %} button-secondary{% endif %}" type="submit">{{ label }}</button>
+        </form>
+        {% endfor %}
+      </div>
+    {% endif %}
+  {% else %}
+    <p class="muted small">The owner and recipient record the handover.</p>
+  {% endif %}
+  {% if plan.state == "awaiting_handover" %}
+  <details class="plan-options"><summary>Collection options {% include "core/_icon.html" with name="chevron" %}</summary>
+  <form method="post" action="{% url 'coordination:plan_action' plan.pk 'decline' %}" data-confirm="Report that you couldn't take part? The owner and recipient will be asked what happened.">{% csrf_token %}
+    <button class="button button-quiet spaced" type="submit">I couldn't take part</button></form></details>
+  {% endif %}
+</section>
