@@ -66,7 +66,28 @@
 
     setupPhotoPreview();
     setupLocation();
+    setupHoldProgress();
   });
+
+  function setupHoldProgress() {
+    document.querySelectorAll("[data-hold-progress]").forEach(function (bar) {
+      var start = Date.parse(bar.dataset.start), end = Date.parse(bar.dataset.until);
+      if (!Number.isFinite(start) || !Number.isFinite(end) || end <= start) return;
+      function update() {
+        if (document.hidden) return;
+        bar.max = end - start;
+        bar.value = Math.max(0, Math.min(end - start, end - Date.now()));
+        bar.hidden = false;
+      }
+      var timer = null;
+      function pause() { window.clearInterval(timer); timer = null; }
+      function resume() { update(); if (timer === null && !document.hidden) timer = window.setInterval(update, 1000); }
+      resume();
+      document.addEventListener("visibilitychange", function () { if (document.hidden) pause(); else resume(); });
+      window.addEventListener("pagehide", pause);
+      window.addEventListener("pageshow", resume);
+    });
+  }
 
   function setupPhotoPreview() {
     var input = document.querySelector("input[type=file][name=photos]");
