@@ -12,19 +12,23 @@
   <link rel="stylesheet" href="{% static 'css/givlah.css' %}">
   <script src="{% static 'js/givlah.js' %}" defer></script>
 </head>
-<body>
+<body class="{% if user.is_authenticated %}app{% else %}guest{% endif %} {% block screen_class %}{% endblock %}">
   <a class="skip-link" href="#main">Skip to content</a>
   <header class="topbar">
-    <a class="brand" href="{% url 'listings:nearby' %}">
+    {% if not user.is_authenticated %}<a class="brand" href="{% url 'listings:nearby' %}">
       <img src="{% static 'icons/icon-192.png' %}" alt="" width="32" height="32">
       <span>Givlah</span>
-    </a>
+    </a>{% endif %}
     {% if user.is_authenticated %}
     <div class="account">
       <details class="account-menu">
         <summary aria-label="Account: {{ user.display_name|default:user.username }}"><span class="avatar" aria-hidden="true">{{ user.display_name|default:user.username|first|upper }}</span></summary>
         <div class="account-popover">
+      <a class="brand" href="{% url 'listings:nearby' %}"><img src="{% static 'icons/icon-192.png' %}" alt="" width="32" height="32"><span>Givlah</span></a>
       <span class="who">{{ user.display_name|default:user.username }}{% if user.is_synthetic %} <span class="tag tag-demo">Demo</span>{% endif %}</span>
+      <label class="motion-setting" hidden data-motion-setting>Motion
+        <select data-motion-choice><option value="force">Full</option><option value="auto">Follow device</option><option value="reduce">Reduced</option></select>
+      </label>
       <form method="post" action="{% url 'accounts:logout' %}">{% csrf_token %}<button class="link" type="submit">Sign out</button></form>
         </div>
       </details>
@@ -48,9 +52,9 @@
     <a href="{{ nearby_url }}" {% if request.path == nearby_url %}aria-current="page"{% endif %}>
       {% include "core/_icon.html" with name="pin" %}Nearby</a>
     <a href="{{ create_url }}" class="tab-primary" {% if request.path == create_url %}aria-current="page"{% endif %}>
-      {% include "core/_icon.html" with name="plus" %}Give an item</a>
+      {% include "core/_icon.html" with name="plus" %}<span>Give</span></a>
     <a href="{{ activity_url }}" {% if request.path == activity_url %}aria-current="page"{% elif request.resolver_match.url_name == 'plan' or request.resolver_match.url_name == 'crew' %}class="tab-active"{% endif %}>
-      {% include "core/_icon.html" with name="activity" %}My activity</a>
+      {% include "core/_icon.html" with name="activity" %}<span>Activity</span></a>
   </nav>
   {% endif %}
 </body>

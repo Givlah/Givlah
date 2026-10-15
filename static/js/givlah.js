@@ -2,11 +2,44 @@
 (function () {
   "use strict";
 
+  // A saved explicit choice takes priority; auto follows the device preference.
+  var motionMode = "force";
+  var motionQuery = window.matchMedia ? window.matchMedia("(prefers-reduced-motion: reduce)") : null;
+  function validMotion(value) { return ["force", "auto", "reduce"].indexOf(value) !== -1; }
+  try {
+    var savedMotion = window.localStorage.getItem("givlah-motion");
+    if (validMotion(savedMotion)) motionMode = savedMotion;
+  } catch (e) { /* The preference also works when storage is unavailable. */ }
+  var requestedMotion = new URLSearchParams(window.location.search).get("motion");
+  if (validMotion(requestedMotion)) {
+    motionMode = requestedMotion;
+    try { window.localStorage.setItem("givlah-motion", motionMode); } catch (e) {}
+  }
+  function applyMotion() {
+    document.documentElement.dataset.motion = motionMode === "force" || (motionMode === "auto" && !(motionQuery && motionQuery.matches)) ? "on" : "off";
+    document.documentElement.dataset.motionMode = motionMode;
+    document.documentElement.dataset.motionPaused = document.hidden ? "true" : "false";
+  }
+  applyMotion();
+  if (motionQuery && motionQuery.addEventListener) motionQuery.addEventListener("change", applyMotion);
+  document.addEventListener("visibilitychange", applyMotion);
+
   if ("serviceWorker" in navigator && window.isSecureContext) {
     window.addEventListener("load", function () { navigator.serviceWorker.register("/sw.js").catch(function () {}); });
   }
 
   document.addEventListener("DOMContentLoaded", function () {
+    document.querySelectorAll("[data-motion-setting]").forEach(function (setting) {
+      setting.hidden = false;
+      var choice = setting.querySelector("[data-motion-choice]");
+      choice.value = motionMode;
+      choice.addEventListener("change", function () {
+        if (!validMotion(choice.value)) return;
+        motionMode = choice.value;
+        try { window.localStorage.setItem("givlah-motion", motionMode); } catch (e) {}
+        applyMotion();
+      });
+    });
     // Disable submit buttons while a request is pending (the server also rejects duplicates).
     document.querySelectorAll("form[data-pending-form]").forEach(function (form) {
       form.addEventListener("submit", function () {
