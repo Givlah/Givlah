@@ -1,17 +1,17 @@
-﻿{% extends "base.html" %}
+{% extends "base.html" %}
 {% block title %}My activity{% endblock %}
 {% block screen_class %}screen-activity{% endblock %}
 {% block content %}
 <div class="page-head"><h1>My activity</h1><p class="muted">Your giving and help in one place</p></div>
-<nav class="segments" aria-label="Jump to activity section"><a href="?section=giving#giving"{% if request.GET.section != 'helping' %} aria-current="location"{% endif %}>Giving</a><a href="?section=helping#helping"{% if request.GET.section == 'helping' %} aria-current="location"{% endif %}>Helping</a></nav>
+<nav class="segments" aria-label="Jump to activity section"><a href="?section=giving#giving"{% if request.GET.section != 'helping' %} aria-current="location"{% endif %}>{% include "core/_icon.html" with name="grid" %}Giving</a><a href="?section=helping#helping"{% if request.GET.section == 'helping' %} aria-current="location"{% endif %}>{% include "core/_icon.html" with name="people" %}Helping</a></nav>
 
 <section class="activity-section" aria-labelledby="action-heading">
-  <h2 class="section-heading" id="action-heading">Needs your action <span class="count count-gold">{{ invitations|length }}</span></h2>
+  <details class="activity-group group-action" open><summary><h2 class="section-heading" id="action-heading"><span class="section-glyph">{% include "core/_icon.html" with name="alert" %}</span><span class="section-label">Needs your action</span><span class="count count-gold">{{ invitations|length }}</span>{% include "core/_icon.html" with name="chevron" %}</h2></summary>
   {% if invitations %}
   <ul class="activity-rows">
     {% for plan in invitations %}<li><a class="activity-row" href="{% url 'coordination:plan' plan.pk %}">
       {% include "core/_item_thumb.html" with item=plan.listing %}
-      <span class="row-copy"><strong>{% if plan.state == "awaiting_confirmations" %}Confirm collection plan{% else %}Record what happened{% endif %}</strong><span class="meta">{{ plan.listing.title }}</span><span class="status status-{{ plan.state }}">{% include "core/_icon.html" with name="clock" %}{{ plan.get_state_display }}</span></span>
+      <span class="row-copy"><strong>{{ plan.listing.title }}</strong><span class="activity-action">{% if plan.state == "awaiting_confirmations" %}Confirm collection plan{% else %}Record what happened{% endif %}</span><span class="meta item-metadata">{% include "core/_icon.html" with name="calendar" %}{{ plan.start|date:"D j M, g:i a" }}</span><span class="status status-{{ plan.state }}">{% include "core/_icon.html" with name="clock" %}{{ plan.get_state_display }}</span></span>
       {% include "core/_icon.html" with name="chevron" %}
     </a></li>{% endfor %}
   </ul>
@@ -21,10 +21,10 @@
     <div><h3>Nothing needs your action</h3><p class="muted small">Invitations and handover actions will appear here.</p></div>
   </div>
   {% endif %}
-</section>
+</details></section>
 
 <section class="activity-section" aria-labelledby="collections-heading">
-  <h2 class="section-heading" id="collections-heading">Collections I'm part of <span class="count count-blue">{{ plans|length }}</span></h2>
+  <details class="activity-group group-collections" open><summary><h2 class="section-heading" id="collections-heading"><span class="section-glyph">{% include "core/_icon.html" with name="clock" %}</span><span class="section-label">Collections I'm part of</span><span class="count count-blue">{{ plans|length }}</span>{% include "core/_icon.html" with name="chevron" %}</h2></summary>
   {% if plans %}
   <ul class="activity-rows">
     {% for plan in plans %}<li><a class="activity-row" href="{% url 'coordination:plan' plan.pk %}">
@@ -34,10 +34,10 @@
     </a></li>{% endfor %}
   </ul>
   {% else %}<p class="empty-note muted">None yet.</p>{% endif %}
-</section>
+</details></section>
 
 <section class="activity-section" id="giving" aria-labelledby="giving-heading" tabindex="-1">
-  <h2 class="section-heading" id="giving-heading">Items I'm giving <span class="count">{{ listings|length }}</span></h2>
+  <details class="activity-group group-giving" open><summary><h2 class="section-heading" id="giving-heading"><span class="section-glyph">{% include "core/_icon.html" with name="plus" %}</span><span class="section-label">Items I'm giving</span><span class="count ">{{ listings|length }}</span>{% include "core/_icon.html" with name="chevron" %}</h2></summary>
   {% if listings %}
   <ul class="activity-rows">
     {% for listing in listings %}<li><a class="activity-row" href="{{ listing.get_absolute_url }}">
@@ -47,10 +47,10 @@
     </a></li>{% endfor %}
   </ul>
   {% else %}<div class="empty-note"><p class="muted">You haven't listed anything yet.</p><a class="text-action" href="{% url 'listings:create' %}">Give an item {% include "core/_icon.html" with name="chevron" %}</a></div>{% endif %}
-</section>
+</details></section>
 
 <section class="activity-section" id="helping" aria-labelledby="helping-heading" tabindex="-1">
-  <h2 class="section-heading" id="helping-heading">My offers <span class="count count-blue">{{ offers|length }}</span></h2>
+  <details class="activity-group group-helping" open><summary><h2 class="section-heading" id="helping-heading"><span class="section-glyph">{% include "core/_icon.html" with name="people" %}</span><span class="section-label">My offers</span><span class="count count-blue">{{ offers|length }}</span>{% include "core/_icon.html" with name="chevron" %}</h2></summary>
   {% if offers %}
   <ul class="activity-rows">
     {% for role, offer in offers %}<li><a class="activity-row" href="{{ offer.listing.get_absolute_url }}">
@@ -60,5 +60,5 @@
     </a></li>{% endfor %}
   </ul>
   {% else %}<div class="empty-note"><p class="muted">No active offers.</p><a class="text-action" href="{% url 'listings:nearby' %}">Help a neighbour nearby {% include "core/_icon.html" with name="chevron" %}</a></div>{% endif %}
-</section>
+</details></section>
 {% endblock %}
