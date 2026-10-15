@@ -1,9 +1,8 @@
 <a class="card listing-card{% if plan %} plan-item-card{% endif %}" href="{{ listing.get_absolute_url }}">
-  {% if listing.is_synthetic %}
-    {% include "core/_image_slot.html" with slot="item-card" ratio="3 / 4" alt="" slot_class="item-card-canvas" %}
-  {% else %}{% with photo=listing.photos.all.0 %}
-    {% if photo %}<img class="card-photo" src="{% url 'listings:photo' photo.uuid %}" alt="" loading="lazy" decoding="async" width="{{ photo.width }}" height="{{ photo.height }}">{% endif %}
-  {% endwith %}{% endif %}
+  {% with photo=listing.photos.all.0 %}
+    {% if photo %}<img class="card-photo" src="{% url 'listings:photo' photo.uuid %}" alt="" loading="lazy" decoding="async" width="{{ photo.width }}" height="{{ photo.height }}">
+    {% else %}{% include "core/_image_slot.html" with slot="item-card" ratio="3 / 4" alt="" slot_class="item-card-canvas" %}{% endif %}
+  {% endwith %}
   <div class="card-body">
     <div class="listing-heading"><h2>{{ listing.title }}</h2>{% if listing.is_synthetic %}<span class="tag tag-demo">Demo</span>{% endif %}</div>
     <span class="condition-chip">{{ listing.get_condition_display }}</span>

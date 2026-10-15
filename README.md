@@ -70,7 +70,7 @@ Full details are in [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md).
 apps/           Django apps: accounts, listings, offers, coordination, core (clock, action tokens), pwa
 givlah/         Django project settings and URLs
 templates/      Mobile-first page templates
-static/         CSS, progressive-enhancement JS and app icons
+static/         CSS, progressive-enhancement JS, app icons and illustrations
 assets/brand/   App icon sources (SVG and 2048 x 2048 PNG)
 docs/           Product, specification and architecture documents
 ```
@@ -100,7 +100,7 @@ Givlah is developed by a small core team, and only team members can contribute c
 
 ## Acknowledgements
 
-Developed with the help of AI coding tools.
+Developed with the help of AI coding tools. The in-app illustrations and the demo item photos were generated with AI image tools; the photos show fictional items, not real listings.
 
 ## License
 

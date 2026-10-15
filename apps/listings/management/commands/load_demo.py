@@ -1,13 +1,12 @@
 """Create a clearly labelled synthetic locality, accounts and listings for local demos."""
 
-import io
 from datetime import timedelta
+from pathlib import Path
 
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.core.management.base import BaseCommand
 from django.db import transaction
 from django.utils import timezone
-from PIL import Image, ImageDraw
 
 from apps.accounts.models import User
 from apps.core import clock
@@ -26,19 +25,12 @@ ZONES = [
     ("Seroja (demo)", "3.08110", "101.51450"),
 ]
 PEOPLE = [("demo_aina", "Aina"), ("demo_ravi", "Ravi"), ("demo_meiling", "Mei Ling"), ("demo_hafiz", "Hafiz")]
+DEMO_PHOTOS = Path(__file__).resolve().parents[2] / "demo_photos"
 
 
-def placeholder_photo(colour, label):
-    """A simple drawn picture, so the demo needs no real photos."""
-    image = Image.new("RGB", (1200, 900), (255, 247, 233))
-    draw = ImageDraw.Draw(image)
-    draw.rounded_rectangle((330, 170, 870, 760), radius=28, fill=colour, outline=(60, 50, 40), width=8)
-    for y in (360, 560):
-        draw.line((330, y, 870, y), fill=(60, 50, 40), width=8)
-    draw.text((40, 40), f"Demo image: {label}", fill=(90, 70, 40))
-    buf = io.BytesIO()
-    image.save(buf, format="PNG")
-    return SimpleUploadedFile("demo.png", buf.getvalue(), content_type="image/png")
+def demo_photo(filename):
+    """A ready-made photo of a demo item. It goes through the same sanitizer as any upload."""
+    return SimpleUploadedFile(filename, (DEMO_PHOTOS / filename).read_bytes(), content_type="image/jpeg")
 
 
 class Command(BaseCommand):
@@ -81,15 +73,15 @@ class Command(BaseCommand):
         day = now + timedelta(days=2)
         items = [
             (users["Aina"], "Wooden bookshelf", "Solid shelf, four levels. Small scratch on one side.", "good",
-             (90, 30, 120), "Heavy; best carried by two people", True, zones["Cempaka (demo)"], (176, 120, 72)),
+             (90, 30, 120), "Heavy; best carried by two people", True, zones["Cempaka (demo)"], "wooden-bookshelf.jpg"),
             (users["Ravi"], "Folding study table", "Folds flat. Fits in a car boot.", "like_new",
-             (100, 50, 75), "", False, zones["Melati (demo)"], (120, 160, 190)),
+             (100, 50, 75), "", False, zones["Melati (demo)"], "folding-study-table.jpg"),
             (users["Mei Ling"], "Rattan armchair", "Comfortable reading chair, cushion included.", "worn",
-             (70, 70, 85), "Light but bulky", False, zones["Kenanga (demo)"], (200, 160, 90)),
+             (70, 70, 85), "Light but bulky", False, zones["Kenanga (demo)"], "rattan-armchair.jpg"),
         ]
         created = {}
-        for owner, title, description, condition, (w, d, h), notes, helper, zone, colour in items:
-            photo = sanitize_image(placeholder_photo(colour, title))
+        for owner, title, description, condition, (w, d, h), notes, helper, zone, photo_file in items:
+            photo = sanitize_image(demo_photo(photo_file))
             created[title] = services.publish_listing(owner, {
                 "action_token": ActionToken.new(), "title": title, "description": description,
                 "condition": condition, "width_cm": w, "depth_cm": d, "height_cm": h,

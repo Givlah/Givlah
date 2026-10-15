@@ -1,10 +1,13 @@
+import hashlib
 import io
 import shutil
 import tempfile
 import uuid
 from datetime import timedelta
 
+from django.conf import settings
 from django.core.files.uploadedfile import SimpleUploadedFile
+from django.core.management import call_command
 from django.test import Client, TestCase, override_settings
 from django.urls import reverse
 from django.utils import timezone
@@ -276,3 +279,61 @@ class ListingFlowTests(TestCase):
         anonymous = Client()
         for url in (reverse("listings:nearby"), reverse("listings:create"), reverse("listings:activity")):
             self.assertEqual(anonymous.get(url).status_code, 302)
+
+
+DEMO_MEDIA = tempfile.mkdtemp(prefix="givlah-test-media-")
+DEMO_PHOTO_FILES = {"Wooden bookshelf": "wooden-bookshelf.jpg", "Folding study table": "folding-study-table.jpg",
+                    "Rattan armchair": "rattan-armchair.jpg"}
+
+
+@override_settings(MEDIA_ROOT=DEMO_MEDIA)
+class DemoDataTests(TestCase):
+    """load_demo gives each demo item its own photo, and pages show that photo."""
+
+    @classmethod
+    def tearDownClass(cls):
+        super().tearDownClass()
+        shutil.rmtree(DEMO_MEDIA, ignore_errors=True)
+
+    def setUp(self):
+        call_command("load_demo", stdout=io.StringIO())
+        self.client.force_login(User.objects.get(username="demo_hafiz"))  # offered to help carry the bookshelf
+
+    def test_each_demo_listing_stores_its_own_sanitized_photo(self):
+        listings = Listing.objects.filter(is_synthetic=True)
+        self.assertEqual(sorted(listing.title for listing in listings), sorted(DEMO_PHOTO_FILES))
+        stored = set()
+        for listing in listings:
+            photo = listing.photos.get()
+            with photo.image.open("rb") as f:
+                data = f.read()
+            image = Image.open(io.BytesIO(data))
+            source = Image.open(settings.BASE_DIR / "apps" / "listings" / "demo_photos" / DEMO_PHOTO_FILES[listing.title])
+            self.assertEqual(image.format, "JPEG")
+            self.assertEqual(len(image.getexif()), 0)
+            # The supplied photos are under the 1600 px limit, so the sanitizer keeps their size.
+            self.assertEqual((image.size, (photo.width, photo.height)), (source.size, source.size))
+            stored.add(hashlib.sha256(data).digest())
+        self.assertEqual(len(stored), 3)
+
+    def test_pages_show_the_listing_photo(self):
+        shelf = Listing.objects.get(title="Wooden bookshelf")
+        photo_url = reverse("listings:photo", args=[shelf.photos.get().uuid])
+        nearby = self.client.get(reverse("listings:nearby"))
+        self.assertContains(nearby, photo_url)
+        self.assertNotContains(nearby, "images/slots/item-card.png")
+        detail = self.client.get(shelf.get_absolute_url())
+        self.assertContains(detail, f'src="{photo_url}" alt="Photo 1 of Wooden bookshelf"')
+        self.assertNotContains(detail, "images/slots/item-detail.png")
+        activity = self.client.get(reverse("listings:activity"))
+        self.assertContains(activity, photo_url)
+        self.assertNotContains(activity, "images/slots/item-thumbnail.png")
+        response = self.client.get(photo_url)
+        self.assertEqual((response.status_code, response["Content-Type"]), (200, "image/jpeg"))
+
+    def test_listing_without_photo_shows_parcel_illustration(self):
+        shelf = Listing.objects.get(title="Wooden bookshelf")
+        shelf.photos.all().delete()
+        self.assertContains(self.client.get(reverse("listings:nearby")), "images/slots/item-card.png", count=1)
+        self.assertContains(self.client.get(shelf.get_absolute_url()), "images/slots/item-detail.png", count=1)
+        self.assertContains(self.client.get(reverse("listings:activity")), "images/slots/item-thumbnail.png", count=1)

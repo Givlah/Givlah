@@ -152,11 +152,9 @@ p { margin: 0 0 12px; }
 .image-slot.item-card-canvas { position: relative; width: 33%; flex: 0 0 33%; max-width: none; margin: 0; align-self: stretch; }
 .item-card-canvas .image-slot-frame { min-height: 170px; height: 100%; border-radius: 22px; border-color: #efe6d7; }
 .item-card-canvas .image-slot-frame img { inset: 4px; width: calc(100% - 8px); height: calc(100% - 8px); border-radius: 18px; }
-.item-card-canvas figcaption { position: absolute; bottom: 5px; left: 5px; right: 5px; margin: 0; padding: 4px; border-radius: 8px; background: rgb(255 255 255 / 92%); font-size: 0.6rem; }
 .listing-card > .card-photo { flex: 0 0 30%; width: 30%; height: auto; aspect-ratio: 4 / 3; align-self: center; border-radius: 16px; margin: 6px; }
 .image-slot.item-thumb { position: relative; width: 64px; height: 64px; margin: 0; max-width: none; }
 .image-slot.item-thumb .image-slot-frame { border-radius: 12px; }
-.image-slot.item-thumb figcaption { position: absolute; bottom: 2px; left: 3px; right: 3px; font-size: 7px; line-height: 1.2; margin: 0; padding: 2px; color: #56605a; background: rgb(255 255 255 / 90%); border-radius: 4px; }
 .card-body h2 { margin-bottom: 4px; }
 .meta { color: var(--ink-muted); font-size: 0.9rem; margin-bottom: 6px; }
 .needs { font-weight: 600; color: var(--gold-700); margin-bottom: 6px; }
@@ -173,7 +171,6 @@ p { margin: 0 0 12px; }
 .image-slot { margin: 0 auto 20px; width: 100%; max-width: 320px; }
 .image-slot-frame { position: relative; width: 100%; overflow: hidden; background: #fff7e9; border: 1px solid #eadfcf; border-radius: 18px; }
 .image-slot-frame img { position: absolute; inset: 5px; width: calc(100% - 10px); height: calc(100% - 10px); max-width: 100%; object-fit: contain; border-radius: 13px; }
-.image-slot figcaption { margin-top: 6px; color: var(--ink-muted); font: 0.7rem/1.4 system-ui, sans-serif; text-align: center; }
 .status-ready, .status-handover_recorded { background: #eafaf1; color: var(--green-900); }
 .status-awaiting_confirmations, .status-awaiting_handover { background: #eef6ff; color: var(--blue-700); }
 .status-cancelled, .status-expired, .status-needs_review, .status-ended { background: #f0f1f0; color: var(--ink-muted); }
@@ -271,7 +268,6 @@ html[data-motion=on] .photo-step, html[data-motion=on] .screen-create .item-deta
 .photo-stage > [data-photo-empty] { height: 100%; }
 .photo-canvas { max-width: none; margin: 0; height: 100%; }
 .photo-canvas .image-slot-frame { height: 100%; border: 0; border-radius: 23px; }
-.photo-canvas figcaption { position: absolute; bottom: 10px; left: 10px; right: 10px; margin: 0; padding: 5px 8px; border-radius: 8px; background: white; }
 .photo-stage > img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; }
 .photo-intro h2 { font-size: 1.6rem; margin-bottom: 10px; }
 .photo-intro p:last-child { font-size: 0.95rem; margin-bottom: 0; }
@@ -440,7 +436,6 @@ h3 { font-family: var(--font-display); font-size: 1rem; line-height: 1.3; margin
 .empty-card h3 { font-size: 0.92rem; margin-bottom: 6px; }
 .empty-card .small { font-size: 0.8rem; }
 .empty-card .image-slot { width: 100px; flex: 0 0 auto; margin: 0; }
-.empty-card .image-slot figcaption { font-size: 0.6rem; }
 .screen-activity .row-copy .status { padding: 3px 8px; font-size: 0.72rem; }
 .empty-card p:last-child, .empty-note p:last-child { margin-bottom: 0; }
 .text-action { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; font-family: var(--font-display); }

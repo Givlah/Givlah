@@ -4,14 +4,14 @@
 {% block content %}
 <article class="detail">
   <a class="text-action detail-back" href="{% url 'listings:nearby' %}">{% include "core/_icon.html" with name="back" %} Nearby</a>
-  {% if listing.is_synthetic %}
-    {% include "core/_image_slot.html" with slot="item-detail" ratio="4 / 3" alt="" slot_class="detail-canvas" %}
-  {% elif listing.photos.all %}
+  {% if listing.photos.all %}
   <div class="gallery">
     {% for photo in listing.photos.all %}
     <img src="{% url 'listings:photo' photo.uuid %}" alt="Photo {{ forloop.counter }} of {{ listing.title }}" width="{{ photo.width }}" height="{{ photo.height }}">
     {% endfor %}
   </div>
+  {% else %}
+    {% include "core/_image_slot.html" with slot="item-detail" ratio="4 / 3" alt="" slot_class="detail-canvas" %}
   {% endif %}
   <div class="detail-head">
     <h1>{{ listing.title }}</h1>
