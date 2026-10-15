@@ -1,4 +1,4 @@
-# givlah product overview
+# Givlah product overview
 
 **Help neighbours give usable household items a new home by arranging the people, transport and time needed to collect them.**
 
@@ -13,14 +13,14 @@ The first users are residents of a single Malaysian township:
 
 Finding a recipient is not enough to get an item moved. The intended outcome is an agreed collection, followed by a handover that both the owner and the recipient record.
 
-givlah does not guarantee participation, truthful declarations, physical safety or that items are kept out of landfill. Early scenarios use clearly labelled synthetic data.
+Givlah does not guarantee participation, truthful declarations, physical safety or that items are kept out of landfill. Early scenarios use clearly labelled synthetic data.
 
 ## Workflow
 
 1. **Offer an item.** Photograph it and declare that you own it or are allowed to give it away. Add condition, dimensions, handling needs, a collection deadline and the times you're available. GPS can suggest the pickup location when you ask, and you confirm or correct it.
 2. **Share locally.** The public card shows the photo, the neighbourhood area, the deadline and a status such as "recipient interested; transport needed".
 3. **Neighbours contribute.** Three actions: "I'd like this", "I can transport it" and "I can help carry". Each offer states availability. Transport offers also state the mode, the vehicle if one is used, and a declaration that the item fits.
-4. **Suggest arrangements.** givlah combines stored offers into complete crews and times across the open listings, without booking any person or vehicle twice. It explains what is missing or conflicting.
+4. **Suggest arrangements.** Givlah combines stored offers into complete crews and times across the open listings, without booking any person or vehicle twice. It explains what is missing or conflicting.
 5. **Confirm.** The owner activates a suggestion, which holds it briefly. The owner and recipient approve sharing their exact details with this crew, and every participant confirms the same plan version.
 6. **Collect and record.** After the collection starts, the owner and the recipient each record the handover. One record alone is not completion.
 7. **Recover.** If someone withdraws or a hold expires before the collection starts, the listing returns to "needs help" with the missing role shown. Once a collection may have started, the item cannot be relisted until both parties confirm it is still with the owner.
@@ -99,4 +99,4 @@ Keep text contrast readable, and never use colour as the only signal of status.
 
 The primary measure is the number of unique listings with both handover records. It is reported for a stated observation period, out of the published listings that were eligible.
 
-Proposed, ready, incomplete, cancelled and unconfirmed outcomes are counted separately. Synthetic demo outcomes never count toward real totals. givlah does not automatically estimate kilograms, CO2 or avoided landfill.
+Proposed, ready, incomplete, cancelled and unconfirmed outcomes are counted separately. Synthetic demo outcomes never count toward real totals. Givlah does not automatically estimate kilograms, CO2 or avoided landfill.

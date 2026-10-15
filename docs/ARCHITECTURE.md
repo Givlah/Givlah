@@ -1,10 +1,10 @@
-# givlah architecture
+# Givlah architecture
 
 Status: **planned design**, 15 October 2026. No application code exists yet. Behaviour is defined in [SPECIFICATION](SPECIFICATION.md) and scope in [PRODUCT](PRODUCT.md). When this document and the specification disagree about behaviour, the specification wins.
 
 ## Client decision: installable mobile web app
 
-givlah is built as a **server-rendered Django web app that phones can install as a PWA**. There is no separate native client.
+Givlah is built as a **server-rendered Django web app that phones can install as a PWA**. There is no separate native client.
 
 | Concern | Choice and reason |
 | --- | --- |

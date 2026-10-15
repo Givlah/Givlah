@@ -1,4 +1,4 @@
-# givlah behaviour specification
+# Givlah behaviour specification
 
 Status: **draft**, 15 October 2026. Defines the prototype's records, matching rules, plan lifecycle, privacy rules, failure handling and acceptance checks. Scope and screens: [PRODUCT](PRODUCT.md). Technical design: [ARCHITECTURE](ARCHITECTURE.md). No application code exists yet; every acceptance check below is **NOT RUN**.
 
