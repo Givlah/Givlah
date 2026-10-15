@@ -3,7 +3,7 @@
 {% block content %}
 <div class="page-head">
   <h1>Nearby</h1>
-  <p class="muted">Usable things neighbours are giving away. Offer to take one, transport it or help carry.</p>
+  <p class="muted">Useful things from your neighbourhood</p>
 </div>
 {% if listings %}
 <ul class="cards">
@@ -15,8 +15,12 @@
       {% endwith %}
       <div class="card-body">
         <h2>{{ listing.title }}</h2>
-        <p class="meta">{{ listing.zone.name }} · collect by {{ listing.deadline|date:"D j M, g:i a" }}</p>
-        <p class="needs">{% include "listings/_needs.html" %}</p>
+        <p class="meta">{{ listing.get_condition_display }}</p>
+        <p class="meta location-line">{% include "core/_icon.html" with name="pin" %}{{ listing.zone.name }}</p>
+        <div class="chip-row">
+          <span class="status status-{{ listing.state }}">{% include "core/_icon.html" with name="status" %}{% include "listings/_needs.html" %}</span>
+          <span class="chip">{% include "core/_icon.html" with name="calendar" %}Collect by {{ listing.deadline|date:"D j M, g:i a" }}</span>
+        </div>
         {% if listing.is_synthetic %}<span class="tag tag-demo">Demo listing</span>{% endif %}
       </div>
     </a>
@@ -25,8 +29,9 @@
 </ul>
 {% else %}
 <section class="empty">
+  {% include "core/_image_slot.html" with slot="nearby-empty" ratio="4 / 3" alt="" %}
   <h2>Nothing listed nearby yet</h2>
-  <p class="hand">Have something usable you no longer need?</p>
+  <p class="muted">Have something usable you no longer need?</p>
   <p><a class="button" href="{% url 'listings:create' %}">Give an item</a></p>
 </section>
 {% endif %}

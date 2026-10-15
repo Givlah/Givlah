@@ -1,0 +1,7 @@
+{% load static %}
+<figure class="image-slot"{% if not alt %} aria-hidden="true"{% endif %}>
+  <div class="image-slot-frame" style="aspect-ratio: {{ ratio }};">
+    {% with image_path="images/slots/"|add:slot|add:".png" %}<img src="{% static image_path %}" alt="{{ alt|default:'' }}" loading="lazy" decoding="async">{% endwith %}
+  </div>
+  {% if demo_mode %}<figcaption>{{ slot }}.png · {{ ratio }}</figcaption>{% endif %}
+</figure>

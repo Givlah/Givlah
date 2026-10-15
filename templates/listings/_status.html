@@ -1,3 +1,3 @@
 <span class="status status-{{ listing.is_expired|yesno:'expired,'|default:listing.state }}">
-  <svg aria-hidden="true" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/></svg>{{ listing.status_label }}
+  {% include "core/_icon.html" with name="status" %}{{ listing.status_label }}
 </span>
