@@ -1,0 +1,19 @@
+{% load static %}<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Offline · Givlah</title>
+  <link rel="stylesheet" href="{% static 'css/givlah.css' %}">
+</head>
+<body>
+  <main class="page">
+    <section class="empty">
+      <img src="{% static 'icons/icon-192.png' %}" alt="" width="72" height="72">
+      <h1>You're offline</h1>
+      <p>Nothing was sent. Givlah needs a connection to show current listings and plans.</p>
+      <p><a class="button" href="/">Try again</a></p>
+    </section>
+  </main>
+</body>
+</html>

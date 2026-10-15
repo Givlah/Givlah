@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block title %}Sign in{% endblock %}
+{% block content %}
+<section class="auth">
+  <h1>Sign in</h1>
+  <p class="muted">Give usable things a new home, with help from neighbours.</p>
+  <form method="post" class="stack" data-pending-form>
+    {% csrf_token %}
+    {% if form.non_field_errors %}<div class="message message-error" role="alert">{% for e in form.non_field_errors %}<p>{{ e }}</p>{% endfor %}</div>{% endif %}
+    {% include "core/_field.html" with field=form.username %}
+    {% include "core/_field.html" with field=form.password %}
+    <input type="hidden" name="next" value="{{ next }}">
+    <button class="button" type="submit" data-pending-label="Signing in…">Sign in</button>
+  </form>
+  <p>New here? <a href="{% url 'accounts:signup' %}">Create an account</a></p>
+
+  {% if demo_users %}
+  <section class="panel panel-demo">
+    <h2>Demo accounts</h2>
+    <p class="muted small">Fictional people for trying Givlah. Their listings are labelled as demo data.</p>
+    <ul class="demo-users">
+      {% for u in demo_users %}
+      <li><form method="post" action="{% url 'accounts:demo_switch' %}">{% csrf_token %}
+        <input type="hidden" name="user_id" value="{{ u.pk }}">
+        <button class="button button-secondary" type="submit">Continue as {{ u.display_name }}</button>
+      </form></li>
+      {% endfor %}
+    </ul>
+  </section>
+  {% endif %}
+</section>
+{% endblock %}

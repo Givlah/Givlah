@@ -8,7 +8,7 @@
 
 Givlah helps neighbours give usable household items a new home. It does more than find someone who wants an item. It arranges the people, transport and time needed to actually collect it.
 
-> **Status: early development.** This repository currently holds the product, behaviour and architecture documents plus brand assets. The application code has not been written yet, so there is nothing to install or run.
+> **Status: early development.** Accounts, item listings with privacy-safe photos and location, and the installable app shell work today. Neighbour offers and collection planning are being built next.
 
 ## The problem
 
@@ -67,15 +67,32 @@ Full details are in [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md).
 ## Repository layout
 
 ```
-assets/brand/   App icon (SVG source and 2048 x 2048 PNG)
+apps/           Django apps: accounts, listings, core (clock, action tokens), pwa
+givlah/         Django project settings and URLs
+templates/      Mobile-first page templates
+static/         CSS, progressive-enhancement JS and app icons
+assets/brand/   App icon sources (SVG and 2048 x 2048 PNG)
 docs/           Product, specification and architecture documents
 ```
 
-The planned application layout is described in [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md#project-layout).
+See [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md#project-layout) for how the pieces fit together.
 
 ## Getting started
 
-Not available yet. Setup and run instructions will be added here once the first runnable version exists.
+Requires Python 3.12 or newer.
+
+```bash
+python -m venv .venv
+# Windows: .venv\Scripts\activate    macOS/Linux: source .venv/bin/activate
+pip install -r requirements.txt
+python manage.py migrate
+python manage.py load_demo          # optional: fictional demo locality, people and items
+python manage.py runserver
+```
+
+Open http://localhost:8000 and create an account. To try the labelled demo accounts, start the server with `GIVLAH_DEMO_MODE=1`. Run the tests with `python manage.py test`.
+
+On a phone, `http://<your-computer's-IP>:8000` works for browsing and photos, but browsers only allow location and app installation over HTTPS, so enter the pickup location manually there. Settings are listed at the top of [givlah/settings.py](givlah/settings.py).
 
 ## Contributing
 

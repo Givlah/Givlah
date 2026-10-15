@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+{% block title %}{% if editing %}Edit {{ listing.title }}{% else %}Give an item{% endif %}{% endblock %}
+{% block content %}
+<div class="page-head">
+  <h1>{% if editing %}Edit item{% else %}Give an item{% endif %}</h1>
+  {% if not editing %}<p class="muted">Furniture and simple household items only. No electrical goods, mattresses or hazardous items.</p>{% endif %}
+</div>
+
+<form method="post" enctype="multipart/form-data" class="stack" data-pending-form novalidate>
+  {% csrf_token %}
+  {{ form.action_token }}
+  {% if editing %}<input type="hidden" name="revision" value="{{ listing.revision }}">{% endif %}
+  {% if form.non_field_errors %}
+  <div class="message message-error" role="alert">{% for e in form.non_field_errors %}<p>{{ e }}</p>{% endfor %}</div>
+  {% endif %}
+  {% if form.is_bound and form.errors %}
+  <p class="message message-error" role="alert">Please fix the highlighted fields. Nothing was saved yet. If you chose photos, choose them again.</p>
+  {% endif %}
+
+  <fieldset>
+    <legend>The item</legend>
+    {% include "core/_field.html" with field=form.photos %}
+    <div class="photo-preview" data-photo-preview aria-live="polite"></div>
+    {% include "core/_field.html" with field=form.title %}
+    {% include "core/_field.html" with field=form.description %}
+    {% include "core/_field.html" with field=form.condition %}
+    <div class="row-3">
+      {% include "core/_field.html" with field=form.width_cm %}
+      {% include "core/_field.html" with field=form.depth_cm %}
+      {% include "core/_field.html" with field=form.height_cm %}
+    </div>
+    {% include "core/_field.html" with field=form.handling_notes %}
+    {% include "core/_field.html" with field=form.needs_extra_helper %}
+  </fieldset>
+
+  <fieldset data-location data-zones="{{ zone_points }}">
+    <legend>Pickup location</legend>
+    <div class="locate">
+      <button type="button" class="button button-secondary" data-locate hidden>
+        <svg aria-hidden="true" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/></svg>
+        Use my location
+      </button>
+      <p class="help" data-locate-status role="status" aria-live="polite"></p>
+    </div>
+    {{ form.latitude }}{{ form.longitude }}
+    {% include "core/_field.html" with field=form.zone %}
+    {% include "core/_field.html" with field=form.pickup_details %}
+  </fieldset>
+
+  <fieldset>
+    <legend>When it can be collected</legend>
+    {% include "core/_field.html" with field=form.deadline %}
+    {% for start, end in form.window_pairs %}
+    <div class="row-2">
+      {% include "core/_field.html" with field=start %}
+      {% include "core/_field.html" with field=end %}
+    </div>
+    {% endfor %}
+    <p class="help">Include enough time for loading and the trip. Helpers commit to the whole window.</p>
+  </fieldset>
+
+  {% include "core/_field.html" with field=form.ownership_declared %}
+  <p class="help">Before publishing, check your photos and text don't show faces, house numbers or other personal details.</p>
+
+  <div class="actions">
+    <button class="button" type="submit" data-pending-label="{% if editing %}Saving…{% else %}Publishing…{% endif %}">{% if editing %}Save changes{% else %}Publish item{% endif %}</button>
+    {% if editing %}<a class="button button-quiet" href="{{ listing.get_absolute_url }}">Cancel</a>{% endif %}
+  </div>
+</form>
+{% endblock %}

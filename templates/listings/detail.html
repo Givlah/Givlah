@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% block title %}{{ listing.title }}{% endblock %}
+{% block content %}
+<article class="detail">
+  {% if listing.photos.all %}
+  <div class="gallery">
+    {% for photo in listing.photos.all %}
+    <img src="{% url 'listings:photo' photo.uuid %}" alt="Photo {{ forloop.counter }} of {{ listing.title }}" width="{{ photo.width }}" height="{{ photo.height }}">
+    {% endfor %}
+  </div>
+  {% endif %}
+  <div class="detail-head">
+    <h1>{{ listing.title }}</h1>
+    {% include "listings/_status.html" %}
+    {% if listing.is_synthetic %}<span class="tag tag-demo">Demo listing</span>{% endif %}
+  </div>
+  <p class="meta">{{ listing.zone.name }} · given by {{ listing.owner }}</p>
+  {% if listing.description %}<p>{{ listing.description|linebreaksbr }}</p>{% endif %}
+
+  <dl class="facts">
+    <div><dt>Condition</dt><dd>{{ listing.get_condition_display }}</dd></div>
+    <div><dt>Size (W × D × H)</dt><dd>{{ listing.width_cm }} × {{ listing.depth_cm }} × {{ listing.height_cm }} cm</dd></div>
+    <div><dt>Carrying</dt><dd>{% if listing.needs_extra_helper %}Needs two people{% else %}One person{% endif %}{% if listing.handling_notes %} · {{ listing.handling_notes }}{% endif %}</dd></div>
+    <div><dt>Collect by</dt><dd>{{ listing.deadline|date:"l j F, g:i a" }}</dd></div>
+  </dl>
+
+  <h2>Available times</h2>
+  <ul class="windows">
+    {% for w in listing.windows.all %}<li>{{ w.start|date:"D j M, g:i a" }} – {{ w.end|date:"g:i a" }}{% if w.start|date:"Ymd" != w.end|date:"Ymd" %} ({{ w.end|date:"D j M" }}){% endif %}</li>{% endfor %}
+  </ul>
+
+  <section class="panel">
+    <h2>What's still needed</h2>
+    <p>{% include "listings/_needs.html" %}.</p>
+  </section>
+
+  {% if is_owner %}
+  <section class="panel panel-private">
+    <h2>Your private pickup details</h2>
+    {% if private %}
+    <p>{{ private.pickup_details|linebreaksbr }}</p>
+    <p class="muted small">{{ private.get_source_display }}. Only you can see this until you approve sharing it with a confirmed crew.</p>
+    {% endif %}
+    {% if listing.is_open %}
+    <div class="actions">
+      <a class="button button-secondary" href="{% url 'listings:edit' listing.pk %}">Edit</a>
+      <form method="post" action="{% url 'listings:close' listing.pk %}" data-confirm="Close this listing? Neighbours will no longer see it.">
+        {% csrf_token %}<input type="hidden" name="revision" value="{{ listing.revision }}">
+        <button class="button button-quiet" type="submit">Close listing</button>
+      </form>
+    </div>
+    {% endif %}
+  </section>
+  {% endif %}
+</article>
+{% endblock %}

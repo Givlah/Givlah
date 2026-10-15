@@ -1,6 +1,6 @@
 # Givlah architecture
 
-Status: **planned design**, 15 October 2026. No application code exists yet. Behaviour is defined in [SPECIFICATION](SPECIFICATION.md) and scope in [PRODUCT](PRODUCT.md). When this document and the specification disagree about behaviour, the specification wins.
+Status: **in progress**, 15 October 2026. Built so far: accounts, listings, photo sanitizing, location input, private pickup storage and the PWA shell. Offers and coordination are next. Behaviour is defined in [SPECIFICATION](SPECIFICATION.md) and scope in [PRODUCT](PRODUCT.md). When this document and the specification disagree about behaviour, the specification wins.
 
 ## Client decision: installable mobile web app
 
@@ -57,21 +57,21 @@ Rules for each layer:
 
 ## Project layout
 
-Planned:
+Folders marked *(next)* don't exist yet:
 
 ```
 manage.py
 givlah/                 Django project: settings, root urls, wsgi
 apps/
+  core/                 clock.py (injectable now), ActionToken (safe resubmission)
   accounts/             User model (display name, synthetic flag), login, demo-mode account switch
-  listings/             Listing, photos, zones, private pickup details, image sanitizer
-  offers/               Recipient, transport and helper offers; shared Vehicle records
-  coordination/
+  listings/             Listing, photos, zones, private pickup details, image sanitizer, load_demo command
+  offers/               (next) Recipient, transport and helper offers; shared Vehicle records
+  coordination/         (next)
     models.py           Plan, Reservation, SharingApproval, Confirmation, HandoverRecord, Event, ActionToken
     matcher.py          Candidate generation + exhaustive selection (pure)
     services.py         activate, approve/revoke, confirm/decline, withdraw, record/retract handover
     selectors.py        Status and private-detail reads per user
-    clock.py            now() wrapper; tests inject time
   pwa/                  Manifest, service worker and offline page views
 templates/              Mobile-first templates and shared components
 static/                 CSS (palette tokens), minimal JS, generated app icons

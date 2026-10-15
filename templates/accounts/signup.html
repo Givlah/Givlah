@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block title %}Create account{% endblock %}
+{% block content %}
+<section class="auth">
+  <h1>Create an account</h1>
+  <form method="post" class="stack" data-pending-form>
+    {% csrf_token %}
+    {% for field in form %}{% include "core/_field.html" %}{% endfor %}
+    <button class="button" type="submit" data-pending-label="Creating…">Create account</button>
+  </form>
+  <p>Already have an account? <a href="{% url 'accounts:login' %}">Sign in</a></p>
+</section>
+{% endblock %}

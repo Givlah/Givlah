@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block title %}My activity{% endblock %}
+{% block content %}
+<div class="page-head"><h1>My activity</h1></div>
+<h2>Items I'm giving</h2>
+{% if listings %}
+<ul class="rows">
+  {% for listing in listings %}
+  <li><a href="{{ listing.get_absolute_url }}"><span>{{ listing.title }}</span>{% include "listings/_status.html" %}</a></li>
+  {% endfor %}
+</ul>
+{% else %}
+<p class="muted">You haven't listed anything yet. <a href="{% url 'listings:create' %}">Give an item</a></p>
+{% endif %}
+{% endblock %}
