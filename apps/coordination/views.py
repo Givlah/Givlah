@@ -201,3 +201,9 @@ def plan_action(request, plan_id, action):
         return plan_detail(request, plan_id, status=exc.status)
     messages.success(request, success)
     return redirect(reverse("coordination:plan", args=[plan_id]))
+
+
+@login_required
+def impact(request):
+    services.reconcile()
+    return render(request, "coordination/impact.html", selectors.outcome_totals())

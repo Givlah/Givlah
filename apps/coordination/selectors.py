@@ -2,7 +2,7 @@
 
 from datetime import timedelta
 
-from django.db.models import Q
+from django.db.models import Count, Q
 
 from apps.core import clock
 from apps.listings.models import ListingPrivate
@@ -74,3 +74,27 @@ def my_offers(user, listing=None):
         "helper": list(HelperOffer.objects.filter(**filters).select_related("listing")),
     }
 
+
+
+def outcome_totals():
+    """Honest counts. A listing counts as handed over only when both owner and recipient recorded it,
+    and demo outcomes are always counted separately from real ones."""
+    from apps.listings.models import Listing
+
+    def counts(synthetic):
+        listings = Listing.objects.filter(is_synthetic=synthetic)
+        handed_over = (Plan.objects.filter(listing__is_synthetic=synthetic, state=Plan.State.HANDOVER_RECORDED,
+                                           handovers__outcome="handed_over")
+                       .values("listing").annotate(records=Count("handovers")).filter(records=2).count())
+        return {
+            "published": listings.count(),
+            "handed_over": handed_over,
+            "in_progress": listings.filter(state__in=[Listing.State.AWAITING_CONFIRMATIONS, Listing.State.READY,
+                                                      Listing.State.AWAITING_HANDOVER]).count(),
+            "needs_review": listings.filter(state=Listing.State.NEEDS_REVIEW).count(),
+            "closed": listings.filter(state=Listing.State.CANCELLED).count(),
+            "open": listings.filter(state=Listing.State.NEEDS_HELP, deadline__gt=clock.now()).count(),
+            "expired": listings.filter(state=Listing.State.NEEDS_HELP, deadline__lte=clock.now()).count(),
+        }
+    first = Listing.objects.order_by("created_at").values_list("created_at", flat=True).first()
+    return {"real": counts(False), "demo": counts(True), "since": first}

@@ -9,6 +9,7 @@ from dataclasses import dataclass
 from datetime import timedelta
 
 from django.db import transaction
+from django.db.models import Max, Q
 
 from apps.core import clock
 from apps.listings.models import Listing
@@ -49,6 +50,7 @@ def reconcile():
     so no background worker is needed and an old page can't keep a hold alive."""
     now = clock.now()
     with transaction.atomic():
+        purge_expired_private_data()
         for plan in Plan.objects.select_related("listing").filter(
                 state=Plan.State.AWAITING_CONFIRMATIONS, hold_expires_at__lte=now):
             _end_plan(plan, "The hold expired before everyone confirmed.", None)
@@ -57,6 +59,28 @@ def reconcile():
             plan.save(update_fields=["state"])
             _set_listing_state(plan.listing, Listing.State.AWAITING_HANDOVER)
             PlanEvent.objects.create(plan=plan, kind="collection_started")
+
+
+RETENTION = timedelta(days=7)
+
+
+def purge_expired_private_data():
+    """Delete exact pickup and drop-off details seven days after a listing closes, passes its
+    deadline or its last collection ends, whichever is latest. Runs on every request through
+    reconcile(); there is no scheduled worker, so an idle app purges on its next request."""
+    from apps.listings.models import ListingPrivate
+    now = clock.now()
+    finished = Listing.objects.filter(
+        Q(state__in=[Listing.State.CANCELLED, Listing.State.HANDOVER_RECORDED])
+        | Q(state=Listing.State.NEEDS_HELP, deadline__lte=now - RETENTION)
+    ).filter(Q(private__isnull=False) | Q(recipientoffers__private__isnull=False)).annotate(
+        last_end=Max("plans__end")).distinct()
+    for listing in finished:
+        # Closed listings count from closure; never-closed ones from their deadline.
+        ends = [t for t in (listing.closed_at or listing.deadline, listing.last_end) if t]
+        if max(ends) + RETENTION <= now:
+            ListingPrivate.objects.filter(listing=listing).delete()
+            RecipientPrivate.objects.filter(offer__listing=listing).delete()
 
 
 def _set_listing_state(listing, state):
@@ -458,6 +482,8 @@ def retract_handover(user, plan_id):
         if deleted:
             PlanEvent.objects.create(plan=plan, actor=user, kind="retracted")
             if plan.state == Plan.State.HANDOVER_RECORDED:
+                plan.listing.closed_at = None
+                plan.listing.save(update_fields=["closed_at"])
                 _to_review(plan, "A handover record was withdrawn.", user)
     return plan
 
@@ -470,6 +496,8 @@ def _settle_outcome(plan, actor):
     if owner == recipient == HandoverRecord.Outcome.HANDED_OVER:
         plan.state = Plan.State.HANDOVER_RECORDED
         plan.save(update_fields=["state"])
+        plan.listing.closed_at = clock.now()
+        plan.listing.save(update_fields=["closed_at"])
         _set_listing_state(plan.listing, Listing.State.HANDOVER_RECORDED)
         PlanEvent.objects.create(plan=plan, kind="handover_recorded")
     elif owner == recipient == HandoverRecord.Outcome.STAYED:

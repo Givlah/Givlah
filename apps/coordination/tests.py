@@ -351,3 +351,49 @@ class ConcurrentActivationTests(TransactionTestCase):
         for th in threads:
             th.join()
         self.assertEqual(Plan.objects.count(), 2)
+
+
+class RetentionAndTotalsTests(TestCase):
+    def setUp(self):
+        self.s = Scenario()
+        self.listing, self.window = self.s.listing("O")
+        r, t, _ = self.s.offers(self.listing, self.window)
+        self.plan = self.s.make_ready(self.s.activate(self.listing, self.window, r, t))
+        with frozen_time(BASE + timedelta(minutes=30)):
+            services.record_handover(self.s.user("O"), self.plan.pk, "handed_over")
+            services.record_handover(self.s.user("R"), self.plan.pk, "handed_over")
+
+    def test_private_details_purged_seven_days_after_collection(self):  # G18
+        from apps.offers.models import RecipientPrivate
+        with frozen_time(self.plan.end + timedelta(days=6)):
+            services.reconcile()
+        self.assertTrue(ListingPrivate.objects.filter(listing=self.listing).exists())
+        with frozen_time(max(self.plan.end, timezone.now()) + timedelta(days=7, minutes=1)):
+            services.reconcile()
+        self.assertFalse(ListingPrivate.objects.filter(listing=self.listing).exists())
+        self.assertFalse(RecipientPrivate.objects.filter(offer__listing=self.listing).exists())
+
+    def test_open_listing_keeps_its_private_details(self):  # G18
+        open_listing, _ = self.s.listing("O2", title="Table", deadline_h=24 * 20)
+        with frozen_time(BASE + timedelta(days=10)):
+            services.reconcile()
+        self.assertTrue(ListingPrivate.objects.filter(listing=open_listing).exists())
+
+    def test_totals_count_dual_records_and_keep_demo_separate(self):  # G20
+        demo_owner = self.s.user("D")
+        demo_owner.is_synthetic = True
+        demo_owner.save()
+        demo, w = self.s.listing("D", title="Demo lamp", start_h=3)
+        Listing.objects.filter(pk=demo.pk).update(is_synthetic=True)
+        r, t, _ = self.s.offers(demo, w, recipient="DR", provider="DP", vehicle=None)
+        demo_plan = self.s.make_ready(self.s.activate(demo, w, r, t))
+        with frozen_time(BASE + timedelta(hours=3, minutes=10)):
+            services.record_handover(demo_owner, demo_plan.pk, "handed_over")  # one record only
+            totals = selectors.outcome_totals()
+        self.assertEqual(totals["real"]["handed_over"], 1)
+        self.assertEqual(totals["real"]["published"], 1)
+        self.assertEqual(totals["demo"]["handed_over"], 0)  # a single record never counts
+        self.assertEqual(totals["demo"]["in_progress"], 1)
+        with frozen_time(BASE + timedelta(minutes=40)):
+            services.retract_handover(self.s.user("R"), self.plan.pk)
+            self.assertEqual(selectors.outcome_totals()["real"]["handed_over"], 0)

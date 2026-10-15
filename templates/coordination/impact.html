@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block title %}Outcomes{% endblock %}
+{% block content %}
+<div class="page-head">
+  <h1>Outcomes</h1>
+  <p class="muted">An item counts as handed over only when both the owner and the recipient record it.{% if since %} Counting since {{ since|date:"j F Y" }}.{% endif %}</p>
+</div>
+<h2>Neighbours</h2>
+{% include "coordination/_totals.html" with t=real %}
+{% if demo.published %}
+<h2>Demo data <span class="tag tag-demo">Not real</span></h2>
+<p class="muted small">Fictional people and items. Never added to the totals above.</p>
+{% include "coordination/_totals.html" with t=demo %}
+{% endif %}
+<p class="muted small">Givlah doesn't estimate weight, carbon or landfill savings. These counts are only what people recorded.</p>
+{% endblock %}

@@ -210,3 +210,4 @@ legend + * { clear: both; }
 .field ul { list-style: none; padding: 0; margin: 4px 0 0; display: grid; gap: 8px; }
 .field ul label { display: flex; align-items: center; gap: 10px; font-weight: 500; min-height: 44px; padding: 8px 12px; border: 1.5px solid #c9d0cc; border-radius: var(--radius-sm); background: #fff; }
 .field ul input { width: 20px; height: 20px; accent-color: var(--green-700); }
+.center { text-align: center; margin-top: 20px; }

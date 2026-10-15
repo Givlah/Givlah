@@ -1,6 +1,6 @@
 # Givlah architecture
 
-Status: **in progress**, 15 October 2026. Built so far: accounts, listings, photo sanitizing, location input, private pickup storage, the PWA shell, neighbour offers and the full coordination lifecycle (matching, holds, approvals, confirmations, withdrawals and handover records). Behaviour is defined in [SPECIFICATION](SPECIFICATION.md) and scope in [PRODUCT](PRODUCT.md). When this document and the specification disagree about behaviour, the specification wins.
+Status: **in progress**, 15 October 2026. Built so far: accounts, listings, photo sanitizing, location input, private pickup storage, the PWA shell, neighbour offers the full coordination lifecycle (matching, holds, approvals, confirmations, withdrawals and handover records), private-data retention and outcome totals. Behaviour is defined in [SPECIFICATION](SPECIFICATION.md) and scope in [PRODUCT](PRODUCT.md). When this document and the specification disagree about behaviour, the specification wins.
 
 ## Client decision: installable mobile web app
 
