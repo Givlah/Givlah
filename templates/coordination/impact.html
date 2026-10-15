@@ -1,16 +1,27 @@
 {% extends "base.html" %}
 {% block title %}Outcomes{% endblock %}
+{% block screen_class %}screen-outcomes{% endblock %}
 {% block content %}
+<article class="outcomes">
+<a class="text-action detail-back" href="{% url 'listings:nearby' %}">{% include "core/_icon.html" with name="back" %}Nearby</a>
 <div class="page-head">
   <h1>Outcomes</h1>
-  <p class="muted">An item counts as handed over only when both the owner and the recipient record it.{% if since %} Counting since {{ since|date:"j F Y" }}.{% endif %}</p>
+  <p class="muted small">An item counts as handed over only when both the owner and the recipient record it.</p>
+  {% if since %}<p class="outcome-period">{% include "core/_icon.html" with name="calendar" %}Counting since {{ since|date:"j F Y" }}</p>{% endif %}
 </div>
+<section class="outcome-section" aria-label="Neighbours' outcomes">
 <h2>Neighbours</h2>
 {% include "coordination/_totals.html" with t=real %}
+</section>
 {% if demo.published %}
-<h2>Demo data <span class="tag tag-demo">Not real</span></h2>
+<details class="demo-outcomes">
+<summary><span>Demo data <span class="tag tag-demo">Not real</span></span>{% include "core/_icon.html" with name="chevron" %}</summary>
+<div>
 <p class="muted small">Fictional people and items. Never added to the totals above.</p>
 {% include "coordination/_totals.html" with t=demo %}
+</div>
+</details>
 {% endif %}
-<p class="muted small">Givlah doesn't estimate weight, carbon or landfill savings. These counts are only what people recorded.</p>
+<p class="muted small outcome-note">Givlah doesn't estimate weight, carbon or landfill savings. These counts are only what people recorded.</p>
+</article>
 {% endblock %}

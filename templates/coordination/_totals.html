@@ -1,5 +1,7 @@
-<dl class="facts">
-  <div><dt>Handed over (both sides recorded)</dt><dd>{{ t.handed_over }}</dd></div>
+<dl class="outcome-stat">
+  <div><dt><span class="outcome-glyph">{% include "core/_icon.html" with name="check" %}</span><span>Handed over <span class="small muted">(both sides recorded)</span></span></dt><dd>{{ t.handed_over }}</dd></div>
+</dl>
+<dl class="outcome-counts">
   <div><dt>Collections in progress</dt><dd>{{ t.in_progress }}</dd></div>
   <div><dt>Waiting for a crew</dt><dd>{{ t.open }}</dd></div>
   <div><dt>Being checked after a problem</dt><dd>{{ t.needs_review }}</dd></div>
