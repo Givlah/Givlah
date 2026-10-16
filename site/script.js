@@ -9,11 +9,10 @@ if (video) {
     const fallback = video.querySelector(".youtube-fallback");
     const status = video.querySelector("#video-status");
     button.disabled = false;
-    video.querySelector(".pill").textContent = "Demo video";
-    video.querySelector(".video-pending").hidden = true;
+    video.querySelector(".pill").textContent = "Captioned demo";
     fallback.href = `https://www.youtube.com/watch?v=${id}`;
     fallback.hidden = false;
-    status.textContent = "Play loads YouTube. The written walkthrough is available below.";
+    status.textContent = "Play loads YouTube. Captions are included; the written walkthrough is available below.";
     button.addEventListener("click", () => {
       const frame = document.createElement("iframe");
       frame.src = `https://www.youtube-nocookie.com/embed/${id}?autoplay=1`;
