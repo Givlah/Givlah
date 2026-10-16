@@ -19,7 +19,7 @@
   {% include "core/_image_slot.html" with slot="nearby-empty" ratio="4 / 3" alt="" %}
   <h2>Nothing listed nearby yet</h2>
   <p class="muted">Have something usable you no longer need?</p>
-  <p><a class="button" href="{% url 'listings:create' %}">Give an item</a></p>
+  <a class="button" href="{% url 'listings:create' %}">{% include "core/_icon.html" with name="plus" %}Give an item</a>
 </section>
 {% endif %}
 {% endblock %}

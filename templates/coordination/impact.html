@@ -3,7 +3,7 @@
 {% block screen_class %}screen-outcomes{% endblock %}
 {% block content %}
 <article class="outcomes">
-<a class="text-action detail-back" href="{% url 'listings:nearby' %}">{% include "core/_icon.html" with name="back" %}Nearby</a>
+<div class="nav-bar"><a class="nav-back" href="{% url 'listings:nearby' %}" aria-label="Back to Nearby">{% include "core/_icon.html" with name="back" %}</a></div>
 <div class="page-head">
   <h1>Outcomes</h1>
   <p class="muted small">An item counts as handed over only when both the owner and the recipient record it.</p>

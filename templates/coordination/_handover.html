@@ -35,25 +35,25 @@
 <section class="handover-actions">
   {% if my_party %}
     {% if my_record %}
-      <details class="plan-options"><summary>Record options {% include "core/_icon.html" with name="chevron" %}</summary>
+      <details class="plan-options"><summary><span>Record options</span>{% include "core/_icon.html" with name="chevron" %}</summary><div class="option-buttons">
       <form method="post" action="{% url 'coordination:plan_action' plan.pk 'retract' %}" data-pending-form>{% csrf_token %}
-        <button class="button button-quiet" type="submit">Withdraw my record</button></form></details>
+        <button class="button button-quiet" type="submit" data-pending-label="Withdrawing…">Withdraw my record</button></form></div></details>
     {% else %}
       <div class="actions handover-record-actions">
         {% for value, label in outcomes %}
         <form method="post" action="{% url 'coordination:plan_action' plan.pk 'handover' %}" data-pending-form>{% csrf_token %}
           <input type="hidden" name="outcome" value="{{ value }}">
-          <button class="button{% if not forloop.first %} button-secondary{% endif %}" type="submit">{{ label }}</button>
+          <button class="button button-block{% if not forloop.first %} button-secondary{% endif %}" type="submit" data-pending-label="Recording…">{{ label }}</button>
         </form>
         {% endfor %}
       </div>
     {% endif %}
   {% else %}
-    <p class="muted small">The owner and recipient record the handover.</p>
+    <p class="state-note">{% include "core/_icon.html" with name="info" %}<span>The owner and recipient record the handover.</span></p>
   {% endif %}
   {% if plan.state == "awaiting_handover" %}
-  <details class="plan-options"><summary>Collection options {% include "core/_icon.html" with name="chevron" %}</summary>
+  <details class="plan-options"><summary><span>Collection options</span>{% include "core/_icon.html" with name="chevron" %}</summary><div class="option-buttons">
   <form method="post" action="{% url 'coordination:plan_action' plan.pk 'decline' %}" data-confirm="Report that you couldn't take part? The owner and recipient will be asked what happened.">{% csrf_token %}
-    <button class="button button-quiet spaced" type="submit">I couldn't take part</button></form></details>
+    <button class="button button-danger" type="submit">I couldn't take part</button></form></div></details>
   {% endif %}
 </section>

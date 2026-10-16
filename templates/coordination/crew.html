@@ -1,38 +1,39 @@
 {% extends "base.html" %}
 {% block title %}Find a crew{% endblock %}
+{% block screen_class %}screen-crew{% endblock %}
 {% block content %}
 <div class="page-head">
-  <div class="screen-title"><a class="back-link" href="{{ listing.get_absolute_url }}" aria-label="Back to {{ listing.title }}">{% include "core/_icon.html" with name="back" %}</a><h1>Find a crew</h1></div>
+  <div class="screen-title"><a class="nav-back" href="{{ listing.get_absolute_url }}" aria-label="Back to {{ listing.title }}">{% include "core/_icon.html" with name="back" %}</a><h1>Find a crew</h1></div>
   <p class="muted">{{ listing.title }} · {{ listing.zone.name }}</p>
 </div>
 {% if plan %}
-  <p class="message">A crew is already being arranged. <a href="{% url 'coordination:plan' plan.pk %}">Open the plan</a></p>
+  <div class="notice">{% include "core/_icon.html" with name="info" %}<div><p>A crew is already being arranged.</p><a class="button button-block" href="{% url 'coordination:plan' plan.pk %}">Open the plan</a></div></div>
 {% elif not suggestion %}
-  <p class="message">This item isn't waiting for a crew.</p>
+  <p class="notice">{% include "core/_icon.html" with name="info" %}<span>This item isn't waiting for a crew.</span></p>
 {% elif suggestion.status == "over_limit" %}
-  <p class="message message-error">Too many items share the same helpers to plan exactly right now ({{ suggestion.batch|length }} items). Nothing was reserved. Try again after some collections are confirmed.</p>
+  <p class="message message-error">{% include "core/_icon.html" with name="warning" %}<span>Too many items share the same helpers to plan exactly right now ({{ suggestion.batch|length }} items). Nothing was reserved. Try again after some collections are confirmed.</span></p>
 {% else %}
-  {% if suggestion.status == "incomplete" %}<p class="message message-error">Planning took too long, so this may not be the best possible arrangement. Nothing was reserved.</p>{% endif %}
+  {% if suggestion.status == "incomplete" %}<p class="message message-error">{% include "core/_icon.html" with name="warning" %}<span>Planning took too long, so this may not be the best possible arrangement. Nothing was reserved.</span></p>{% endif %}
   {% if best %}
     <h2>Best complete crew</h2>
     <p class="muted small">Everyone here offered to help at this time, and no one is booked twice{% if batch_others %}, while still leaving {{ batch_others|join:", " }} plannable{% endif %}.</p>
     {% include "coordination/_candidate.html" with c=best best=True %}
   {% elif not alternatives %}
-    <section class="panel">
+    <section class="panel crew-empty">
       {% include "core/_image_slot.html" with slot="crew-empty" ratio="1 / 1" alt="" %}
       <h2>No complete crew yet</h2>
-      <ul>{% for r in suggestion.reasons %}<li>{{ r }}</li>{% endfor %}</ul>
+      <ul class="reason-list">{% for r in suggestion.reasons %}<li>{% include "core/_icon.html" with name="alert" %}<span>{{ r }}</span></li>{% endfor %}</ul>
       <p class="muted small">Share the item with neighbours, or add more collection times.</p>
     </section>
   {% else %}
-    <p class="message">The people who offered are better used for other items at the same time. You can still choose a crew below.</p>
+    <p class="notice">{% include "core/_icon.html" with name="info" %}<span>The people who offered are better used for other items at the same time. You can still choose a crew below.</span></p>
   {% endif %}
   {% if alternatives %}
-    <details class="panel history"{% if not best %} open{% endif %}>
-    <summary>{% if best %}Other options{% else %}Possible crews{% endif %}</summary>
-    {% for c in alternatives %}{% include "coordination/_candidate.html" with best=False %}{% endfor %}
+    <details class="disclosure crew-options"{% if not best %} open{% endif %}>
+    <summary><span>{% if best %}Other options{% else %}Possible crews{% endif %}</span>{% include "core/_icon.html" with name="chevron" %}</summary>
+    <div class="disclosure-body">{% for c in alternatives %}{% include "coordination/_candidate.html" with best=False %}{% endfor %}</div>
     </details>
   {% endif %}
-  <p class="muted small">Inviting a crew holds everyone's time for 20 minutes while they confirm. Nothing is final until every person confirms.</p>
+  <p class="muted small crew-footnote">{% include "core/_icon.html" with name="clock" %}<span>Inviting a crew holds everyone's time for 20 minutes while they confirm. Nothing is final until every person confirms.</span></p>
 {% endif %}
 {% endblock %}

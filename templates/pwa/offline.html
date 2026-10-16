@@ -2,18 +2,19 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#FFFBF4">
   <title>Offline · Givlah</title>
   <link rel="stylesheet" href="{% static 'css/givlah.css' %}">
 </head>
-<body>
-  <main class="page offline-page">
-    <section class="empty">
-      <img src="{% static 'icons/icon-192.png' %}" alt="" width="72" height="72">
+<body class="screen-status">
+  <main class="page status-page offline-page">
+    <section class="status-screen">
+      <img src="{% static 'icons/icon-192.png' %}" alt="" width="76" height="76">
       <h1>You're offline</h1>
-      <p>Nothing was sent. Givlah needs a connection to show current listings and plans.</p>
+      <p class="muted">Nothing was sent. Givlah needs a connection to show current listings and plans.</p>
       <p class="hand">Good things will be here when you're back.</p>
-      <p><a class="button" href="/">Try again</a></p>
+      <a class="button button-block" href="/">Try again</a>
     </section>
   </main>
 </body>

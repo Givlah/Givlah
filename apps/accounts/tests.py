@@ -64,8 +64,8 @@ class DemoSwitchTests(TestCase):
         with override_settings(DEMO_MODE=True):
             response = self.client.get(reverse("listings:activity"))
             self.assertContains(response, 'Try another demo person')
-            self.assertContains(response, f'<option value="{self.demo.pk}" selected>Aina</option>')
-            self.assertNotContains(response, f'<option value="{self.real.pk}"')
+            self.assertContains(response, f'name="user_id" value="{self.demo.pk}" class="sheet-row" aria-current="true" disabled')
+            self.assertNotContains(response, f'name="user_id" value="{self.real.pk}"')
         with override_settings(DEMO_MODE=False):
             self.assertNotContains(self.client.get(reverse("listings:activity")), 'Try another demo person')
 

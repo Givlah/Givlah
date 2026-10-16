@@ -33,7 +33,7 @@
       {% include "core/_icon.html" with name="chevron" %}
     </a></li>{% endfor %}
   </ul>
-  {% else %}<p class="empty-note muted">None yet.</p>{% endif %}
+  {% else %}<p class="empty-note muted">Collections you join will appear here.</p>{% endif %}
 </details></section>
 
 <section class="activity-section" id="giving" aria-labelledby="giving-heading" tabindex="-1">
@@ -46,7 +46,7 @@
       {% include "core/_icon.html" with name="chevron" %}
     </a></li>{% endfor %}
   </ul>
-  {% else %}<div class="empty-note"><p class="muted">You haven't listed anything yet.</p><a class="text-action" href="{% url 'listings:create' %}">Give an item {% include "core/_icon.html" with name="chevron" %}</a></div>{% endif %}
+  {% else %}<div class="empty-note"><p class="muted">You haven't listed anything yet.</p><a class="button button-tonal button-small" href="{% url 'listings:create' %}">{% include "core/_icon.html" with name="plus" %}Give an item</a></div>{% endif %}
 </details></section>
 
 <section class="activity-section" id="helping" aria-labelledby="helping-heading" tabindex="-1">
@@ -59,6 +59,6 @@
       {% include "core/_icon.html" with name="chevron" %}
     </a></li>{% endfor %}
   </ul>
-  {% else %}<div class="empty-note"><p class="muted">No active offers.</p><a class="text-action" href="{% url 'listings:nearby' %}">Help a neighbour nearby {% include "core/_icon.html" with name="chevron" %}</a></div>{% endif %}
+  {% else %}<div class="empty-note"><p class="muted">No active offers.</p><a class="button button-tonal button-small" href="{% url 'listings:nearby' %}">{% include "core/_icon.html" with name="pin" %}Help a neighbour nearby</a></div>{% endif %}
 </details></section>
 {% endblock %}

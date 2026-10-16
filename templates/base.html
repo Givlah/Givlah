@@ -3,58 +3,70 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta name="theme-color" content="#10C766">
+  <meta name="theme-color" content="#FFFBF4">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="Givlah">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="format-detection" content="telephone=no">
   <title>{% block title %}Givlah{% endblock %} · Givlah</title>
   <link rel="manifest" href="{% url 'pwa:manifest' %}">
   <link rel="icon" href="{% static 'icons/favicon-32.png' %}" sizes="32x32">
   <link rel="apple-touch-icon" href="{% static 'icons/apple-touch-icon.png' %}">
   <link rel="preload" href="{% static 'fonts/givlah/Givlah-Bold.woff2' %}" as="font" type="font/woff2" crossorigin>
-  <link rel="stylesheet" href="{% static 'css/givlah.css' %}?v=demo-switch-1">
-  <script src="{% static 'js/givlah.js' %}?v=art-1" defer></script>
+  <link rel="stylesheet" href="{% static 'css/givlah.css' %}?v=native-1">
+  <script>document.documentElement.classList.add("js");</script>
+  <script src="{% static 'js/givlah.js' %}?v=native-1" defer></script>
 </head>
 <body class="{% if user.is_authenticated %}app{% else %}guest{% endif %} {% block screen_class %}{% endblock %}">
   {% if user.is_authenticated %}<div class="app-atmosphere" aria-hidden="true"><span class="atmosphere-green"></span><span class="atmosphere-blue"></span></div>{% endif %}
-  <a class="skip-link" href="#main">Skip to content</a>
+  {% if demo_mode %}<p class="demo-banner" role="note"><span>Demo mode: fictional people, places and items.</span></p>{% endif %}
+  {% if user.is_authenticated %}
   <header class="topbar">
-    {% if not user.is_authenticated %}<a class="brand" href="{% url 'listings:nearby' %}">
-      <img src="{% static 'icons/icon-192.png' %}" alt="" width="32" height="32">
-      <span>Givlah</span>
-    </a>{% endif %}
-    {% if user.is_authenticated %}
     <div class="account">
-      <details class="account-menu">
+      <details class="account-menu" data-account-menu>
         <summary aria-label="Account: {{ user.display_name|default:user.username }}"><span class="avatar" aria-hidden="true">{{ user.display_name|default:user.username|first|upper }}</span></summary>
-        <div class="account-popover">
-      <a class="brand" href="{% url 'listings:nearby' %}"><img src="{% static 'icons/icon-192.png' %}" alt="" width="32" height="32"><span>Givlah</span></a>
-      <span class="who">{{ user.display_name|default:user.username }}{% if user.is_synthetic %} <span class="tag tag-demo">Demo</span>{% endif %}</span>
-      <a class="account-link" href="{% url 'coordination:impact' %}">{% include "core/_icon.html" with name="check" %}<span>Outcomes</span>{% include "core/_icon.html" with name="chevron" %}</a>
-      <label class="motion-setting" hidden data-motion-setting>Motion
-        <select data-motion-choice><option value="force">Full</option><option value="auto">Follow device</option><option value="reduce">Reduced</option></select>
-      </label>
-      {% if demo_switch_users %}
-      <form class="demo-switch" method="post" action="{% url 'accounts:demo_switch' %}" data-pending-form>
-        {% csrf_token %}
-        <input type="hidden" name="next" value="{{ request.path }}">
-        <label for="demo-person">Try another demo person</label>
-        <select id="demo-person" name="user_id">
-          {% for person in demo_switch_users %}<option value="{{ person.pk }}"{% if person.pk == user.pk %} selected{% endif %}>{{ person.display_name }}</option>{% endfor %}
-        </select>
-        <button class="button button-secondary" type="submit" data-pending-label="Switching…">Switch person</button>
-        <p class="muted small">Fictional accounts. Each person confirms for themselves.</p>
-      </form>
-      {% endif %}
-      <form method="post" action="{% url 'accounts:logout' %}">{% csrf_token %}<button class="link" type="submit">Sign out</button></form>
+        <div class="account-popover" role="group" aria-label="Account">
+          <span class="sheet-grabber" aria-hidden="true"></span>
+          <div class="sheet-profile">
+            <span class="avatar avatar-lg" aria-hidden="true">{{ user.display_name|default:user.username|first|upper }}</span>
+            <span class="sheet-profile-copy"><strong class="who">{{ user.display_name|default:user.username }}</strong>{% if user.is_synthetic %}<span class="tag tag-demo">Demo</span>{% endif %}</span>
+          </div>
+          <div class="sheet-group">
+            <a class="sheet-row" href="{% url 'coordination:impact' %}"><span class="sheet-row-icon">{% include "core/_icon.html" with name="check" %}</span><span class="sheet-row-label">Outcomes</span>{% include "core/_icon.html" with name="chevron" %}</a>
+          </div>
+          <fieldset class="motion-setting" hidden data-motion-setting>
+            <legend class="sheet-label">Motion</legend>
+            <div class="segmented segmented-3">
+              <label><input type="radio" name="motion" value="force" data-motion-choice><span>Full</span></label>
+              <label><input type="radio" name="motion" value="auto" data-motion-choice><span>Device</span></label>
+              <label><input type="radio" name="motion" value="reduce" data-motion-choice><span>Reduced</span></label>
+            </div>
+          </fieldset>
+          {% if demo_switch_users %}
+          <form class="demo-switch" method="post" action="{% url 'accounts:demo_switch' %}" data-pending-form>
+            {% csrf_token %}
+            <input type="hidden" name="next" value="{{ request.path }}">
+            <p class="sheet-label" id="demo-person-label">Try another demo person</p>
+            <div class="sheet-group" role="group" aria-labelledby="demo-person-label">
+              {% for person in demo_switch_users %}<button type="submit" name="user_id" value="{{ person.pk }}" class="sheet-row"{% if person.pk == user.pk %} aria-current="true" disabled{% endif %}><span class="avatar avatar-sm avatar-{{ forloop.counter }}" aria-hidden="true">{{ person.display_name|first|upper }}</span><span class="sheet-row-label">{{ person.display_name }}{% if person.pk == user.pk %}<span class="sr-only"> (current)</span>{% endif %}</span>{% if person.pk == user.pk %}<span class="sheet-row-check">{% include "core/_icon.html" with name="check" %}</span>{% endif %}</button>{% endfor %}
+            </div>
+            <p class="sheet-note">Fictional accounts. Each person confirms for themselves.</p>
+          </form>
+          {% endif %}
+          <form method="post" action="{% url 'accounts:logout' %}">{% csrf_token %}
+            <div class="sheet-group"><button class="sheet-row sheet-row-danger" type="submit"><span class="sheet-row-icon">{% include "core/_icon.html" with name="logout" %}</span><span class="sheet-row-label">Sign out</span></button></div>
+          </form>
         </div>
       </details>
     </div>
-    {% endif %}
   </header>
-  {% if demo_mode %}<p class="demo-banner" role="note">Demo mode: fictional people, places and items.</p>{% endif %}
+  {% endif %}
 
   <main class="page" id="main" tabindex="-1">
     {% if messages %}
     <div class="messages" role="status" aria-live="polite">
-      {% for message in messages %}<p class="message message-{{ message.tags }}">{{ message }}</p>{% endfor %}
+      {% for message in messages %}<p class="message message-{{ message.tags }}">{% if message.tags == "error" %}{% include "core/_icon.html" with name="warning" %}{% elif message.tags == "success" %}{% include "core/_icon.html" with name="check" %}{% else %}{% include "core/_icon.html" with name="info" %}{% endif %}<span>{{ message }}</span></p>{% endfor %}
     </div>
     {% endif %}
     {% block content %}{% endblock %}

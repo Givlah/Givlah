@@ -3,19 +3,19 @@
 {% block screen_class %}screen-plan{% if plan.state == "awaiting_handover" or plan.state == "handover_recorded" or plan.state == "needs_review" %} screen-handover{% endif %}{% endblock %}
 {% block content %}
 <div class="page-head plan-head">
-  <div class="screen-title"><a class="back-link" href="{{ plan.listing.get_absolute_url }}" aria-label="Back to {{ plan.listing.title }}">{% include "core/_icon.html" with name="back" %}</a><h1>{% if plan.state == "awaiting_handover" or plan.state == "handover_recorded" or plan.state == "needs_review" %}Handover confirmation{% else %}Collection plan{% endif %}</h1></div>
+  <div class="screen-title"><a class="nav-back" href="{{ plan.listing.get_absolute_url }}" aria-label="Back to {{ plan.listing.title }}">{% include "core/_icon.html" with name="back" %}</a><h1>{% if plan.state == "awaiting_handover" or plan.state == "handover_recorded" or plan.state == "needs_review" %}Handover confirmation{% else %}Collection plan{% endif %}</h1></div>
   {% if plan.state != "awaiting_handover" and plan.state != "handover_recorded" and plan.state != "needs_review" %}<p class="plan-intro muted">Review the time, crew and location sharing.</p>{% endif %}
   {% include "listings/_item_card.html" with listing=plan.listing %}
 </div>
 
 {% if plan.state == "ended" %}
-<p class="message">This plan has ended: {{ plan.ended_reason|default:"it is no longer active" }}. Everyone's time has been released.</p>
+<p class="notice">{% include "core/_icon.html" with name="info" %}<span>This plan has ended: {{ plan.ended_reason|default:"it is no longer active" }}. Everyone's time has been released.</span></p>
 
 {% elif plan.state == "ready" %}
-<p class="message message-success">{% include "core/_icon.html" with name="check" %} Everyone confirmed. The collection is on.</p>
+<p class="notice notice-success">{% include "core/_icon.html" with name="check" %}<span>Everyone confirmed. The collection is on.</span></p>
 
 {% elif plan.state == "needs_review" %}
-<p class="message message-error">Something changed after the collection time started. The owner and recipient each record what happened. The item won't be relisted until both say it stayed with the owner.</p>
+<p class="message message-error">{% include "core/_icon.html" with name="warning" %}<span>Something changed after the collection time started. The owner and recipient each record what happened. The item won't be relisted until both say it stayed with the owner.</span></p>
 {% endif %}
 
 {% if plan.state == "awaiting_handover" or plan.state == "needs_review" or plan.state == "handover_recorded" %}
@@ -29,7 +29,7 @@
     <div class="collection-row">{% include "core/_icon.html" with name="pin" %}<div><strong>{{ plan.listing.zone.name }}</strong><span class="muted small">To {{ plan.recipient_offer.destination_zone.name }}</span></div></div>
   </div>
   <details class="trip-details">
-    <summary>Trip and item details {% include "core/_icon.html" with name="chevron" %}</summary>
+    <summary><span>Trip and item details</span>{% include "core/_icon.html" with name="chevron" %}</summary>
     <p class="muted small">This whole window is reserved for everyone, including loading, the trip and unloading.</p>
     <dl class="facts compact">
       <div><dt>Item</dt><dd>{{ plan.listing.title }}, {{ plan.listing.width_cm }} × {{ plan.listing.depth_cm }} × {{ plan.listing.height_cm }} cm</dd></div>
@@ -56,15 +56,14 @@
 <section class="panel location-panel{% if locations %} panel-private{% endif %}">
   <h2>{% include "core/_icon.html" with name="pin" %}Exact locations</h2>
   {% if plan.state == "awaiting_confirmations" or plan.state == "ready" %}
-  <details class="sharing-details"><summary>Sharing status {% include "core/_icon.html" with name="chevron" %}</summary><ul class="sharing-tiles">
+  <details class="sharing-details"><summary><span>Sharing status</span>{% include "core/_icon.html" with name="chevron" %}</summary><ul class="sharing-tiles">
     <li><span class="sharing-icon {% if approvals.pickup %}sharing-yes{% endif %}">{% if approvals.pickup %}{% include "core/_icon.html" with name="check" %}{% else %}{% include "core/_icon.html" with name="clock" %}{% endif %}</span><span><strong>Pickup</strong><span class="muted small">{% if approvals.pickup %}Shared with crew{% else %}Waiting for {{ plan.owner }}{% endif %}</span></span></li>
     <li><span class="sharing-icon {% if approvals.destination %}sharing-yes{% endif %}">{% if approvals.destination %}{% include "core/_icon.html" with name="check" %}{% else %}{% include "core/_icon.html" with name="clock" %}{% endif %}</span><span><strong>Drop-off</strong><span class="muted small">{% if approvals.destination %}Shared with crew{% else %}Waiting for {{ plan.recipient }}{% endif %}</span></span></li>
   </ul></details>
   {% endif %}
   {% if locations %}
-    <details class="exact-details"><summary>View pickup and drop-off {% include "core/_icon.html" with name="chevron" %}</summary>
-    <p><strong>Pickup:</strong> {{ locations.pickup }}</p>
-    <p><strong>Drop-off:</strong> {{ locations.destination }}</p>
+    <details class="exact-details"><summary><span>View pickup and drop-off</span>{% include "core/_icon.html" with name="chevron" %}</summary>
+    <dl class="location-rows selectable"><div><dt>Pickup</dt><dd>{{ locations.pickup }}</dd></div><div><dt>Drop-off</dt><dd>{{ locations.destination }}</dd></div></dl>
     <p class="muted small">Shared with this crew only. Access ends if the plan changes, and seven days after the collection.</p>
     </details>
   {% elif plan.state == "awaiting_confirmations" %}
@@ -75,33 +74,33 @@
 </section>
 
 {% if plan.state == "awaiting_confirmations" %}
-<div class="hold-notice">{% include "core/_icon.html" with name="clock" %}<div><h2>Awaiting confirmations</h2><p class="message">Held until <strong>{{ plan.hold_expires_at|date:"g:i a" }}</strong>. If anyone hasn't confirmed by then, the plan ends and everyone is released.</p><progress hidden data-hold-progress data-start="{{ plan.created_at|date:'c' }}" data-until="{{ plan.hold_expires_at|date:'c' }}" aria-label="Invitation time remaining"></progress></div></div>
+<div class="hold-notice">{% include "core/_icon.html" with name="clock" %}<div><h2>Awaiting confirmations</h2><p>Held until <strong>{{ plan.hold_expires_at|date:"g:i a" }}</strong> If anyone hasn't confirmed by then, the plan ends and everyone is released.</p><progress hidden data-hold-progress data-start="{{ plan.created_at|date:'c' }}" data-until="{{ plan.hold_expires_at|date:'c' }}" aria-label="Invitation time remaining"></progress></div></div>
 <section class="panel plan-action">
   <h2>Your part</h2>
   {% if can_approve %}
   <form method="post" action="{% url 'coordination:plan_action' plan.pk 'approve' %}" data-pending-form>{% csrf_token %}
     <p>Share your exact {% if my_party == "owner" %}pickup{% else %}drop-off{% endif %} location with these {{ crew|length }} people?</p>
-    <button class="button" type="submit" data-pending-label="Sharing…">Share my location with this crew</button>
+    <button class="button button-block" type="submit" data-pending-label="Sharing…">Share my location with this crew</button>
   </form>
   {% elif not i_confirmed %}
     {% if both_approved %}
     <form method="post" action="{% url 'coordination:plan_action' plan.pk 'confirm' %}" data-pending-form>{% csrf_token %}
       <p>I can do the whole window above{% if "transport" in my_roles %}, and the item fits my transport{% endif %}.</p>
-      <button class="button" type="submit" data-pending-label="Confirming…">Confirm</button>
+      <button class="button button-block" type="submit" data-pending-label="Confirming…">Confirm</button>
     </form>
     {% else %}
     <p class="muted">You can confirm once both locations are shared.</p>
     {% endif %}
   {% else %}
-    <p>✓ You've confirmed. Waiting for the others.</p>
+    <p class="state-note state-note-recorded">{% include "core/_icon.html" with name="check" %}<span>You've confirmed. Waiting for the others.</span></p>
   {% endif %}
-  <details class="plan-options"><summary>Plan options {% include "core/_icon.html" with name="chevron" %}</summary><div class="actions spaced">
+  <details class="plan-options"><summary><span>Plan options</span>{% include "core/_icon.html" with name="chevron" %}</summary><div class="option-buttons">
     {% if i_share and not can_approve %}
     <form method="post" action="{% url 'coordination:plan_action' plan.pk 'revoke' %}" data-confirm="Stop sharing your location? This ends the plan for everyone.">{% csrf_token %}
       <button class="button button-quiet" type="submit">Stop sharing my location</button></form>
     {% endif %}
     <form method="post" action="{% url 'coordination:plan_action' plan.pk 'decline' %}" data-confirm="Leave this plan? Everyone will be released.">{% csrf_token %}
-      <button class="button button-quiet" type="submit">I can't make it</button></form>
+      <button class="button button-danger" type="submit">I can't make it</button></form>
   </div></details>
 </section>
 {% elif plan.state == "ready" %}
@@ -109,15 +108,15 @@
   {% include "core/_image_slot.html" with slot="plan-ready" ratio="2 / 1" alt="" %}
   <h2>Everyone confirmed</h2><p class="muted">The collection is on.</p>
 </section>
-<details class="panel plan-options"><summary>Plan options {% include "core/_icon.html" with name="chevron" %}</summary>
+<details class="panel plan-options"><summary><span>Plan options</span>{% include "core/_icon.html" with name="chevron" %}</summary><div class="option-buttons">
   <form method="post" action="{% url 'coordination:plan_action' plan.pk 'decline' %}" data-confirm="Drop out? The plan ends and the item looks for a new crew.">{% csrf_token %}
-    <button class="button button-quiet" type="submit">I can no longer make it</button></form>
-</details>
+    <button class="button button-danger" type="submit">I can no longer make it</button></form>
+</div></details>
 
 {% endif %}
 
 <details class="panel history">
-  <summary>History</summary>
-  <ul>{% for e in events %}<li>{{ e.created_at|date:"j M, g:i a" }} · {{ e.label }}{% if e.actor %} · {{ e.actor }}{% endif %}{% if e.note %} · {{ e.note }}{% endif %}</li>{% endfor %}</ul>
+  <summary><span class="history-title">{% include "core/_icon.html" with name="history" %}History</span>{% include "core/_icon.html" with name="chevron" %}</summary>
+  <ol class="history-list">{% for e in events %}<li><strong>{{ e.label }}</strong><span class="muted small">{{ e.created_at|date:"j M, g:i a" }}{% if e.actor %} · {{ e.actor }}{% endif %}{% if e.note %} · {{ e.note }}{% endif %}</span></li>{% endfor %}</ol>
 </details>
 {% endblock %}

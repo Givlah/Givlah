@@ -1,10 +1,10 @@
-<div class="field{% if field.errors %} field-error{% endif %}{% if field.field.widget.input_type == 'checkbox' and not field.field.widget.allow_multiple_selected %} field-check{% endif %}"{% if field.field.widget.allow_multiple_selected %} role="group" aria-labelledby="{{ field.auto_id }}_label"{% endif %}>
+<div class="field{% if field.errors %} field-error{% endif %}{% if field.field.widget.input_type == 'checkbox' and not field.field.widget.allow_multiple_selected %} field-check{% if field.field.widget.attrs.role == 'switch' %} field-switch{% endif %}{% endif %}{% if field.field.widget.input_type == 'radio' or field.field.widget.allow_multiple_selected and field.field.widget.input_type == 'checkbox' %} field-options{% endif %}"{% if field.field.widget.allow_multiple_selected or field.field.widget.input_type == 'radio' %} role="group" aria-labelledby="{{ field.auto_id }}_label"{% endif %}>
   {% if field.field.widget.input_type == 'checkbox' and not field.field.widget.allow_multiple_selected %}
     {{ field }} <label for="{{ field.id_for_label }}">{{ field.label }}</label>
   {% else %}
-    {% if field.field.widget.allow_multiple_selected %}<span class="field-label" id="{{ field.auto_id }}_label">{{ field.label }}</span>{% else %}<label for="{{ field.id_for_label }}">{{ field.label }}{% if not field.field.required %} <span class="muted">(optional)</span>{% endif %}</label>{% endif %}
+    {% if field.field.widget.allow_multiple_selected or field.field.widget.input_type == 'radio' %}<span class="field-label" id="{{ field.auto_id }}_label">{{ field.label }}</span>{% else %}<label for="{{ field.id_for_label }}">{{ field.label }}{% if not field.field.required %} <span class="optional">Optional</span>{% endif %}</label>{% endif %}
     {{ field }}
   {% endif %}
   {% if field.help_text %}<p class="help" id="{{ field.id_for_label }}_help">{{ field.help_text }}</p>{% endif %}
-  {% for error in field.errors %}<p class="error" role="alert">{{ error }}</p>{% endfor %}
+  {% for error in field.errors %}<p class="error" role="alert">{% include "core/_icon.html" with name="warning" %}<span>{{ error }}</span></p>{% endfor %}
 </div>

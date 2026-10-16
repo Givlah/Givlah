@@ -1,22 +1,25 @@
 {% extends "base.html" %}
 {% block title %}{{ heading }}{% endblock %}
-{% block screen_class %}screen-form{% endblock %}
+{% block screen_class %}screen-form screen-modal{% endblock %}
 {% block content %}
-<div class="page-head">
-  <a class="text-action detail-back" href="{{ listing.get_absolute_url }}">{% include "core/_icon.html" with name="back" %}{{ listing.title }}</a>
-  <h1>{{ heading }}</h1>
-  <p class="muted">{{ listing.title }} · {{ listing.zone.name }} · {{ listing.width_cm }} × {{ listing.depth_cm }} × {{ listing.height_cm }} cm{% if listing.handling_notes %} · {{ listing.handling_notes }}{% endif %}</p>
-</div>
 <form method="post" class="stack form-page" data-pending-form novalidate>
+  <header class="composer-header">
+    <a class="icon-button" href="{{ listing.get_absolute_url }}" aria-label="Cancel and go back to {{ listing.title }}">{% include "core/_icon.html" with name="close" %}</a>
+    <h1>{{ heading }}</h1>
+  </header>
+  <a class="item-summary" href="{{ listing.get_absolute_url }}">
+    {% include "core/_item_thumb.html" with item=listing %}
+    <span class="row-copy"><strong>{{ listing.title }}</strong><span class="meta">{{ listing.zone.name }} · {{ listing.width_cm }} × {{ listing.depth_cm }} × {{ listing.height_cm }} cm</span>{% if listing.handling_notes %}<span class="meta">{{ listing.handling_notes }}</span>{% endif %}</span>
+  </a>
   {% csrf_token %}
-  {% if form.non_field_errors %}<div class="message message-error" role="alert">{% for e in form.non_field_errors %}<p>{{ e }}</p>{% endfor %}</div>{% endif %}
+  {% if form.non_field_errors %}<div class="message message-error" role="alert">{% include "core/_icon.html" with name="warning" %}<div>{% for e in form.non_field_errors %}<p>{{ e }}</p>{% endfor %}</div></div>{% endif %}
   <fieldset>
     <legend>Times</legend>
     {% if form.fields.windows.queryset %}
     {% include "core/_field.html" with field=form.windows %}
     <p class="help">Each time includes loading, the trip and unloading. You'd be committed for the whole window.</p>
     {% else %}
-    <p class="message message-error">There are no upcoming collection times left for this item.</p>
+    <p class="message message-error">{% include "core/_icon.html" with name="warning" %}<span>There are no upcoming collection times left for this item.</span></p>
     {% endif %}
   </fieldset>
   {% if kind == "recipient" %}
@@ -35,9 +38,8 @@
     <p class="help">You can also offer transport if you're the person receiving the item.</p>
   </fieldset>
   {% endif %}
-  <div class="actions">
-    <button class="button" type="submit" data-pending-label="Saving…">{{ button }}</button>
-    <a class="button button-quiet" href="{{ listing.get_absolute_url }}">Cancel</a>
+  <div class="actions form-actions">
+    <button class="button button-block" type="submit" data-pending-label="Saving…">{{ button }}</button>
   </div>
 </form>
 {% endblock %}

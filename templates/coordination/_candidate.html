@@ -1,12 +1,12 @@
 <div class="crew-card{% if best %} crew-card-best{% endif %}">
-  <p class="crew-time"><strong>{{ c.window.start|date:"D j M, g:i a" }} – {{ c.window.end|date:"g:i a" }}</strong></p>
+  <p class="crew-time">{% include "core/_icon.html" with name="calendar" %}<strong>{{ c.window.start|date:"D j M, g:i a" }} – {{ c.window.end|date:"g:i a" }}</strong></p>
   <ul class="crew-people">
     <li>{% include "core/_person.html" with person=listing.owner role="Giving" tone="owner" %}</li>
     <li>{% include "core/_person.html" with person=c.recipient_user role="Receiving" tone="recipient" %}</li>
     <li>{% include "core/_person.html" with person=c.transport_user role="Transport" tone="transport" %}<span class="muted small">{% if c.vehicle %}{{ c.vehicle }}{% else %}Carrying locally{% endif %}</span></li>
     {% if c.helper_user %}<li>{% include "core/_person.html" with person=c.helper_user role="Helps carry" tone="helper" %}</li>{% endif %}
   </ul>
-  {% if c.conflicts %}<p class="warn">⚠ Choosing this would stop {{ c.conflicts|join:", " }} from being collected at the same time.</p>{% endif %}
+  {% if c.conflicts %}<p class="warn">{% include "core/_icon.html" with name="warning" %}<span>Choosing this would stop {{ c.conflicts|join:", " }} from being collected at the same time.</span></p>{% endif %}
   <form method="post" data-pending-form>
     {% csrf_token %}
     <input type="hidden" name="revision" value="{{ listing.revision }}">
@@ -14,6 +14,6 @@
     <input type="hidden" name="recipient" value="{{ c.recipient_id }}">
     <input type="hidden" name="transport" value="{{ c.transport_id }}">
     <input type="hidden" name="helper" value="{{ c.helper_id|default_if_none:'' }}">
-    <button class="button{% if not best %} button-secondary{% endif %}" type="submit" data-pending-label="Inviting…">Invite this crew</button>
+    <button class="button button-block{% if not best %} button-secondary{% endif %}" type="submit" data-pending-label="Inviting…">Invite this crew</button>
   </form>
 </div>

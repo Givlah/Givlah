@@ -1,31 +1,28 @@
 {% extends "base.html" %}
 {% block title %}{% if editing %}Edit {{ listing.title }}{% else %}Give an item{% endif %}{% endblock %}
-{% block screen_class %}screen-form{% if not editing %} screen-create{% endif %}{% endblock %}
+{% block screen_class %}screen-form screen-modal{% if not editing %} screen-create{% endif %}{% endblock %}
 {% block content %}
-{% if editing %}
-<div class="page-head">
-  <h1>Edit item</h1>
-</div>
-{% endif %}
-
 <form method="post" enctype="multipart/form-data" class="stack form-page" data-pending-form{% if not editing %} data-photo-composer data-form-bound="{{ form.is_bound|yesno:'true,false' }}"{% endif %} novalidate>
-  {% if not editing %}
   <header class="composer-header">
+    {% if editing %}
+    <a class="icon-button" href="{{ listing.get_absolute_url }}" aria-label="Cancel editing">{% include "core/_icon.html" with name="close" %}</a>
+    <h1>Edit item</h1>
+    {% else %}
     <a class="icon-button" href="{% url 'listings:nearby' %}" aria-label="Cancel giving an item" data-photo-close>{% include "core/_icon.html" with name="close" %}</a>
     <button class="icon-button" type="button" aria-label="Back to photos" data-photo-back hidden>{% include "core/_icon.html" with name="back" %}</button>
     <h1 data-composer-heading>Add photos</h1>
     <button class="button composer-next" type="button" data-photo-next hidden disabled>Next {% include "core/_icon.html" with name="chevron" %}</button>
+    {% endif %}
   </header>
-  {% endif %}
   {% csrf_token %}
   {{ form.action_token }}
   {% if editing %}<input type="hidden" name="revision" value="{{ listing.revision }}">
-  {% if listing.state != "needs_help" %}<p class="message message-error" role="note">A crew is being arranged for this item. Saving changes ends that plan, and everyone will need to confirm again.</p>{% endif %}{% endif %}
+  {% if listing.state != "needs_help" %}<p class="message message-error" role="note">{% include "core/_icon.html" with name="warning" %}<span>A crew is being arranged for this item. Saving changes ends that plan, and everyone will need to confirm again.</span></p>{% endif %}{% endif %}
   {% if form.non_field_errors %}
-  <div class="message message-error" role="alert">{% for e in form.non_field_errors %}<p>{{ e }}</p>{% endfor %}</div>
+  <div class="message message-error" role="alert">{% include "core/_icon.html" with name="warning" %}<div>{% for e in form.non_field_errors %}<p>{{ e }}</p>{% endfor %}</div></div>
   {% endif %}
   {% if form.is_bound and form.errors %}
-  <p class="message message-error" role="alert">Please fix the highlighted fields. Nothing was saved yet. If you chose photos, choose them again.</p>
+  <p class="message message-error" role="alert">{% include "core/_icon.html" with name="warning" %}<span>Please fix the highlighted fields. Nothing was saved yet. If you chose photos, choose them again.</span></p>
   {% endif %}
 
   {% if not editing %}
@@ -50,7 +47,7 @@
       <button class="button button-secondary" type="button" data-photo-library>{% include "core/_icon.html" with name="image" %}Choose photos</button>
     </div>
     <p class="error" data-photo-error role="alert" hidden></p>
-    {% if form.photos.errors %}<div id="{{ form.photos.auto_id }}_error">{% for error in form.photos.errors %}<p class="error" role="alert">{{ error }}</p>{% endfor %}</div>{% endif %}
+    {% if form.photos.errors %}<div id="{{ form.photos.auto_id }}_error">{% for error in form.photos.errors %}<p class="error" role="alert">{% include "core/_icon.html" with name="warning" %}<span>{{ error }}</span></p>{% endfor %}</div>{% endif %}
     <p class="help" data-photo-status role="status" aria-live="polite">JPEG, PNG or WebP. Up to 5 MB per photo.</p>
     <p class="help">Keep faces, house numbers and other personal details out of your photos.</p>
     <a class="button button-secondary" href="#item-details" data-photo-fallback>Continue to details {% include "core/_icon.html" with name="chevron" %}</a>
@@ -62,15 +59,22 @@
   <div class="photo-summary" data-photo-summary hidden>
     <img data-photo-summary-image hidden alt="">
     <div><p class="step-label">Step 2 of 2</p><span data-photo-count>No photos selected</span></div>
-    <button class="button button-quiet" type="button" data-photo-change>Change photos</button>
+    <button class="button button-tonal button-small" type="button" data-photo-change>Change photos</button>
   </div>
-  <p class="help">Furniture and simple household items only. No electrical goods, mattresses or hazardous items.</p>
+  <p class="help form-note">{% include "core/_icon.html" with name="info" %}<span>Furniture and simple household items only. No electrical goods, mattresses or hazardous items.</span></p>
   {% endif %}
   <fieldset>
     <legend>The item</legend>
     {% if editing %}
-    {% include "core/_field.html" with field=form.photos %}
-    <div class="photo-preview" data-photo-preview aria-live="polite"></div>
+    <div class="field photo-field{% if form.photos.errors %} field-error{% endif %}">
+      <span class="field-label">Photos</span>
+      {% if listing.photos.all %}<div class="current-photos" data-current-photos>{% for photo in listing.photos.all %}<img src="{% url 'listings:photo' photo.uuid %}" alt="Current photo {{ forloop.counter }}" width="{{ photo.width }}" height="{{ photo.height }}">{% endfor %}</div>{% endif %}
+      <div class="photo-preview" data-photo-preview aria-live="polite"></div>
+      <label class="button button-tonal button-small photo-pick" for="{{ form.photos.auto_id }}">{% include "core/_icon.html" with name="image" %}Replace photos</label>
+      {{ form.photos }}
+      <p class="help">Choose 1 to 3 new photos to replace the current ones. Leave this to keep them.</p>
+      {% for error in form.photos.errors %}<p class="error" role="alert">{% include "core/_icon.html" with name="warning" %}<span>{{ error }}</span></p>{% endfor %}
+    </div>
     {% endif %}
     {% include "core/_field.html" with field=form.title %}
     {% include "core/_field.html" with field=form.description %}
@@ -87,7 +91,7 @@
   <fieldset data-location data-zones="{{ zone_points }}">
     <legend>Pickup location</legend>
     <div class="locate">
-      <button type="button" class="button button-secondary" data-locate hidden>
+      <button type="button" class="button button-tonal" data-locate hidden>
         {% include "core/_icon.html" with name="locate" %}
         Use my location
       </button>
@@ -102,7 +106,7 @@
     <legend>When it can be collected</legend>
     {% include "core/_field.html" with field=form.deadline %}
     {% for start, end in form.window_pairs %}
-    {% if forloop.counter == 2 %}<details class="optional-fields"{% if form.errors or editing %} open{% endif %}><summary>More collection times {% include "core/_icon.html" with name="plus" %}</summary><div class="stack">{% endif %}
+    {% if forloop.counter == 2 %}<details class="optional-fields"{% if form.errors or editing %} open{% endif %}><summary><span class="optional-fields-icon">{% include "core/_icon.html" with name="plus" %}</span><span>More collection times</span>{% include "core/_icon.html" with name="chevron" %}</summary><div class="stack">{% endif %}
     <div class="row-2">
       {% include "core/_field.html" with field=start %}
       {% include "core/_field.html" with field=end %}
@@ -118,10 +122,8 @@
   <p class="help">Before publishing, check your photos and text don't show faces, house numbers or other personal details.</p>
   </fieldset>
 
-  <div class="actions">
-    <button class="button" type="submit" data-pending-label="{% if editing %}Saving…{% else %}Publishing…{% endif %}">{% if editing %}Save changes{% else %}Publish item{% endif %}</button>
-    {% if editing %}<a class="button button-quiet" href="{{ listing.get_absolute_url }}">Cancel</a>{% endif %}
-    {% if not editing %}<a class="button button-quiet" href="{% url 'listings:nearby' %}">Cancel</a>{% endif %}
+  <div class="actions form-actions">
+    <button class="button button-block" type="submit" data-pending-label="{% if editing %}Saving…{% else %}Publishing…{% endif %}">{% if editing %}Save changes{% else %}Publish item{% endif %}</button>
   </div>
   </div>
 </form>

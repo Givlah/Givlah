@@ -1,13 +1,20 @@
 {% extends "base.html" %}
 {% block title %}Create account{% endblock %}
+{% block screen_class %}screen-auth{% endblock %}
 {% block content %}
 <section class="auth">
+  <div class="nav-bar"><a class="nav-back" href="{% url 'accounts:login' %}" aria-label="Back to sign in">{% include "core/_icon.html" with name="back" %}</a></div>
   <h1>Create an account</h1>
-  <form method="post" class="stack auth-card" data-pending-form>
+  <p class="muted auth-lead">Give things you no longer need, or help a neighbour collect them.</p>
+  <form method="post" class="stack auth-card" data-pending-form novalidate>
     {% csrf_token %}
+    {% if form.non_field_errors %}<div class="message message-error" role="alert">{% include "core/_icon.html" with name="warning" %}<div>{% for e in form.non_field_errors %}<p>{{ e }}</p>{% endfor %}</div></div>{% endif %}
     {% for field in form %}{% include "core/_field.html" %}{% endfor %}
-    <button class="button" type="submit" data-pending-label="Creating…">Create account</button>
+    <button class="button button-block" type="submit" data-pending-label="Creating…">Create account</button>
   </form>
-  <p>Already have an account? <a href="{% url 'accounts:login' %}">Sign in</a></p>
+  <div class="auth-switch">
+    <span class="muted">Already have an account?</span>
+    <a class="button button-tonal button-block" href="{% url 'accounts:login' %}">Sign in</a>
+  </div>
 </section>
 {% endblock %}

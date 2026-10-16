@@ -3,12 +3,15 @@
 {% block screen_class %}screen-detail{% endblock %}
 {% block content %}
 <article class="detail">
-  <a class="text-action detail-back" href="{% url 'listings:nearby' %}">{% include "core/_icon.html" with name="back" %} Nearby</a>
+  <div class="nav-bar"><a class="nav-back" href="{% url 'listings:nearby' %}" aria-label="Back to Nearby">{% include "core/_icon.html" with name="back" %}</a></div>
   {% if listing.photos.all %}
-  <div class="gallery">
-    {% for photo in listing.photos.all %}
-    <img src="{% url 'listings:photo' photo.uuid %}" alt="Photo {{ forloop.counter }} of {{ listing.title }}" width="{{ photo.width }}" height="{{ photo.height }}">
-    {% endfor %}
+  <div class="gallery-wrap">
+    <div class="gallery" data-gallery>
+      {% for photo in listing.photos.all %}
+      <img src="{% url 'listings:photo' photo.uuid %}" alt="Photo {{ forloop.counter }} of {{ listing.title }}" width="{{ photo.width }}" height="{{ photo.height }}">
+      {% endfor %}
+    </div>
+    {% if listing.photos.all|length > 1 %}<span class="gallery-count" aria-hidden="true"><span data-gallery-index>1</span> / {{ listing.photos.all|length }}</span>{% endif %}
   </div>
   {% else %}
     {% include "core/_image_slot.html" with slot="item-detail" ratio="4 / 3" alt="" slot_class="detail-canvas" %}
@@ -18,35 +21,35 @@
     {% include "listings/_status.html" %}
     {% if listing.is_synthetic %}<span class="tag tag-demo">Demo listing</span>{% endif %}
   </div>
-  <p class="meta location-line">{% include "core/_icon.html" with name="pin" %}{{ listing.zone.name }} · given by {{ listing.owner }}</p>
-  {% if listing.description %}<p>{{ listing.description|linebreaksbr }}</p>{% endif %}
+  <p class="meta location-line">{% include "core/_icon.html" with name="pin" %}<span>{{ listing.zone.name }} · given by {{ listing.owner }}</span></p>
+  {% if listing.description %}<p class="detail-description selectable">{{ listing.description|linebreaksbr }}</p>{% endif %}
 
   <dl class="facts">
     <div><dt>Condition</dt><dd>{{ listing.get_condition_display }}</dd></div>
-    <div><dt>Size (W × D × H)</dt><dd>{{ listing.width_cm }} × {{ listing.depth_cm }} × {{ listing.height_cm }} cm</dd></div>
-    <div><dt>Carrying</dt><dd>{% if listing.needs_extra_helper %}Needs two people{% else %}One person{% endif %}{% if listing.handling_notes %} · {{ listing.handling_notes }}{% endif %}</dd></div>
-    <div><dt>Collect by</dt><dd>{{ listing.deadline|date:"l j F, g:i a" }}</dd></div>
+    <div><dt>Size</dt><dd>{{ listing.width_cm }} × {{ listing.depth_cm }} × {{ listing.height_cm }} cm<span class="facts-sub">Width × depth × height</span></dd></div>
+    <div><dt>Carrying</dt><dd>{% if listing.needs_extra_helper %}Needs two people{% else %}One person{% endif %}{% if listing.handling_notes %}<span class="facts-sub">{{ listing.handling_notes }}</span>{% endif %}</dd></div>
+    <div><dt>Collect by</dt><dd>{{ listing.deadline|date:"D j M, g:i a" }}</dd></div>
   </dl>
 
   <section class="panel">
-  <h2>Available times</h2>
-  <ul class="windows">
-    {% for w in listing.windows.all %}<li>{{ w.start|date:"D j M, g:i a" }} – {{ w.end|date:"g:i a" }}{% if w.start|date:"Ymd" != w.end|date:"Ymd" %} ({{ w.end|date:"D j M" }}){% endif %}</li>{% endfor %}
-  </ul>
+    <h2>Available times</h2>
+    <ul class="time-rows">
+      {% for w in listing.windows.all %}<li><span class="time-icon">{% include "core/_icon.html" with name="calendar" %}</span><span><strong>{{ w.start|date:"D j M" }}</strong><span class="muted">{{ w.start|date:"g:i a" }} – {{ w.end|date:"g:i a" }}{% if w.start|date:"Ymd" != w.end|date:"Ymd" %} ({{ w.end|date:"D j M" }}){% endif %}</span></span></li>{% endfor %}
+    </ul>
   </section>
 
   <section class="panel">
     <h2>What's still needed</h2>
-    <p class="status">{% include "core/_icon.html" with name="status" %}{% include "listings/_needs.html" %}.</p>
+    <p class="status status-block">{% include "core/_icon.html" with name="status" %}<span>{% include "listings/_needs.html" %}.</span></p>
     {% if listing.active_recipients or listing.active_transports or listing.active_helpers %}
     <ul class="offer-list">
-      {% for o in listing.active_recipients %}<li><span class="role role-recipient">Wants it</span> {{ o.user }}</li>{% endfor %}
-      {% for o in listing.active_transports %}<li><span class="role role-transport">Transport</span> {{ o.user }}{% if o.vehicle %} · {{ o.vehicle }}{% else %} · carrying locally{% endif %}</li>{% endfor %}
-      {% for o in listing.active_helpers %}<li><span class="role role-helper">Helps carry</span> {{ o.user }}</li>{% endfor %}
+      {% for o in listing.active_recipients %}<li><span class="avatar avatar-sm role-recipient" aria-hidden="true">{{ o.user.display_name|default:o.user.username|first|upper }}</span><span class="offer-person"><strong>{{ o.user }}</strong><span class="muted">Wants it</span></span></li>{% endfor %}
+      {% for o in listing.active_transports %}<li><span class="avatar avatar-sm role-transport" aria-hidden="true">{{ o.user.display_name|default:o.user.username|first|upper }}</span><span class="offer-person"><strong>{{ o.user }}</strong><span class="muted">Transport · {% if o.vehicle %}{{ o.vehicle }}{% else %}carrying locally{% endif %}</span></span></li>{% endfor %}
+      {% for o in listing.active_helpers %}<li><span class="avatar avatar-sm role-helper" aria-hidden="true">{{ o.user.display_name|default:o.user.username|first|upper }}</span><span class="offer-person"><strong>{{ o.user }}</strong><span class="muted">Helps carry</span></span></li>{% endfor %}
     </ul>
     {% endif %}
     {% if active_plan and my_plan_role and not is_owner %}
-    <p><a class="button" href="{% url 'coordination:plan' active_plan.pk %}">Open your collection plan</a></p>
+    <a class="button button-block spaced" href="{% url 'coordination:plan' active_plan.pk %}">Open your collection plan</a>
     {% endif %}
   </section>
 
@@ -57,20 +60,20 @@
     <div class="offer-actions">
       {% if my_offers.recipient %}{% with o=my_offers.recipient.0 %}
         <form method="post" action="{% url 'coordination:withdraw' 'recipient' o.pk %}" data-pending-form>{% csrf_token %}
-          <span class="offered">{% include "core/_icon.html" with name="check" %}<span>You asked for this</span></span> <button class="link offer-withdraw" type="submit">Withdraw</button></form>
+          <span class="offered">{% include "core/_icon.html" with name="check" %}<span>You asked for this</span></span> <button class="offer-withdraw" type="submit" data-pending-label="Withdrawing…">Withdraw</button></form>
       {% endwith %}{% else %}
-        <a class="button" href="{% url 'coordination:offer' listing.pk 'recipient' %}">I'd like this</a>
+        <a class="button button-block" href="{% url 'coordination:offer' listing.pk 'recipient' %}">I'd like this</a>
       {% endif %}
       {% if my_offers.transport %}{% with o=my_offers.transport.0 %}
         <form method="post" action="{% url 'coordination:withdraw' 'transport' o.pk %}" data-pending-form>{% csrf_token %}
-          <span class="offered">{% include "core/_icon.html" with name="check" %}<span>You offered transport</span></span> <button class="link offer-withdraw" type="submit">Withdraw</button></form>
+          <span class="offered">{% include "core/_icon.html" with name="check" %}<span>You offered transport</span></span> <button class="offer-withdraw" type="submit" data-pending-label="Withdrawing…">Withdraw</button></form>
       {% endwith %}{% else %}
         <a class="offer-option" href="{% url 'coordination:offer' listing.pk 'transport' %}"><span class="offer-option-icon">{% include "core/_icon.html" with name="truck" %}</span><span>I can transport it</span>{% include "core/_icon.html" with name="chevron" %}</a>
       {% endif %}
       {% if listing.needs_extra_helper %}
         {% if my_offers.helper %}{% with o=my_offers.helper.0 %}
           <form method="post" action="{% url 'coordination:withdraw' 'helper' o.pk %}" data-pending-form>{% csrf_token %}
-            <span class="offered">{% include "core/_icon.html" with name="check" %}<span>You offered to help carry</span></span> <button class="link offer-withdraw" type="submit">Withdraw</button></form>
+            <span class="offered">{% include "core/_icon.html" with name="check" %}<span>You offered to help carry</span></span> <button class="offer-withdraw" type="submit" data-pending-label="Withdrawing…">Withdraw</button></form>
         {% endwith %}{% else %}
           <a class="offer-option" href="{% url 'coordination:offer' listing.pk 'helper' %}"><span class="offer-option-icon">{% include "core/_icon.html" with name="people" %}</span><span>I can help carry</span>{% include "core/_icon.html" with name="chevron" %}</a>
         {% endif %}
@@ -81,23 +84,21 @@
 
   {% if is_owner %}
   <section class="panel panel-private">
-    <h2>Your private pickup details</h2>
+    <h2 class="panel-title">{% include "core/_icon.html" with name="lock" %}Your private pickup details</h2>
     {% if private %}
-    <p>{{ private.pickup_details|linebreaksbr }}</p>
+    <p class="selectable">{{ private.pickup_details|linebreaksbr }}</p>
     <p class="muted small">{{ private.get_source_display }}. Only you can see this until you approve sharing it with a confirmed crew.</p>
     {% endif %}
     {% if listing.is_open or active_plan %}
-    <div class="actions">
-      {% if active_plan %}<a class="button" href="{% url 'coordination:plan' active_plan.pk %}">Open collection plan</a>
-      {% else %}<a class="button" href="{% url 'coordination:crew' listing.pk %}">Find a crew</a>{% endif %}
-    </div>
+      {% if active_plan %}<a class="button button-block" href="{% url 'coordination:plan' active_plan.pk %}">Open collection plan</a>
+      {% else %}<a class="button button-block" href="{% url 'coordination:crew' listing.pk %}">Find a crew</a>{% endif %}
     {% endif %}
     {% if listing.is_editable %}
-    <div class="actions">
-      <a class="button button-secondary" href="{% url 'listings:edit' listing.pk %}">Edit</a>
-      <form method="post" action="{% url 'listings:close' listing.pk %}" data-confirm="Close this listing? Neighbours will no longer see it{% if active_plan %}, and the current crew will be released{% endif %}.">
+    <div class="button-pair">
+      <a class="button button-secondary" href="{% url 'listings:edit' listing.pk %}">{% include "core/_icon.html" with name="edit" %}Edit</a>
+      <form method="post" action="{% url 'listings:close' listing.pk %}" data-confirm="Close this listing? Neighbours will no longer see it{% if active_plan %}, and the current crew will be released{% endif %}." data-confirm-title="Close listing">
         {% csrf_token %}<input type="hidden" name="revision" value="{{ listing.revision }}">
-        <button class="button button-quiet" type="submit">Close listing</button>
+        <button class="button button-quiet" type="submit">{% include "core/_icon.html" with name="archive" %}Close listing</button>
       </form>
     </div>
     {% endif %}

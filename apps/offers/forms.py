@@ -27,7 +27,7 @@ class OfferForm(forms.Form):
 
 
 class RecipientOfferForm(OfferForm):
-    destination_zone = forms.ModelChoiceField(queryset=Zone.objects.all(), label="Your neighbourhood area",
+    destination_zone = forms.ModelChoiceField(queryset=Zone.objects.all(), label="Your neighbourhood area", empty_label="Choose your area",
                                               help_text="Shown to neighbours planning the trip.")
     destination_details = forms.CharField(max_length=300, label="Where it should go (private)",
                                           widget=forms.Textarea(attrs={"rows": 2}),
@@ -36,7 +36,8 @@ class RecipientOfferForm(OfferForm):
 
 class TransportOfferForm(OfferForm):
     mode = forms.ChoiceField(choices=TransportOffer.Mode.choices, widget=forms.RadioSelect, label="How")
-    vehicle = forms.ModelChoiceField(queryset=Vehicle.objects.none(), required=False, label="Your vehicle")
+    vehicle = forms.ModelChoiceField(queryset=Vehicle.objects.none(), required=False, label="Your vehicle",
+                                     empty_label="Choose a saved vehicle")
     new_vehicle = forms.CharField(max_length=60, required=False, label="Or add a vehicle",
                                   help_text="For example: grey hatchback, small van. No plate numbers.")
     fit_declared = forms.BooleanField(label="I've checked the item's size and can transport it for the whole time I chose, "

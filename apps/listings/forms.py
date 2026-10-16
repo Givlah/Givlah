@@ -37,13 +37,14 @@ class ListingForm(forms.Form):
     title = forms.CharField(max_length=80, help_text="For example: Wooden bookshelf")
     description = forms.CharField(max_length=1000, required=False, widget=forms.Textarea(attrs={"rows": 3}))
     condition = forms.ChoiceField(choices=Listing.Condition.choices)
-    width_cm = forms.IntegerField(min_value=1, max_value=500, label="Width (cm)")
-    depth_cm = forms.IntegerField(min_value=1, max_value=500, label="Depth (cm)")
-    height_cm = forms.IntegerField(min_value=1, max_value=500, label="Height (cm)")
+    width_cm = forms.IntegerField(min_value=1, max_value=500, label="Width (cm)", widget=forms.NumberInput(attrs={"inputmode": "numeric"}))
+    depth_cm = forms.IntegerField(min_value=1, max_value=500, label="Depth (cm)", widget=forms.NumberInput(attrs={"inputmode": "numeric"}))
+    height_cm = forms.IntegerField(min_value=1, max_value=500, label="Height (cm)", widget=forms.NumberInput(attrs={"inputmode": "numeric"}))
     handling_notes = forms.CharField(max_length=200, required=False, label="Handling notes",
                                      help_text="For example: heavy, glass panel, comes apart into two pieces")
-    needs_extra_helper = forms.BooleanField(required=False, label="Needs two people to carry")
-    zone = forms.ModelChoiceField(queryset=Zone.objects.none(), label="Neighbourhood area",
+    needs_extra_helper = forms.BooleanField(required=False, label="Needs two people to carry",
+                                            widget=forms.CheckboxInput(attrs={"role": "switch"}))
+    zone = forms.ModelChoiceField(queryset=Zone.objects.none(), label="Neighbourhood area", empty_label="Choose your area",
                                   help_text="Shown publicly. Your exact pickup details are not.")
     pickup_details = forms.CharField(max_length=300, label="Exact pickup details (private)",
                                      help_text="Address and access notes. Shared only with a confirmed crew, after you approve.",

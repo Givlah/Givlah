@@ -1,28 +1,37 @@
 {% extends "base.html" %}
+{% load static %}
 {% block title %}Sign in{% endblock %}
+{% block screen_class %}screen-auth{% endblock %}
 {% block content %}
 <section class="auth">
+  <div class="auth-hero">
+    <img class="auth-icon" src="{% static 'icons/icon-192.png' %}" alt="" width="76" height="76">
+    <p class="auth-wordmark">Givlah</p>
+    <p class="hand">Good things. New homes. Together.</p>
+  </div>
   <h1>Sign in</h1>
-  <p class="hand">Good things. New homes. Together.</p>
-  <form method="post" class="stack auth-card" data-pending-form>
+  <form method="post" class="stack auth-card" data-pending-form novalidate>
     {% csrf_token %}
-    {% if form.non_field_errors %}<div class="message message-error" role="alert">{% for e in form.non_field_errors %}<p>{{ e }}</p>{% endfor %}</div>{% endif %}
+    {% if form.non_field_errors %}<div class="message message-error" role="alert">{% include "core/_icon.html" with name="warning" %}<div>{% for e in form.non_field_errors %}<p>{{ e }}</p>{% endfor %}</div></div>{% endif %}
     {% include "core/_field.html" with field=form.username %}
     {% include "core/_field.html" with field=form.password %}
     <input type="hidden" name="next" value="{{ next }}">
-    <button class="button" type="submit" data-pending-label="Signing in…">Sign in</button>
+    <button class="button button-block" type="submit" data-pending-label="Signing in…">Sign in</button>
   </form>
-  <p>New here? <a href="{% url 'accounts:signup' %}">Create an account</a></p>
+  <div class="auth-switch">
+    <span class="muted">New here?</span>
+    <a class="button button-tonal button-block" href="{% url 'accounts:signup' %}">Create an account</a>
+  </div>
 
   {% if demo_users %}
-  <section class="panel panel-demo">
-    <h2>Demo accounts</h2>
-    <p class="muted small">Fictional people for trying Givlah. Their listings are labelled as demo data.</p>
-    <ul class="demo-users">
+  <section class="auth-demo" aria-labelledby="demo-accounts-heading">
+    <h2 class="list-heading" id="demo-accounts-heading">Demo accounts</h2>
+    <p class="list-caption">Fictional people for trying Givlah. Their listings are labelled as demo data.</p>
+    <ul class="list-group demo-users">
       {% for u in demo_users %}
-      <li><form method="post" action="{% url 'accounts:demo_switch' %}">{% csrf_token %}
+      <li><form method="post" action="{% url 'accounts:demo_switch' %}" data-pending-form>{% csrf_token %}
         <input type="hidden" name="user_id" value="{{ u.pk }}">
-        <button class="button button-secondary" type="submit">Continue as {{ u.display_name }}</button>
+        <button class="list-row" type="submit" aria-label="Continue as {{ u.display_name }}"><span class="avatar avatar-{{ forloop.counter }}" aria-hidden="true">{{ u.display_name|first|upper }}</span><span class="list-row-copy"><strong>{{ u.display_name }}</strong><span>Demo person</span></span>{% include "core/_icon.html" with name="chevron" %}</button>
       </form></li>
       {% endfor %}
     </ul>
