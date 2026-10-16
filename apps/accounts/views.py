@@ -4,6 +4,7 @@ from django.contrib.auth import login
 from django.contrib.auth.views import LoginView
 from django.http import Http404
 from django.shortcuts import get_object_or_404, redirect, render
+from django.urls import Resolver404, resolve, reverse
 from django.views.decorators.http import require_POST
 
 from .forms import SignupForm
@@ -38,7 +39,32 @@ def demo_switch(request):
     """Log in as a fictional demo account. Exists only in demo mode and only for synthetic users."""
     if not settings.DEMO_MODE:
         raise Http404
-    user = get_object_or_404(User, pk=request.POST.get("user_id"), is_synthetic=True, is_active=True)
+    try:
+        user_id = int(request.POST.get("user_id", ""))
+    except (TypeError, ValueError):
+        raise Http404
+    user = get_object_or_404(User, pk=user_id, is_synthetic=True, is_active=True)
     login(request, user, backend="django.contrib.auth.backends.ModelBackend")
     messages.info(request, f"Demo: now acting as {user.display_name} (synthetic account).")
-    return redirect("listings:nearby")
+    return redirect(_demo_destination(user, request.POST.get("next", "")))
+
+
+def _demo_destination(user, path):
+    """Keep a demo's place only on known read pages the new actor can access."""
+    from apps.coordination.selectors import plan_for
+    from apps.listings.selectors import visible_listing
+
+    fallback = reverse("listings:nearby")
+    try:
+        match = resolve(path)
+    except Resolver404:
+        return fallback
+    if match.view_name in {"listings:nearby", "listings:activity", "coordination:impact"}:
+        return reverse(match.view_name)
+    if match.view_name == "coordination:plan":
+        if plan_for(user, match.kwargs["plan_id"]):
+            return reverse(match.view_name, kwargs=match.kwargs)
+    if match.view_name in {"listings:detail", "coordination:crew"}:
+        if visible_listing(user, match.kwargs["pk"]):
+            return reverse("listings:detail", kwargs=match.kwargs)
+    return fallback

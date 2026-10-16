@@ -131,6 +131,12 @@ p { margin: 0 0 12px; }
 .account-popover { position: absolute; right: 0; top: 52px; width: 240px; padding: 18px; background: white; border: 1px solid var(--line); border-radius: var(--radius); box-shadow: 0 12px 40px rgb(30 40 30 / 12%); }
 .account-popover .brand { margin-bottom: 16px; }
 .account-popover .who { display: block; margin-bottom: 12px; }
+.account-popover { max-height: calc(100dvh - 190px - env(safe-area-inset-top)); overflow-y: auto; }
+.demo-switch { display: grid; gap: 8px; margin: 12px 0; padding: 14px 0; border-block: 1px solid var(--line); }
+.demo-switch label { font-size: .85rem; font-weight: 700; }
+.demo-switch select { width: 100%; min-height: 44px; border: 1px solid #8c9890; padding: 8px; background: white; border-radius: 10px; font: inherit; color: var(--ink); }
+.demo-switch .button { width: 100%; }
+.demo-switch p { margin: 0; }
 .account-link { display: flex; align-items: center; gap: 10px; min-height: 48px; margin-bottom: 10px; padding: 8px 10px; border-radius: 12px; background: #f5faf7; color: var(--ink); font-family: var(--font-display); text-decoration: none; }
 .account-link > span { flex: 1; }
 .account-link > .icon:first-child { color: var(--green-700); }

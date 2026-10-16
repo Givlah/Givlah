@@ -99,6 +99,8 @@ Client: server-rendered Django PWA ([ARCHITECTURE](ARCHITECTURE.md)). These serv
 
 Mutations require authentication and CSRF; no GET mutation. Separate synthetic accounts enable real-session checks. Any demo account switch is explicitly labelled and disabled outside demo mode. No credentials in source and no external notification/account provider required.
 
+In demo mode, the account menu can switch between active synthetic people. Switching preserves an accessible item or collection plan, otherwise returns to Nearby; it never approves sharing or confirms on anyone's behalf. Return destinations are restricted to known read pages, with access checked for the new person.
+
 Disable duplicate buttons while pending; also enforce unique action tokens/object versions server-side. Lost-response retry returns the committed result; genuinely stale input returns current state. Database/server failure must show "not confirmed; refresh to check", not false success. Preserve entered non-sensitive fields and offer bounded manual retry.
 
 ## Persistence and concurrent writes

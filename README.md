@@ -92,6 +92,8 @@ python manage.py runserver
 
 Open http://localhost:8000 and create an account. To try the labelled demo accounts, start the server with `GIVLAH_DEMO_MODE=1`. Run the tests with `python manage.py test`.
 
+In demo mode, open the account avatar and use **Try another demo person** to switch roles during a walkthrough. Crew members stay on the current collection plan, with their own approvals and confirmations; someone without access returns to Nearby. This switcher is unavailable outside demo mode.
+
 On a phone, `http://<your-computer's-IP>:8000` works for browsing and photos, but browsers only allow location and app installation over HTTPS, so enter the pickup location manually there. Settings are listed at the top of [givlah/settings.py](givlah/settings.py).
 
 ## Contributing

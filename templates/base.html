@@ -9,7 +9,7 @@
   <link rel="icon" href="{% static 'icons/favicon-32.png' %}" sizes="32x32">
   <link rel="apple-touch-icon" href="{% static 'icons/apple-touch-icon.png' %}">
   <link rel="preload" href="{% static 'fonts/givlah/Givlah-Bold.woff2' %}" as="font" type="font/woff2" crossorigin>
-  <link rel="stylesheet" href="{% static 'css/givlah.css' %}?v=atmosphere-1">
+  <link rel="stylesheet" href="{% static 'css/givlah.css' %}?v=demo-switch-1">
   <script src="{% static 'js/givlah.js' %}?v=art-1" defer></script>
 </head>
 <body class="{% if user.is_authenticated %}app{% else %}guest{% endif %} {% block screen_class %}{% endblock %}">
@@ -31,6 +31,18 @@
       <label class="motion-setting" hidden data-motion-setting>Motion
         <select data-motion-choice><option value="force">Full</option><option value="auto">Follow device</option><option value="reduce">Reduced</option></select>
       </label>
+      {% if demo_switch_users %}
+      <form class="demo-switch" method="post" action="{% url 'accounts:demo_switch' %}" data-pending-form>
+        {% csrf_token %}
+        <input type="hidden" name="next" value="{{ request.path }}">
+        <label for="demo-person">Try another demo person</label>
+        <select id="demo-person" name="user_id">
+          {% for person in demo_switch_users %}<option value="{{ person.pk }}"{% if person.pk == user.pk %} selected{% endif %}>{{ person.display_name }}</option>{% endfor %}
+        </select>
+        <button class="button button-secondary" type="submit" data-pending-label="Switching…">Switch person</button>
+        <p class="muted small">Fictional accounts. Each person confirms for themselves.</p>
+      </form>
+      {% endif %}
       <form method="post" action="{% url 'accounts:logout' %}">{% csrf_token %}<button class="link" type="submit">Sign out</button></form>
         </div>
       </details>
