@@ -14,9 +14,9 @@
   <link rel="icon" href="{% static 'icons/favicon-32.png' %}" sizes="32x32">
   <link rel="apple-touch-icon" href="{% static 'icons/apple-touch-icon.png' %}">
   <link rel="preload" href="{% static 'fonts/givlah/Givlah-Bold.woff2' %}" as="font" type="font/woff2" crossorigin>
-  <link rel="stylesheet" href="{% static 'css/givlah.css' %}?v=native-1">
+  <link rel="stylesheet" href="{% static 'css/givlah.css' %}?v=native-2">
   <script>document.documentElement.classList.add("js");</script>
-  <script src="{% static 'js/givlah.js' %}?v=native-1" defer></script>
+  <script src="{% static 'js/givlah.js' %}?v=native-2" defer></script>
 </head>
 <body class="{% if user.is_authenticated %}app{% else %}guest{% endif %} {% block screen_class %}{% endblock %}">
   {% if user.is_authenticated %}<div class="app-atmosphere" aria-hidden="true"><span class="atmosphere-green"></span><span class="atmosphere-blue"></span></div>{% endif %}

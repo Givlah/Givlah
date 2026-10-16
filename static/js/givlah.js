@@ -99,6 +99,7 @@
     function build() {
       sheet = document.createElement("dialog");
       sheet.className = "confirm-sheet";
+      sheet.tabIndex = -1;
       sheet.setAttribute("aria-labelledby", "confirm-sheet-title");
       sheet.setAttribute("aria-describedby", "confirm-sheet-message");
       sheet.innerHTML = '<span class="sheet-grabber" aria-hidden="true"></span>' +
@@ -147,7 +148,8 @@
         sheet.querySelector("[data-sheet-confirm]").textContent = label;
         pending = form;
         sheet.showModal();
-        sheet.querySelector("[data-sheet-cancel]").focus();
+        // Focus the sheet itself so screen readers announce it and no button shows a focus ring on open.
+        sheet.focus();
       });
     });
   }

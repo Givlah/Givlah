@@ -413,9 +413,11 @@ html[data-motion=on] .toast.is-leaving { animation: toast-out 200ms ease-in forw
 
 /* Forms */
 .stack { display: grid; gap: 16px; }
-fieldset { border: 0; min-width: 0; margin: 0; padding: 20px 16px; background: var(--card); border-radius: 22px; box-shadow: var(--shadow); display: grid; gap: 18px; }
-legend { font-family: var(--font-display); font-weight: 700; font-size: 1.1rem; padding: 0; float: left; width: 100%; margin-bottom: 2px; }
-legend + * { clear: both; }
+/* Block layout (not grid) so the floated legend stays inside the card in WebKit too. */
+fieldset { border: 0; min-width: 0; margin: 0; padding: 20px 16px; background: var(--card); border-radius: 22px; box-shadow: var(--shadow); display: block; }
+fieldset > * + * { margin-top: 18px; }
+legend { font-family: var(--font-display); font-weight: 700; font-size: 1.1rem; padding: 0; float: left; width: 100%; margin: 0 0 18px; }
+fieldset > legend + * { clear: both; margin-top: 0; }
 .field { display: grid; gap: 7px; min-width: 0; }
 .field > label, .field-label { font-weight: 600; font-size: 0.95rem; }
 .optional { margin-left: 6px; padding: 1px 7px; border-radius: 999px; background: var(--fill); color: var(--ink-muted); font-size: 0.72rem; font-weight: 600; vertical-align: 2px; }
@@ -431,12 +433,14 @@ legend + * { clear: both; }
 .field input:focus, .field select:focus, .field textarea:focus { outline: none; border-color: var(--green-700); box-shadow: 0 0 0 4px rgb(16 199 102 / 20%); }
 .field select { padding-right: 44px; background: #fff var(--icon-chevron-down) right 14px center / 20px no-repeat; cursor: pointer; }
 .field textarea { min-height: 0; resize: none; line-height: 1.45; }
-.field input[type=number] { -moz-appearance: textfield; }
+.field input[type=number]:not([type=checkbox]):not([type=radio]):not([type=file]) { -moz-appearance: textfield; appearance: textfield; }
 .field input[type=number]::-webkit-outer-spin-button, .field input[type=number]::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
 .field input[type=datetime-local] { position: relative; padding-right: 48px; cursor: pointer; }
 .field input[type=datetime-local]::-webkit-calendar-picker-indicator { position: absolute; right: 12px; width: 24px; height: 24px; padding: 0; opacity: 1; cursor: pointer; background: var(--icon-calendar) center / 22px no-repeat; color: transparent; }
 .dt-wrap { position: relative; display: block; }
-.dt-placeholder { position: absolute; left: 15.5px; top: 50%; transform: translateY(-50%); color: var(--ink-muted); pointer-events: none; }
+/* The hint covers the browser's empty date mask in every engine; taps pass through to the input. */
+.dt-placeholder { position: absolute; inset: 1.5px 48px 1.5px 1.5px; display: flex; align-items: center; padding-left: 14px; border-radius: 12px 0 0 12px; background: #fff; color: var(--ink-muted); pointer-events: none; }
+.field-error .dt-placeholder { background: #fffafa; }
 .dt-wrap:not(.is-empty) .dt-placeholder, .dt-wrap:focus-within .dt-placeholder { display: none; }
 .dt-wrap.is-empty input:not(:focus) { color: transparent; }
 .dt-wrap.is-empty input:not(:focus)::-webkit-datetime-edit { opacity: 0; }
@@ -604,6 +608,7 @@ html[data-motion=on] .photo-step, html[data-motion=on] .screen-create .item-deta
   padding: 8px 16px calc(18px + env(safe-area-inset-bottom)); border: 0; border-radius: 28px 28px 0 0;
   background: var(--app-background); color: var(--ink); box-shadow: 0 -12px 40px rgb(20 30 25 / 18%);
 }
+.confirm-sheet:focus { outline: none; }
 .confirm-sheet::backdrop { background: rgb(18 28 22 / 40%); }
 .confirm-sheet h2 { margin: 6px 4px 6px; font-size: 1.3rem; }
 .confirm-sheet p { margin: 0 4px 20px; color: var(--ink-muted); font-size: 0.95rem; }
