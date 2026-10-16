@@ -8,6 +8,8 @@
 
 <p>Good things. New homes. Together.</p>
 
+<p>Built for the <a href="https://www.simedarbyproperty.com/universityhackathon/">Sime Darby Property (SDP) University Hackathon 2026</a>.</p>
+
 <a href="https://givlah.vercel.app"><img src="assets/brand/explore-site.svg" alt="Explore the Givlah site" height="42"></a>
 <a href="https://www.youtube.com/watch?v=JkXULAtTk6Y"><img src="assets/brand/watch-demo.svg" alt="Watch the captioned demo on YouTube" height="42"></a>
 
