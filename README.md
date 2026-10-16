@@ -1,18 +1,40 @@
-<p align="center">
-  <img src="assets/brand/iconconcept-readme.png" alt="Givlah icon: a parcel passed between two hands" width="140">
-</p>
+<div align="center">
 
-<h1 align="center">Givlah</h1>
+<img src="assets/brand/iconconcept-readme.png" alt="Givlah rounded icon: a parcel between green and blue waves" width="84">
 
-<p align="center"><strong>Good things. New homes. Together.</strong></p>
+# Givlah
 
-Givlah helps neighbours give usable household items a new home. It does more than find someone who wants an item. It arranges the people, transport and time needed to actually collect it.
+### Give usable items a new home, with the people, transport and time to collect them.
 
-> **Status: early development.** The core flow works end to end: list an item, neighbours offer to take, transport or carry it, Givlah suggests a complete crew without double-booking anyone, everyone confirms, and both sides record the handover. Not yet deployed.
+<p>Good things. New homes. Together.</p>
+
+<a href="https://givlah.vercel.app"><img src="assets/brand/explore-site.svg" alt="Explore the Givlah site" height="42"></a>
+<a href="https://www.youtube.com/watch?v=JkXULAtTk6Y"><img src="assets/brand/watch-demo.svg" alt="Watch the captioned demo on YouTube" height="42"></a>
+
+<br>
+<br>
+
+<a href="https://givlah.vercel.app"><img src="assets/brand/Givlah-preview.png" alt="Givlah app preview: nearby items, a compatible collection crew, and a handover recorded by both parties. Fictional demo data." width="900"></a>
+
+**Python 3.12+ · Django 5.2 · SQLite · Progressive Web App**
+
+</div>
+
+## Start here
+
+**[Explore Givlah](https://givlah.vercel.app)** for the walkthrough, mechanism, privacy rules and local setup, or **[watch the 3-minute captioned demo](https://www.youtube.com/watch?v=JkXULAtTk6Y)**. No sound is needed.
+
+The documentation site and video are live. The interactive app is a working local prototype; a public app instance is not hosted yet. All demo people, places, items and outcomes are fictional.
+
+## Watch the demo
+
+**[Play on YouTube →](https://www.youtube.com/watch?v=JkXULAtTk6Y)**
+
+Follow a bookshelf from its photo and neighbours' offers to a compatible crew, private-location approvals, four individual confirmations and two separate handover records. A second item shares the same people and van, so its collection uses a different time. The video explicitly labels its simulated advance to collection time; no physical handover or real-world impact is claimed.
 
 ## The problem
 
-Someone has a usable bookshelf they no longer need, and a neighbour wants it. But the neighbour has no car, and the shelf needs two people to carry. Giveaway groups help people find each other, but that is where they stop. The item often ends up waiting or thrown away because nobody can organise the collection.
+Someone has a usable bookshelf they no longer need, and a neighbour wants it. But the neighbour has no car, and the shelf needs two people to carry. Finding someone interested still leaves the collection to arrange. Givlah connects those separate offers into a complete plan that everyone can confirm.
 
 ## How Givlah works
 
@@ -46,7 +68,7 @@ What makes Givlah different:
 
 ## Architecture at a glance
 
-Givlah is planned as an **installable mobile web app (PWA)** served by **Django**:
+Givlah is a **mobile web app (PWA)** served by **Django**:
 
 - Server-rendered Django 5.2 templates, designed for phones first.
 - Camera capture through the browser's file input, and location through the Geolocation API.
@@ -73,6 +95,7 @@ templates/      Mobile-first page templates
 static/         CSS, progressive-enhancement JS, app icons and illustrations
 assets/brand/   App icon sources (SVG and 2048 x 2048 PNG)
 docs/           Product, specification and architecture documents
+site/           Static documentation and demo site, hosted separately
 ```
 
 See [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md#project-layout) for how the pieces fit together.
