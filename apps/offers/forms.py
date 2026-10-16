@@ -1,5 +1,6 @@
 from django import forms
 from django.utils import timezone
+from django.utils.formats import date_format
 
 from apps.core import clock
 from apps.listings.models import Zone
@@ -8,10 +9,12 @@ from .models import TransportOffer, Vehicle
 
 
 def _local_label(w):
+    # Same wording as the times shown on item and plan screens, e.g. "Sun 18 Oct, 10:00 a.m. – 12:00 p.m.".
     start, end = timezone.localtime(w.start), timezone.localtime(w.end)
-    day = start.strftime("%a ") + str(start.day) + start.strftime(" %b")
-    fmt = lambda d: (d.strftime("%I:%M %p").lstrip("0")).lower()
-    return f"{day}, {fmt(start)} – {fmt(end)}"
+    label = f"{date_format(start, 'D j M, g:i a')} – {date_format(end, 'g:i a')}"
+    if start.date() != end.date():
+        label += f" ({date_format(end, 'D j M')})"
+    return label
 
 
 class OfferForm(forms.Form):

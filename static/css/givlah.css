@@ -415,9 +415,10 @@ html[data-motion=on] .toast.is-leaving { animation: toast-out 200ms ease-in forw
 .stack { display: grid; gap: 16px; }
 /* Block layout (not grid) so the floated legend stays inside the card in WebKit too. */
 fieldset { border: 0; min-width: 0; margin: 0; padding: 20px 16px; background: var(--card); border-radius: 22px; box-shadow: var(--shadow); display: block; }
-fieldset > * + * { margin-top: 18px; }
+/* The stack spacing must win over component margins such as .help { margin: 0 }. */
+fieldset > * + * { margin-top: 18px !important; }
 legend { font-family: var(--font-display); font-weight: 700; font-size: 1.1rem; padding: 0; float: left; width: 100%; margin: 0 0 18px; }
-fieldset > legend + * { clear: both; margin-top: 0; }
+fieldset > legend + * { clear: both; margin-top: 0 !important; }
 .field { display: grid; gap: 7px; min-width: 0; }
 .field > label, .field-label { font-weight: 600; font-size: 0.95rem; }
 .optional { margin-left: 6px; padding: 1px 7px; border-radius: 999px; background: var(--fill); color: var(--ink-muted); font-size: 0.72rem; font-weight: 600; vertical-align: 2px; }
