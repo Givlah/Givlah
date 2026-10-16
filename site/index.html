@@ -21,10 +21,11 @@
       <a href="#overview">01 <span>Start here</span></a>
       <a href="#walkthrough">02 <span>The walkthrough</span></a>
       <a href="#mechanism">03 <span>How it works</span></a>
-      <a href="#verification">04 <span>Checks & limits</span></a>
-      <a href="#try">05 <span>Try the app</span></a>
-      <a href="#run">06 <span>Run it yourself</span></a>
-      <a href="#reference">07 <span>Reference</span></a>
+      <a href="#research">04 <span>Research & gap</span></a>
+      <a href="#verification">05 <span>Checks & limits</span></a>
+      <a href="#try">06 <span>Try the app</span></a>
+      <a href="#run">07 <span>Run it yourself</span></a>
+      <a href="#reference">08 <span>Reference</span></a>
     </nav>
     <div class="sidebar-foot"><span class="status-dot" aria-hidden="true"></span> Local prototype<br><a href="https://github.com/Givlah/Givlah">View source <span aria-hidden="true">↗</span></a></div>
   </aside>
@@ -93,8 +94,17 @@
       <p class="source">Rules: <a href="https://github.com/Givlah/Givlah/blob/main/docs/SPECIFICATION.md#plan-activation-confirmations-and-states">plan states and outcomes</a> · <a href="https://github.com/Givlah/Givlah/blob/main/docs/SPECIFICATION.md#observable-acceptance-checks">G16–G17, G20</a></p>
     </section>
 
+    <section id="research" aria-labelledby="research-title">
+      <p class="eyebrow">04 / Research & gap</p><h2 id="research-title">Why collection needs coordination</h2>
+      <p>Finding someone who wants an item can still leave transport, carrying help and a shared time to arrange. A <a href="https://journals.sagepub.com/doi/abs/10.1177/14413582231165268">2023 study of unwanted household goods</a> identifies coordination and practical enablement as issues in increasing reuse. That motivates our question; it does not establish demand for Givlah in Malaysian townships.</p>
+      <p>Existing alternatives already address parts of this work. <a href="https://help.olioapp.com/en/articles/12238795-can-i-ask-or-offer-to-deliver-on-olio">Olio permits collection by a friend or neighbour</a>; <a href="https://www.salvationarmy.org.my/contact-us/">The Salvation Army Malaysia offers bulky-item collection enquiries</a>. <a href="https://help.tiptapp.com/en/articles/12858266-how-do-i-post-an-ad-in-tiptapp">Tiptapp describes paid help</a>, <a href="https://furnish-forward.com/">Furnish Forward advertises volunteer-mover pickups</a>, and <a href="https://nearbyapp.social/">Nearby advertises multi-helper tasks</a>. <a href="https://support.signupgenius.com/hc/en-us/articles/29435544326679-Create-a-Sign-Up">SignUpGenius supports role and time slots</a>.</p>
+      <div class="note-grid"><div class="note-card"><h3>The gap we target</h3><p>Givlah combines complete crews across items, checks shared people and vehicles, then connects approvals, confirmations, withdrawal recovery and two-party handover records. A careful spreadsheet can implement the same matching; reduced effort has not been measured.</p></div><div class="note-card"><h3>What remains open</h3><p>This is desk research and a local synthetic prototype. Competitors' full workflows were not tested. Resident demand, reliable transport participation, real handovers and environmental benefit remain unvalidated. No worldwide-first claim is made.</p></div></div>
+      <p class="source">Public sources checked <time datetime="2026-10-16">16 October 2026</time>. Advertised capabilities are provider descriptions, not independently verified service results.</p>
+      <p><a href="https://github.com/Givlah/Givlah/blob/main/docs/RESEARCH.md">Read the full research, competitor comparison and evidence limits <span aria-hidden="true">↗</span></a></p>
+    </section>
+
     <section id="verification" aria-labelledby="verification-title">
-      <p class="eyebrow">04 / Evidence & boundaries</p><h2 id="verification-title">What has been checked</h2>
+      <p class="eyebrow">05 / Evidence & boundaries</p><h2 id="verification-title">What has been checked</h2>
       <p>The repository defines <a href="https://github.com/Givlah/Givlah/blob/main/docs/SPECIFICATION.md#observable-acceptance-checks">acceptance scenarios G01–G20</a>. Its draft status text predates implementation; scenario definitions are not a test report. The figures below come from checks executed on <time datetime="2026-10-16">16 October 2026</time>, against app commit <a href="https://github.com/Givlah/Givlah/commit/d1c75a58289d8a8ea6ad7fab437d41e284f7708a"><code>d1c75a5</code></a>.</p>
       <div class="table-scroll"><table><caption>Local verification, not field validation</caption><thead><tr><th scope="col">Check</th><th scope="col">Executed result</th></tr></thead><tbody>
         <tr><th scope="row">Django test suite</th><td>77 tests passed. Covers permissions, image sanitation, coordination, concurrent writes, rollback, expiry, handover, retention and outcome counts.</td></tr>
@@ -107,12 +117,12 @@
     </section>
 
     <section id="try" aria-labelledby="try-title">
-      <p class="eyebrow">05 / Try it</p><h2 id="try-title">Hosted demo: not available yet</h2>
+      <p class="eyebrow">06 / Try it</p><h2 id="try-title">Hosted demo: not available yet</h2>
       <div class="pending-box"><span class="pill">Demo URL pending</span><p>No public app instance is linked yet. The documentation site and the Django app are separate deployments.</p><p>The intended hosted demo is for <strong>synthetic data only</strong>, will reset periodically, and may be slow on first load. Its URL and reset schedule will be added when deployment exists. For now, run the local demo below.</p><a href="#run">Open local setup <span aria-hidden="true">↓</span></a></div>
     </section>
 
     <section id="run" aria-labelledby="run-title">
-      <p class="eyebrow">06 / On your machine</p><h2 id="run-title">Run it yourself</h2><p>You need Git and Python 3.12 or newer. These instructions start a local development instance; they are not a production deployment recipe.</p>
+      <p class="eyebrow">07 / On your machine</p><h2 id="run-title">Run it yourself</h2><p>You need Git and Python 3.12 or newer. These instructions start a local development instance; they are not a production deployment recipe.</p>
       <h3>1. Clone and install</h3><pre><code>git clone https://github.com/Givlah/Givlah.git
 cd Givlah
 python -m venv .venv</code></pre>
@@ -137,7 +147,7 @@ GIVLAH_DEMO_MODE=1 .venv/bin/python manage.py runserver</code></pre></div></div>
     </section>
 
     <section id="reference" aria-labelledby="reference-title">
-      <p class="eyebrow">07 / Further reading</p><h2 id="reference-title">Inside the prototype</h2>
+      <p class="eyebrow">08 / Further reading</p><h2 id="reference-title">Inside the prototype</h2>
       <div class="architecture" aria-label="Architecture, in request order"><div><strong>Browser / PWA</strong><span>Django templates · small JS</span></div><span aria-hidden="true">↓</span><div><strong>Views & permission-filtered reads</strong><span>Session auth · forms · CSRF</span></div><span aria-hidden="true">↓</span><div><strong>Services & exact matcher</strong><span>State rules · short transactions</span></div><span aria-hidden="true">↓</span><div><strong>SQLite + sanitized media</strong><span>Separate private-location records</span></div></div>
       <p>Django 5.2 serves the app and owns authentication, validation and persistence. Coordination rules live in plain Python service functions. SQLite uses short <code>IMMEDIATE</code> write transactions with repeated overlap checks. Pillow sanitizes photos. There is no model API, route service, geocoder or paid provider on the critical path.</p>
       <div class="reference-links"><a href="https://github.com/Givlah/Givlah/blob/main/docs/PRODUCT.md"><strong>Product</strong><span>Users, scope and workflow ↗</span></a><a href="https://github.com/Givlah/Givlah/blob/main/docs/ARCHITECTURE.md"><strong>Architecture</strong><span>Layers, records and transactions ↗</span></a><a href="https://github.com/Givlah/Givlah/blob/main/docs/SPECIFICATION.md"><strong>Specification</strong><span>Behaviour and G01–G20 ↗</span></a><a href="https://github.com/Givlah/Givlah/blob/main/LICENSE"><strong>MIT license</strong><span>Terms for the code ↗</span></a><a href="https://github.com/Givlah/Givlah/blob/main/CONTRIBUTING.md"><strong>Contributing</strong><span>Core-team code; bug reports welcome ↗</span></a><a href="https://github.com/Givlah/Givlah/blob/main/SECURITY.md"><strong>Security</strong><span>Report vulnerabilities privately ↗</span></a></div>

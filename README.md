@@ -38,6 +38,8 @@ Follow a bookshelf from its photo and neighbours' offers to a compatible crew, p
 
 Someone has a usable bookshelf they no longer need, and a neighbour wants it. But the neighbour has no car, and the shelf needs two people to carry. Finding someone interested still leaves the collection to arrange. Givlah connects those separate offers into a complete plan that everyone can confirm.
 
+Read the **[research, gap and alternatives](docs/RESEARCH.md)** for the public sources, competitor comparison and what remains unvalidated.
+
 ## How Givlah works
 
 ```mermaid
@@ -84,6 +86,7 @@ Full details are in [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md).
 
 | Document | Contents |
 | --- | --- |
+| [docs/RESEARCH.md](docs/RESEARCH.md) | Problem evidence, competitors and alternatives, the targeted gap and validation limits |
 | [docs/PRODUCT.md](docs/PRODUCT.md) | Users, workflow, prototype scope, screens and visual direction |
 | [docs/SPECIFICATION.md](docs/SPECIFICATION.md) | Records, matching rules, plan states, privacy rules, failure handling and acceptance checks |
 | [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) | Client choice, components, data model, transactions, PWA behaviour and testing approach |
@@ -96,7 +99,7 @@ givlah/         Django project settings and URLs
 templates/      Mobile-first page templates
 static/         CSS, progressive-enhancement JS, app icons and illustrations
 assets/brand/   App icon sources (SVG and 2048 x 2048 PNG)
-docs/           Product, specification and architecture documents
+docs/           Research summary, product, specification and architecture documents
 site/           Static documentation and demo site, hosted separately
 ```
 
