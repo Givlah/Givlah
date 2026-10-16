@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="How Givlah arranges the people, transport and time for neighbours to give usable household items a new home. A real app walkthrough, technical notes and local setup.">
+  <meta name="theme-color" content="#fff9ee">
+  <title>Givlah — Documentation & demo</title>
+  <link rel="icon" href="assets/givlah-icon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="styles.css">
+  <script src="script.js" defer></script>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+<header class="mobile-header"><a class="brand" href="#overview"><img src="assets/givlah-icon.svg" alt="" width="40" height="40">givlah<span class="brand-note">the field guide</span></a></header>
+<div class="layout">
+  <aside class="sidebar">
+    <a class="brand desktop-brand" href="#overview"><img src="assets/givlah-icon.svg" alt="" width="46" height="46">givlah</a>
+    <p class="sidebar-label">Documentation & demo</p>
+    <nav aria-label="On this page">
+      <a href="#overview">01 <span>Start here</span></a>
+      <a href="#walkthrough">02 <span>The walkthrough</span></a>
+      <a href="#mechanism">03 <span>How it works</span></a>
+      <a href="#verification">04 <span>Checks & limits</span></a>
+      <a href="#try">05 <span>Try the app</span></a>
+      <a href="#run">06 <span>Run it yourself</span></a>
+      <a href="#reference">07 <span>Reference</span></a>
+    </nav>
+    <div class="sidebar-foot"><span class="status-dot" aria-hidden="true"></span> Local prototype<br><a href="https://github.com/Givlah/Givlah">View source <span aria-hidden="true">↗</span></a></div>
+  </aside>
+  <main id="main" tabindex="-1">
+    <section id="overview" class="intro" aria-labelledby="intro-title">
+      <div class="intro-mark" aria-hidden="true"></div>
+      <p class="eyebrow">The Givlah field guide <span>/</span> 16 October 2026</p>
+      <h1 id="intro-title">A collection<br>takes a crew<span class="gold-dot">.</span></h1>
+      <p class="lede">Give usable household items a new home by arranging the people, transport and time needed to collect them.</p>
+      <p>A neighbour wants your bookshelf. Someone has a van. Another person can help carry it. Givlah brings their offers into one collection plan, checks their declared availability across competing items, and asks everyone to confirm.</p>
+      <p class="handwritten">From “I'd like this” to “we can collect it.”</p>
+      <div class="start-path" aria-label="Start here">
+        <p class="eyebrow">Start here · about a minute</p>
+        <ol>
+          <li><a href="#demo-video"><span>1</span> Watch the demo</a><small>Video pending; screenshots below</small></li>
+          <li><a href="#mechanism"><span>2</span> See how it works</a><small>Offers → crew → confirmation</small></li>
+          <li><a href="#try"><span>3</span> Try it</a><small>Hosted demo not available yet</small></li>
+          <li><a href="#run"><span>4</span> Run it yourself</a><small>Local setup with synthetic data</small></li>
+        </ol>
+      </div>
+      <div class="scope-note"><strong>For neighbours in one locality.</strong> The prototype covers owner-authorised furniture and simple non-electrical household items. It does not provide paid hauling, payments, route optimisation, chat, safety certification or guaranteed participation. Electrical goods, mattresses, hazardous waste and unconsented roadside items are excluded.</div>
+    </section>
+
+    <section id="walkthrough" aria-labelledby="walkthrough-title">
+      <p class="eyebrow">02 / Follow one item</p>
+      <h2 id="walkthrough-title">The real app, step by step</h2>
+      <p>These are screenshots captured from the running Django app in Microsoft Edge at 390 px. Every person, item, address and outcome is <strong>synthetic demo data</strong>. The item photos and in-app illustrations were generated with AI image tools. A controlled server clock advances to the collection window; no physical collection took place.</p>
+      <div id="demo-video" class="video-card" data-video-id="">
+        <div class="video-frame">
+          <img src="assets/demo/nearby.png" alt="Preview of the Givlah Nearby screen with three fictional household items" width="390" height="887" class="video-poster">
+          <div class="video-overlay"><span class="pill">Video URL pending</span><button type="button" class="video-play" disabled aria-describedby="video-status"><span aria-hidden="true">▶</span> Play demo</button></div>
+        </div>
+        <div class="video-caption"><p id="video-status" role="status">The main video has not been published. Use the captioned walkthrough and written step summary below.</p><a class="youtube-fallback" hidden>Watch on YouTube <span aria-hidden="true">↗</span></a><span class="video-pending">Watch on YouTube: link pending.</span></div>
+        <noscript><p>Video playback needs JavaScript. The written walkthrough below works without it.</p></noscript>
+      </div>
+      <nav class="chapters" aria-label="Walkthrough chapters"><a href="#step-list">List</a><a href="#step-offer">Offer</a><a href="#step-match">Match</a><a href="#step-hold">Hold</a><a href="#step-confirm">Confirm</a><a href="#step-handover">Handover</a><a href="#step-review">Review</a><a href="#step-outcomes">Outcomes</a></nav>
+      <p class="small muted">Written step summary · chapter links follow the app flow; video timestamps and captions await the published recording. Select a screenshot to open its full-size capture.</p>
+      <div class="walkthrough-grid">
+        <article id="step-list" class="walk-step"><div class="step-copy"><p class="step-number">Step 01</p><h3>Start with the item</h3><p>Aina chooses a photo, then adds condition, dimensions, carrying needs, collection times and a private pickup address. She declares permission to give the item away. Nearby shows the neighbourhood area.</p></div><figure><a href="assets/demo/listing.png"><img src="assets/demo/listing.png" alt="Aina's Give an item form after choosing a bookshelf photo, with the item details entered" width="390" height="2293" loading="lazy"></a><figcaption>Photo first, details next. Only a sanitized copy is stored after publishing.</figcaption></figure></article>
+        <article id="step-offer" class="walk-step"><div class="step-copy"><p class="step-number">Step 02</p><h3>Offers supply the missing roles</h3><p>Ravi wants the bookshelf. Mei Ling offers her van for the full collection window and declares the item fits. Hafiz offers carrying help. Each person acts through their own account.</p></div><figure><a href="assets/demo/offer.png"><img src="assets/demo/offer.png" alt="Mei Ling's transport offer with a collection window, a demo van and a declaration that the item fits" width="390" height="1294" loading="lazy"></a><figcaption>Interest alone cannot fill transport or carrying requirements.</figcaption></figure></article>
+        <article id="step-match" class="walk-step"><div class="step-copy"><p class="step-number">Step 03</p><h3>Find a compatible crew</h3><p>The bookshelf and folding table share Mei Ling's van. The matcher finds a morning crew for the shelf while keeping the table plannable in the evening. A suggestion reserves nothing.</p></div><figure><a href="assets/demo/matching.png"><img src="assets/demo/matching.png" alt="Find a crew shows the complete bookshelf crew and leaves the folding study table plannable" width="390" height="921" loading="lazy"></a><figcaption>Plans consider other items that share a person or vehicle.</figcaption></figure></article>
+        <article id="step-hold" class="walk-step"><div class="step-copy"><p class="step-number">Step 04</p><h3>Invite, then approve sharing</h3><p>Aina invites the crew. Everyone's time is held for up to 20 minutes, or until collection start if sooner. Aina and Ravi each approve sharing their own exact location with this version of the crew.</p></div><figure><a href="assets/demo/hold.png"><img src="assets/demo/hold.png" alt="Collection plan awaiting confirmations with four crew members and location sharing still pending" width="390" height="1700" loading="lazy"></a><figcaption>A temporary hold is not a confirmed collection.</figcaption></figure></article>
+        <article id="step-confirm" class="walk-step"><div class="step-copy"><p class="step-number">Step 05</p><h3>Everyone confirms for themselves</h3><p>Once both locations are approved, all four people confirm the same plan and the full trip window. Only then is the plan Ready. A material change ends the old plan and requires fresh approvals and confirmations.</p></div><figure><a href="assets/demo/ready.png"><img src="assets/demo/ready.png" alt="Collection plan marked Everyone confirmed, with all four crew members confirmed" width="390" height="1637" loading="lazy"></a><figcaption>Declared availability becomes a commitment only through confirmation.</figcaption></figure></article>
+        <article id="step-handover" class="walk-step"><div class="step-copy"><p class="step-number">Step 06</p><h3>Two separate handover records</h3><p>After the controlled clock reaches collection start, Aina records that the item was handed over. It stays pending until Ravi records receipt separately. Helpers cannot record for either party.</p></div><figure><a href="assets/demo/handover.png"><img src="assets/demo/handover.png" alt="Handover timeline with both the owner and recipient records received and Handover recorded" width="390" height="1821" loading="lazy"></a><figcaption>Both records establish a recorded outcome, not independently observed physical reuse.</figcaption></figure></article>
+        <article id="step-review" class="walk-step"><div class="step-copy"><p class="step-number">Step 07</p><h3>Keep uncertainty visible</h3><p>In a separate branch, Aina withdraws her handover record. Completion is removed and the plan needs review. After a collection may have started, the item cannot automatically return to the feed; both parties must say it stayed with the owner before reopening.</p></div><figure><a href="assets/demo/review.png"><img src="assets/demo/review.png" alt="Handover confirmation in Needs review after the owner withdrew a record; the item is not automatically relisted" width="390" height="1754" loading="lazy"></a><figcaption>A retracted or conflicting record removes completion.</figcaption></figure></article>
+        <article id="step-outcomes" class="walk-step"><div class="step-copy"><p class="step-number">Step 08</p><h3>Keep demo totals separate</h3><p>Before that retraction, the outcomes screen shows one fictional handover in its separate demo disclosure. The real total stays zero. Counts include an observation period and the eligible published-listing denominator.</p></div><figure><a href="assets/demo/outcomes.png"><img src="assets/demo/outcomes.png" alt="Outcomes page with zero real handovers and a separate expanded fictional demo count" width="390" height="1425" loading="lazy"></a><figcaption>No automatic kilograms, carbon or avoided-landfill estimates.</figcaption></figure></article>
+      </div>
+    </section>
+
+    <section id="mechanism" aria-labelledby="mechanism-title">
+      <p class="eyebrow">03 / The mechanism</p><h2 id="mechanism-title">Complete arrangements across items</h2>
+      <p>For each item, Givlah combines an owner, a recipient, a transport provider and a distinct extra helper when needed. The recipient may also provide transport and is counted once. Carrying locally still needs a declared provider, but no vehicle.</p>
+      <ol class="mechanism-list">
+        <li><strong>Build feasible candidates.</strong> All roles, suitability declarations and exact offered collection windows must agree. The reserved window includes loading, travel and unloading; the app does not calculate routes.</li>
+        <li><strong>Follow shared resources.</strong> Open listings connected by a shared person or vehicle form a batch. Independent groups cannot affect one another's choice.</li>
+        <li><strong>Choose the largest compatible set.</strong> Exact search maximises complete proposed handovers without overlapping any declared person or vehicle. Ties prefer earlier deadlines, older listings, then stable IDs. Existing holds and Ready plans stay reserved.</li>
+        <li><strong>Make bounded claims.</strong> The cap is eight open listings and 24 feasible combinations per batch, with a five-second solve budget. Over-limit or timeout results create no commitments and never claim a truncated optimum.</li>
+      </ol>
+      <div class="example"><p class="eyebrow">A small synthetic conflict</p><div class="conflict-grid"><div><strong>Item A</strong><span>needs P + X</span></div><div><strong>Item B</strong><span>needs P + Y</span></div><div><strong>Item C</strong><span>needs Q + X</span></div></div><p>All three use the same interval; other people are distinct. Choosing A first blocks B and C. Choosing <strong>B + C</strong> makes two complete arrangements. This constructed case explains the mechanism; it does not show how often such conflicts occur in a neighbourhood.</p></div>
+      <p class="source">Rules: <a href="https://github.com/Givlah/Givlah/blob/main/docs/SPECIFICATION.md#candidate-generation-and-matching">matching contract</a> · <a href="https://github.com/Givlah/Givlah/blob/main/docs/SPECIFICATION.md#observable-acceptance-checks">G04–G11, G15</a></p>
+      <h3>Privacy belongs to the plan</h3>
+      <div class="note-grid"><div class="note-card"><h4>Coarse in public</h4><p>Public cards show a neighbourhood zone. Exact pickup and destination details live in separate private records. GPS is requested only on a tap, with manual entry available.</p></div><div class="note-card"><h4>Approved for this crew</h4><p>Exact details require current membership, both location owners' approvals and the current live plan version. Invalidation, review or completion revokes access. Revocation cannot erase something already seen.</p></div><div class="note-card"><h4>Sanitized photos</h4><p>Accepted photos are decoded and re-encoded with metadata removed; originals are not stored. This does not remove faces or addresses pictured in the image. Owners still review visible content.</p></div><div class="note-card"><h4>Seven-day retention</h4><p>Private records expire seven days after closure, deadline or the last associated collection end, whichever is later. Access is blocked at expiry; purge runs on the next request or startup. An inactive local app has no scheduled deletion worker.</p></div></div>
+      <p class="source">Rules: <a href="https://github.com/Givlah/Givlah/blob/main/docs/SPECIFICATION.md#location-and-photo-privacy">location and photo privacy</a> · <a href="https://github.com/Givlah/Givlah/blob/main/docs/SPECIFICATION.md#observable-acceptance-checks">G01–G03, G12–G14, G18</a></p>
+      <h3>Count what was recorded</h3><p>A unique listing counts as handed over only when its owner and recipient separately agree. One record, a retraction or disagreement cannot count as completion. Real and synthetic outcomes stay separate; reported outcomes are not proof of avoided disposal or environmental benefit.</p>
+      <p class="source">Rules: <a href="https://github.com/Givlah/Givlah/blob/main/docs/SPECIFICATION.md#plan-activation-confirmations-and-states">plan states and outcomes</a> · <a href="https://github.com/Givlah/Givlah/blob/main/docs/SPECIFICATION.md#observable-acceptance-checks">G16–G17, G20</a></p>
+    </section>
+
+    <section id="verification" aria-labelledby="verification-title">
+      <p class="eyebrow">04 / Evidence & boundaries</p><h2 id="verification-title">What has been checked</h2>
+      <p>The repository defines <a href="https://github.com/Givlah/Givlah/blob/main/docs/SPECIFICATION.md#observable-acceptance-checks">acceptance scenarios G01–G20</a>. Its draft status text predates implementation; scenario definitions are not a test report. The figures below come from checks executed on <time datetime="2026-10-16">16 October 2026</time>, against app commit <a href="https://github.com/Givlah/Givlah/commit/d1c75a58289d8a8ea6ad7fab437d41e284f7708a"><code>d1c75a5</code></a>.</p>
+      <div class="table-scroll"><table><caption>Local verification, not field validation</caption><thead><tr><th scope="col">Check</th><th scope="col">Executed result</th></tr></thead><tbody>
+        <tr><th scope="row">Django test suite</th><td>77 tests passed. Covers permissions, image sanitation, coordination, concurrent writes, rollback, expiry, handover, retention and outcome counts.</td></tr>
+        <tr><th scope="row">Independent matcher comparison (G08)</th><td>300 generated small cases agree with exhaustive feasible-subset enumeration; 112 cases have tied optima.</td></tr>
+        <tr><th scope="row">Clean local setup</th><td>Fresh clone and virtual environment: pinned dependencies installed, migrations applied, three fictional listings loaded, demo account switching and local server exercised.</td></tr>
+        <tr><th scope="row">Rendered walkthrough</th><td>Real form submissions and separate synthetic-user browser sessions exercise offers, invitation, both location approvals, four confirmations, dual handover, retraction and outcome totals.</td></tr>
+      </tbody></table></div>
+      <p class="small muted">Tests and captured demo interactions use offline fixtures and a controlled clock. They establish local software behaviour, not service quality, safety, adoption or real-world impact. Run the current tests yourself with the command below.</p>
+      <div class="limits"><h3>Not yet verified</h3><ul><li>Real-device camera and GPS behaviour.</li><li>Home-screen installation over HTTPS on real phones.</li><li>A screen-reader pass.</li><li>A public multi-user deployment and its database/storage behaviour.</li><li>Use by real residents, physical handovers or environmental benefit.</li></ul></div>
+    </section>
+
+    <section id="try" aria-labelledby="try-title">
+      <p class="eyebrow">05 / Try it</p><h2 id="try-title">Hosted demo: not available yet</h2>
+      <div class="pending-box"><span class="pill">Demo URL pending</span><p>No public app instance is linked yet. The documentation site and the Django app are separate deployments.</p><p>The intended hosted demo is for <strong>synthetic data only</strong>, will reset periodically, and may be slow on first load. Its URL and reset schedule will be added when deployment exists. For now, run the local demo below.</p><a href="#run">Open local setup <span aria-hidden="true">↓</span></a></div>
+    </section>
+
+    <section id="run" aria-labelledby="run-title">
+      <p class="eyebrow">06 / On your machine</p><h2 id="run-title">Run it yourself</h2><p>You need Git and Python 3.12 or newer. These instructions start a local development instance; they are not a production deployment recipe.</p>
+      <h3>1. Clone and install</h3><pre><code>git clone https://github.com/Givlah/Givlah.git
+cd Givlah
+python -m venv .venv</code></pre>
+      <div class="setup-grid"><div><h4>Windows · PowerShell</h4><pre><code>.\.venv\Scripts\python.exe -m pip install -r requirements.txt
+.\.venv\Scripts\python.exe manage.py migrate
+.\.venv\Scripts\python.exe manage.py load_demo
+$env:GIVLAH_DEMO_MODE = "1"
+.\.venv\Scripts\python.exe manage.py runserver</code></pre></div><div><h4>macOS / Linux · shell</h4><pre><code>.venv/bin/python -m pip install -r requirements.txt
+.venv/bin/python manage.py migrate
+.venv/bin/python manage.py load_demo
+GIVLAH_DEMO_MODE=1 .venv/bin/python manage.py runserver</code></pre></div></div>
+      <p>Open <code>http://localhost:8000</code>. Choose a labelled synthetic account on the sign-in page. The loader creates three fictional listings and offers that compete for one van. It does not create real residents or real handovers. To use ordinary account creation, run without <code>GIVLAH_DEMO_MODE</code>.</p>
+      <h3>2. Follow the collection flow</h3><p>As Aina, open the wooden bookshelf and find a crew. Invite the suggested crew, then use separate browser profiles or sign out and switch demo accounts to approve and confirm each person's part. The generated windows are two days ahead. Handover recording becomes available after the collection start; the screenshot walkthrough uses a controlled clock to demonstrate that later state.</p>
+      <h3>3. Run the checks</h3><pre><code># Windows
+.\.venv\Scripts\python.exe manage.py test
+
+# macOS / Linux
+.venv/bin/python manage.py test</code></pre>
+      <p>To refresh fictional fixtures locally, stop the server and run <code>manage.py load_demo --reset</code> with your virtual environment's Python. This deletes synthetic listings and their plans; it is not a production reset tool.</p>
+      <div class="scope-note"><strong>Local limits.</strong> SQLite and local sanitized-image storage are prototype choices. A phone's plain-HTTP LAN address does not support browser GPS or installation; use manual location entry. App installation, secure cookies, persistent storage, database choice and backup retention need separate deployment checks. The service worker provides an offline notice; it does not make coordination work offline.</div>
+      <p class="source">Setup: <a href="https://github.com/Givlah/Givlah#getting-started">repository README</a> · <a href="https://github.com/Givlah/Givlah/blob/main/givlah/settings.py">settings and environment variables</a></p>
+    </section>
+
+    <section id="reference" aria-labelledby="reference-title">
+      <p class="eyebrow">07 / Further reading</p><h2 id="reference-title">Inside the prototype</h2>
+      <div class="architecture" aria-label="Architecture, in request order"><div><strong>Browser / PWA</strong><span>Django templates · small JS</span></div><span aria-hidden="true">↓</span><div><strong>Views & permission-filtered reads</strong><span>Session auth · forms · CSRF</span></div><span aria-hidden="true">↓</span><div><strong>Services & exact matcher</strong><span>State rules · short transactions</span></div><span aria-hidden="true">↓</span><div><strong>SQLite + sanitized media</strong><span>Separate private-location records</span></div></div>
+      <p>Django 5.2 serves the app and owns authentication, validation and persistence. Coordination rules live in plain Python service functions. SQLite uses short <code>IMMEDIATE</code> write transactions with repeated overlap checks. Pillow sanitizes photos. There is no model API, route service, geocoder or paid provider on the critical path.</p>
+      <div class="reference-links"><a href="https://github.com/Givlah/Givlah/blob/main/docs/PRODUCT.md"><strong>Product</strong><span>Users, scope and workflow ↗</span></a><a href="https://github.com/Givlah/Givlah/blob/main/docs/ARCHITECTURE.md"><strong>Architecture</strong><span>Layers, records and transactions ↗</span></a><a href="https://github.com/Givlah/Givlah/blob/main/docs/SPECIFICATION.md"><strong>Specification</strong><span>Behaviour and G01–G20 ↗</span></a><a href="https://github.com/Givlah/Givlah/blob/main/LICENSE"><strong>MIT license</strong><span>Terms for the code ↗</span></a><a href="https://github.com/Givlah/Givlah/blob/main/CONTRIBUTING.md"><strong>Contributing</strong><span>Core-team code; bug reports welcome ↗</span></a><a href="https://github.com/Givlah/Givlah/blob/main/SECURITY.md"><strong>Security</strong><span>Report vulnerabilities privately ↗</span></a></div>
+      <h3>AI-use disclosure</h3><p>Developed with the help of AI coding tools. The in-app illustrations and demo item photos were generated with AI image tools; they show fictional items, not real listings. This matches the <a href="https://github.com/Givlah/Givlah#acknowledgements">repository disclosure</a>. Automated checks and synthetic walkthroughs are not independent human validation.</p>
+      <h3 id="site-privacy">This site's privacy</h3><p>This static guide has no analytics, forms or tracking scripts. Fonts, images, CSS and JavaScript are served locally. Once a video is configured, clicking Play loads a <code>youtube-nocookie.com</code> iframe and allows YouTube to receive your request; nothing is sent there before that click. Following an external source link also opens that service. Your hosting provider may keep ordinary request logs.</p>
+    </section>
+    <footer><a class="brand" href="#overview">givlah</a><p>Good things. New homes. Together.</p><a href="#overview">Back to the start ↑</a></footer>
+  </main>
+</div>
+</body>
+</html>

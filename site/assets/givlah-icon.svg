@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg"
+     xmlns:xlink="http://www.w3.org/1999/xlink"
+     width="1024" height="1024" viewBox="0 0 1024 1024"
+     role="img" aria-labelledby="title description">
+  <title id="title">Parcel between green and blue waves</title>
+  <desc id="description">A centered, rounded golden parcel with a cream tape
+    strip, surrounded by a white ribbon between matching green and blue waves.</desc>
+
+  <defs>
+    <linearGradient id="green" gradientUnits="userSpaceOnUse"
+                    x1="512" y1="0" x2="512" y2="750">
+      <stop offset="0" stop-color="#34e180"/>
+      <stop offset="0.3" stop-color="#30df7c"/>
+      <stop offset="0.65" stop-color="#23d470"/>
+      <stop offset="1" stop-color="#10c766"/>
+    </linearGradient>
+    <linearGradient id="blue" gradientUnits="userSpaceOnUse"
+                    x1="260" y1="0" x2="600" y2="700">
+      <stop offset="0" stop-color="#278fff"/>
+      <stop offset="0.55" stop-color="#238dff"/>
+      <stop offset="1" stop-color="#1785fc"/>
+    </linearGradient>
+    <linearGradient id="green-fold" gradientUnits="userSpaceOnUse"
+                    x1="258" y1="240" x2="804" y2="240">
+      <stop offset="0" stop-color="#00ad51" stop-opacity="0"/>
+      <stop offset="0.38" stop-color="#00ad51" stop-opacity="0.18"/>
+      <stop offset="1" stop-color="#00a94f" stop-opacity="0.64"/>
+    </linearGradient>
+    <linearGradient id="blue-fold" gradientUnits="userSpaceOnUse"
+                    x1="258" y1="240" x2="804" y2="240">
+      <stop offset="0" stop-color="#0064ef" stop-opacity="0"/>
+      <stop offset="0.38" stop-color="#0064ef" stop-opacity="0.18"/>
+      <stop offset="1" stop-color="#0064ef" stop-opacity="0.66"/>
+    </linearGradient>
+    <linearGradient id="box-top" gradientUnits="userSpaceOnUse"
+                    x1="420" y1="300" x2="570" y2="510">
+      <stop offset="0" stop-color="#ffda7b"/>
+      <stop offset="1" stop-color="#ffda78"/>
+    </linearGradient>
+    <linearGradient id="box-left" gradientUnits="userSpaceOnUse"
+                    x1="280" y1="430" x2="530" y2="690">
+      <stop offset="0" stop-color="#ffbd30"/>
+      <stop offset="0.55" stop-color="#ffbf32"/>
+      <stop offset="1" stop-color="#fdbc2e"/>
+    </linearGradient>
+    <linearGradient id="box-right" gradientUnits="userSpaceOnUse"
+                    x1="744" y1="410" x2="512" y2="710">
+      <stop offset="0" stop-color="#f8a728"/>
+      <stop offset="0.55" stop-color="#f5a329"/>
+      <stop offset="1" stop-color="#f3a027"/>
+    </linearGradient>
+    <linearGradient id="tape-top" gradientUnits="userSpaceOnUse"
+                    x1="390" y1="335" x2="635" y2="460">
+      <stop offset="0" stop-color="#fff7e9"/>
+      <stop offset="1" stop-color="#fff4e4"/>
+    </linearGradient>
+    <linearGradient id="tape-front" gradientUnits="userSpaceOnUse"
+                    x1="600" y1="455" x2="656" y2="530">
+      <stop offset="0" stop-color="#ffecd3"/>
+      <stop offset="1" stop-color="#fce6c9"/>
+    </linearGradient>
+
+    <!-- The second wave and fold are exact half-turns of these paths. -->
+    <path id="wave" d="M 0,684
+      C 61,675 147,624 199,579
+      C 249,535 244,498 246,449
+      C 248,396 275,368 317,340
+      L 423,269
+      C 467,239 506,237 550,254
+      L 713,317
+      C 769,339 816,338 864,320
+      C 939,292 1002,247 1024,201
+      V 0 H 0 Z"/>
+    <path id="fold" d="M 258,134 H 602
+      C 638,134 656,143 685,158
+      C 724,180 763,204 786,226
+      C 808,248 811,276 793,296
+      C 777,317 751,325 719,319
+      L 550,254
+      C 506,237 467,239 423,269
+      L 317,340
+      C 284,362 261,383 251,410 Z"/>
+    <clipPath id="wave-clip">
+      <use xlink:href="#wave"/>
+    </clipPath>
+
+    <!-- Matched projected edges; the silhouette is centered at (512,512). -->
+    <path id="parcel-outline" d="M 488,297.586
+      Q 512,286 536,297.586
+      L 722,387.379
+      Q 744,398 744,422
+      V 602
+      Q 744,626 722,636.621
+      L 536,726.414
+      Q 512,738 488,726.414
+      L 302,636.621
+      Q 280,626 280,602
+      V 422
+      Q 280,398 302,387.379 Z"/>
+    <clipPath id="parcel-clip">
+      <use xlink:href="#parcel-outline"/>
+    </clipPath>
+  </defs>
+
+  <rect width="1024" height="1024" fill="#fdfcfd"/>
+
+  <g id="green-wave">
+    <use xlink:href="#wave" fill="url(#green)"/>
+    <g clip-path="url(#wave-clip)">
+      <use xlink:href="#fold" fill="url(#green-fold)"/>
+    </g>
+  </g>
+  <g id="blue-wave" transform="rotate(180 512 512)">
+    <use xlink:href="#wave" fill="url(#blue)"/>
+    <g clip-path="url(#wave-clip)">
+      <use xlink:href="#fold" fill="url(#blue-fold)"/>
+    </g>
+  </g>
+
+  <g id="parcel" clip-path="url(#parcel-clip)">
+    <use xlink:href="#parcel-outline" fill="url(#box-left)"/>
+    <path id="right-face" fill="url(#box-right)"
+          d="M 512,509 768,385 V 650 L 512,762 Z"/>
+    <path id="top-face" fill="url(#box-top)"
+          d="M 512,286 744,398 512,510 280,398 Z"/>
+
+    <!-- The tape occupies the middle of the parcel's projected depth. -->
+    <path id="tape-fold" fill="url(#tape-front)"
+          d="M 600,466.517 656,439.483
+             V 506.483
+             Q 656,512.483 650,515.379
+             L 606,536.621
+             Q 600,539.517 600,533.517 Z"/>
+    <path id="tape" fill="url(#tape-top)"
+          d="M 368,355.517 424,328.483 656,440.483 600,467.517 Z"/>
+  </g>
+</svg>
