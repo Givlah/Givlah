@@ -184,7 +184,7 @@ Scaling note: SQLite and a single process are choices for the prototype. A publi
 
 ## PWA behaviour
 
-- **Manifest** (`/manifest.webmanifest`): name `givlah`, `display: standalone`, theme green `#10C766`, background `#FDFCFD`. Icons at 192 and 512 px, plus a maskable variant, are generated from `assets/brand/givlah-icon.png`.
+- **Manifest** (`/manifest.webmanifest`): name `Givlah`, `display: standalone`, theme green `#10C766`, background `#FDFCFD`. Standard icons at 192 and 512 px use `assets/brand/iconconcept-readme.png`, the rounded-corner presentation. The opaque maskable variant lets the device apply its installation shape.
 - **Service worker** (`/sw.js`, scoped to the site root):
   - Precaches only versioned static assets (CSS, JS, icons) and an offline notice page.
   - HTML, authenticated responses, media and anything carrying private data always go to the network and are never cached.

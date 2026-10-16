@@ -75,7 +75,7 @@ Solver and dependency jargon stays out of resident-facing screens, and so do inv
 
 ## Visual direction
 
-The app icon (`assets/brand/givlah-icon.svg`) shows a parcel between green and blue waves. The UI uses its palette:
+The rounded-corner app icon (`assets/brand/iconconcept-readme.png`) shows a parcel between green and blue waves. Use that presentation consistently across the app, website, documentation and demo materials. The UI uses its palette:
 
 | Role | Colours |
 | --- | --- |
