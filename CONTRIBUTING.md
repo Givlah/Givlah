@@ -55,4 +55,4 @@ These rules come from the specification. Please keep them intact:
 - Keep each pull request focused on one change, with tests that would catch the bug or regression it addresses.
 - Describe what changed, why and how you checked it.
 
-By contributing, you agree that your contributions are licensed under the [MIT License](LICENSE).
+Contributions are part of the hackathon submission and are subject to the terms described in [LICENSE](LICENSE).

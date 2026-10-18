@@ -134,4 +134,4 @@ Developed with the help of AI coding tools. The in-app illustrations and the dem
 
 ## License
 
-[MIT](LICENSE)
+This repository is a submission to the Sime Darby Property University Hackathon 2026 and is not released under an open-source licence. Rights in it are governed by the [programme terms](https://www.simedarbyproperty.com/universityhackathon/terms-and-conditions/); see [LICENSE](LICENSE). Third-party components keep their own licences.
